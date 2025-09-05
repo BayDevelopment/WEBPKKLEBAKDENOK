@@ -59,9 +59,11 @@
 </section>
 
 <script>
-    // tahun otomatis
-    document.getElementById('year').textContent = new Date().getFullYear();
+
 </script>
+
+<!-- partikel js -->
+<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 
 
 <!-- typed js -->
@@ -69,15 +71,23 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 
 <script type="module">
+    // tahun otomatis
+    document.getElementById('year').textContent = new Date().getFullYear();
+
     import Typed from "https://cdn.jsdelivr.net/npm/typed.js@2.1.0/dist/typed.module.js";
+
     new Typed("#typed", {
-        strings: ["TP PKK Kelurahan Lebak Denok", "Pelaksanaan Pemberdayaan & Kesejahteraan Keluarga"],
-        typeSpeed: 45,
-        backSpeed: 28,
-        backDelay: 1500,
+        strings: [
+            "TP PKK Kelurahan Lebak Denok",
+            "Pelaksanaan Pemberdayaan & Kesejahteraan Keluarga"
+        ],
+        typeSpeed: 50, // lebih cepat
+        backSpeed: 30, // lebih halus
+        backDelay: 1500, // tunggu sebentar sebelum menghapus
         loop: true,
-        smartBackspace: true
+        smartBackspace: false // matikan biar hapus full, lebih smooth
     });
+
 
     document.addEventListener('DOMContentLoaded', function() {
         const topbar = document.querySelector('.navbar-information-sosmed');
@@ -183,7 +193,106 @@
             }
         });
     })();
+
+    particlesJS("particles-js", {
+        particles: {
+            number: {
+                value: 80,
+                density: {
+                    enable: true,
+                    value_area: 800
+                }
+            },
+            color: {
+                value: "#3498db"
+            }, // biru modern
+            shape: {
+                type: "circle"
+            },
+            opacity: {
+                value: 0.6,
+                random: true
+            },
+            size: {
+                value: 4,
+                random: true
+            },
+            line_linked: {
+                enable: true,
+                distance: 150,
+                color: "#3498db",
+                opacity: 0.4,
+                width: 1
+            },
+            move: {
+                enable: true,
+                speed: 3,
+                direction: "none",
+                random: false,
+                straight: false,
+                out_mode: "out"
+            }
+        },
+        interactivity: {
+            detect_on: "canvas",
+            events: {
+                onhover: {
+                    enable: true,
+                    mode: "grab"
+                },
+                onclick: {
+                    enable: true,
+                    mode: "push"
+                }
+            },
+            modes: {
+                grab: {
+                    distance: 200,
+                    line_linked: {
+                        opacity: 0.8
+                    }
+                },
+                push: {
+                    particles_nb: 4
+                }
+            }
+        },
+        retina_detect: true
+    });
+
+    // fade in
+    (function() {
+        const items = document.querySelectorAll('.reveal');
+
+        if (!('IntersectionObserver' in window) || !items.length) {
+            // Fallback: tampilkan langsung
+            items.forEach(el => el.classList.add('is-visible'));
+            return;
+        }
+
+        const io = new IntersectionObserver((entries, obs) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    obs.unobserve(entry.target); // animasi sekali saja
+                }
+            });
+        }, {
+            root: null,
+            threshold: 0.12,
+            rootMargin: '0px 0px -8% 0px'
+        });
+
+        items.forEach((el, i) => {
+            // jika belum set delay, kasih stagger otomatis 60ms
+            if (!el.style.getPropertyValue('--d')) {
+                el.style.setProperty('--d', (i % 8) * 60);
+            }
+            io.observe(el);
+        });
+    })();
 </script>
+
 
 </body>
 

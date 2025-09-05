@@ -2,6 +2,46 @@
    FINAL CSS (tanpa ubah HTML)
    ======================= */
 
+/* fade in */
+
+/* Fade-in util */
+.reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+  will-change: opacity, transform;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Arah opsional */
+.reveal-up {
+  transform: translateY(22px);
+}
+.reveal-left {
+  transform: translateX(-22px);
+}
+.reveal-right {
+  transform: translateX(22px);
+}
+
+/* Stagger via CSS variable --d (delay ms) */
+.reveal {
+  transition-delay: calc(var(--d, 0) * 1ms);
+}
+
+/* Hormati preferensi user */
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal.is-visible {
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
 /* Font */
 @font-face {
   font-family: "Gothic";
@@ -64,6 +104,49 @@ body {
 }
 
 /* Nav link + underline lembut */
+
+/* partikel */
+#particles-js {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: #ffffff;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.29) 0%,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(13, 163, 222, 0.13) 100%
+  );
+  top: 0;
+  left: 0;
+  z-index: 0;
+}
+
+.section-cover-jumbtron .bg-body-jumbotron {
+  position: relative;
+  z-index: 1;
+  background: transparent; /* biar partikel kelihatan */
+  color: #fff; /* teks jadi putih */
+}
+
+#typed-container {
+  display: inline-block;
+  min-width: 420px; /* sesuaikan biar muat string terpanjang */
+  text-align: center;
+}
+
+.typed-cursor {
+  font-size: 1.2em;
+  color: #f7f1f1; /* putih, biar kontras */
+  animation: blink 0.7s infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
 .nav-modern .nav-link {
   position: relative;
   font-weight: 600;
@@ -235,10 +318,10 @@ body {
   font-weight: 800;
   letter-spacing: 0.06em;
   color: transparent !important; /* isi huruf tembus */
-  -webkit-text-stroke: 2px #313131a6; /* garis tepi (Safari/Chromium) */
-  text-stroke: 2px #272626; /* non-standar, aman diabaikan browser lain */
+  -webkit-text-stroke: 2px #adc3ff; /* garis tepi (Safari/Chromium) */
+  text-stroke: 2px #d7ebf7; /* non-standar, aman diabaikan browser lain */
   filter: drop-shadow(
-    0 2px 6px rgba(0, 0, 0, 0.25)
+    0 2px 6px rgba(241, 241, 241, 0.25)
   ); /* biar kebaca di foto terang */
   text-transform: uppercase; /* jaga konsistensi */
 }
@@ -366,7 +449,6 @@ body {
   position: relative;
   overflow: hidden;
   transition: 0.25s ease;
-  box-shadow: 0 10px 22px rgba(93, 135, 252, 0.32);
 }
 
 .btn-native-quiz::before {
@@ -384,7 +466,6 @@ body {
 }
 
 .btn-native-quiz:hover {
-  box-shadow: 0 16px 34px rgba(13, 49, 253, 0.32);
   color: #fff;
 }
 
@@ -402,7 +483,7 @@ body {
 }
 
 /* (opsional) styling tombol biar cakep */
-.btn-native-quiz {
+/* .btn-native-quiz {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
@@ -423,7 +504,7 @@ body {
 }
 .btn-native-quiz i {
   margin-right: 0.5rem;
-}
+} */
 
 .btn-native {
   display: inline-flex;
@@ -673,7 +754,7 @@ body {
 }
 
 /* Tombol (fallback jika belum punya .btn-native) */
-.btn-native {
+/* .btn-native {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
@@ -690,7 +771,7 @@ body {
   color: #0b243a;
   filter: brightness(1.03);
   box-shadow: 0 12px 28px rgba(13, 163, 222, 0.36);
-}
+} */
 
 /* Responsif kecil: ratakan konten dan beri ruang */
 @media (max-width: 575.98px) {

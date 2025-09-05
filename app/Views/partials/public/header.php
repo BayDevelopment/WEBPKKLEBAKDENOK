@@ -25,7 +25,7 @@
                             <span><i class="fa-solid fa-phone"></i></span> 082112341234
                         </a>
                         <a href="mailto:pkklebakdenok@example.com" class="text-native text-decoration-none d-inline-flex align-items-center gap-2">
-                            <span><i class="fa-solid fa-envelope"></i></span> pkklebakdenok
+                            <span><i class="fa-solid fa-envelope"></i></span> pkklebakdenok@gmail.com
                         </a>
                     </div>
                     <!-- KANAN -->
@@ -56,10 +56,16 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0 nav-modern">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#">Beranda</a>
+                            <a class="nav-link <?= ($navLink === 'beranda') ? 'active' : '' ?>"
+                                aria-current="page"
+                                href="<?= base_url('/') ?>">
+                                Beranda
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Tentang Kami</a>
+                            <a class="nav-link <?= ($navLink === 'Tentang Kami') ? 'active' : '' ?>"
+                                aria-current="page"
+                                href="<?= base_url('/tentang-kami') ?>">Tentang Kami</a>
                         </li>
 
                         <li class="nav-item dropdown">
@@ -69,7 +75,9 @@
                             </a>
                             <!-- Tambah kelas: dropdown-menu-modern + dropdown-menu-cols-2 -->
                             <ul class="dropdown-menu dropdown-menu-modern dropdown-menu-responsive" data-bs-auto-close="outside">
-                                <li><a class="dropdown-item" href="#">Pendahuluan</a></li>
+                                <li><a class="dropdown-item <?= ($navLink === 'Pendahuluan') ? 'active' : '' ?>"
+                                        aria-current="page"
+                                        href="<?= base_url('/pendahuluan') ?>">Pendahuluan</a></li>
                                 <li><a class="dropdown-item" href="#">Maksud dan Tujuan</a></li>
                                 <li><a class="dropdown-item" href="#">Visi, Misi & Moto</a></li>
                                 <li><a class="dropdown-item" href="#">Kondisi Wilayah</a></li>
