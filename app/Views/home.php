@@ -145,7 +145,7 @@
                 </p>
 
                 <div class="d-flex gap-2">
-                    <a href="#" class="btn-native" aria-label="Baca selengkapnya pendahuluan"><span><i class="fa-solid fa-eye"></i></span> Selengkapnya</a>
+                    <a href="/pendahuluan" class="btn-native" aria-label="Baca selengkapnya pendahuluan"><span><i class="fa-solid fa-eye"></i></span> Selengkapnya</a>
                 </div>
             </div>
         </div>
@@ -193,7 +193,7 @@
                 </div>
             </div>
             <div class="justify-content-center text-center gap-2">
-                <a href="#" class="btn-native" aria-label="Baca selengkapnya pendahuluan"><span><i class="fa-solid fa-eye"></i></span> Selengkapnya</a>
+                <a href="/kondisi-wilayah" class="btn-native" aria-label="Baca selengkapnya pendahuluan"><span><i class="fa-solid fa-eye"></i></span> Selengkapnya</a>
             </div>
         </div>
     </div>
@@ -248,7 +248,7 @@
         </div>
 
         <div class="text-center mt-4">
-            <a href="#" class="btn-native" aria-label="Hubungi kami"><i class="fa-solid fa-tty me-2"></i>Hubungi Kami</a>
+            <a href="/hubungi-kami" class="btn-native" aria-label="Hubungi kami"><i class="fa-solid fa-tty me-2"></i>Hubungi Kami</a>
         </div>
     </div>
 </section>

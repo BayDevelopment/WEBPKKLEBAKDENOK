@@ -260,34 +260,26 @@
         retina_detect: true
     });
 
-    // fade in
+    // Reveal on view
     (function() {
         const items = document.querySelectorAll('.reveal');
-
         if (!('IntersectionObserver' in window) || !items.length) {
-            // Fallback: tampilkan langsung
             items.forEach(el => el.classList.add('is-visible'));
             return;
         }
-
         const io = new IntersectionObserver((entries, obs) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('is-visible');
-                    obs.unobserve(entry.target); // animasi sekali saja
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    e.target.classList.add('is-visible');
+                    obs.unobserve(e.target);
                 }
             });
         }, {
-            root: null,
-            threshold: 0.12,
+            threshold: .12,
             rootMargin: '0px 0px -8% 0px'
         });
-
         items.forEach((el, i) => {
-            // jika belum set delay, kasih stagger otomatis 60ms
-            if (!el.style.getPropertyValue('--d')) {
-                el.style.setProperty('--d', (i % 8) * 60);
-            }
+            if (!el.style.getPropertyValue('--d')) el.style.setProperty('--d', (i % 8) * 60);
             io.observe(el);
         });
     })();

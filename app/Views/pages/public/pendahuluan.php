@@ -287,7 +287,7 @@
         <section class="section-pendahuluan py-5 py-lg-6">
             <div class="container">
                 <div class="mx-auto" style="max-width: 900px;">
-                    <article class="card modern-card border-0 rounded-4 overflow-hidden">
+                    <article class="card modern-card border-0 rounded-4 overflow-hidden" style="--d:120ms">
                         <!-- Accent top line -->
                         <span class="modern-card-accent"></span>
 

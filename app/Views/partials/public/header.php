@@ -56,7 +56,7 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0 nav-modern">
                         <li class="nav-item">
-                            <a class="nav-link <?= ($navLink === 'beranda') ? 'active' : '' ?>"
+                            <a class="nav-link <?= ($navLink === 'Beranda') ? 'active' : '' ?>"
                                 aria-current="page"
                                 href="<?= base_url('/') ?>">
                                 Beranda
@@ -78,14 +78,15 @@
                                 <li><a class="dropdown-item <?= ($navLink === 'Pendahuluan') ? 'active' : '' ?>"
                                         aria-current="page"
                                         href="<?= base_url('/pendahuluan') ?>">Pendahuluan</a></li>
-                                <li><a class="dropdown-item" href="#">Maksud dan Tujuan</a></li>
-                                <li><a class="dropdown-item" href="#">Visi, Misi & Moto</a></li>
-                                <li><a class="dropdown-item" href="#">Kondisi Wilayah</a></li>
-                                <li><a class="dropdown-item" href="#">Kependudukan</a></li>
-                                <li><a class="dropdown-item" href="#">Pendidikan</a></li>
-                                <li><a class="dropdown-item" href="#">Struktur Organisasi</a></li>
-                                <li><a class="dropdown-item" href="#">Profil Ketua dan Sekertaris</a></li>
-                                <li><a class="dropdown-item" href="#">Perencanaan Kegiatan</a></li>
+                                <li><a class="dropdown-item <?= ($navLink === 'MaksudTujuan') ? 'active' : '' ?>"
+                                        aria-current="page"
+                                        href="<?= base_url('/maksud-dan-tujuan') ?>">Maksud dan Tujuan</a></li>
+                                <li><a class="dropdown-item <?= ($navLink === 'VisiMisi') ? 'active' : '' ?>"
+                                        aria-current="page"
+                                        href="<?= base_url('/visi-misi-motto') ?>">Visi, Misi & Moto</a></li>
+                                <li><a class="dropdown-item <?= ($navLink === 'KondisiWilayah') ? 'active' : '' ?>"
+                                        aria-current="page"
+                                        href="<?= base_url('/kondisi-wilayah') ?>">Kondisi Wilayah</a></li>
                             </ul>
                         </li>
                         <li class="nav-item dropdown">
@@ -95,11 +96,15 @@
                             </a>
                             <!-- Tambah kelas: dropdown-menu-modern + dropdown-menu-cols-2 -->
                             <ul class="dropdown-menu dropdown-menu-modern dropdown-menu-responsive" data-bs-auto-close="outside">
-                                <li><a class="dropdown-item" href="#">Tanaman Hias</a></li>
+                                <li><a class="dropdown-item <?= ($navLink === 'Tanamanku') ? 'active' : '' ?>"
+                                        aria-current="page"
+                                        href="<?= base_url('/tanamanku') ?>">Tanamanku</a></li>
                             </ul>
                         </li>
                         <li class="nav-item">
-                            <a class="btn-native-quiz" href="#"><i class="fa-solid fa-circle-question"></i>Kuis Sekarang</a>
+                            <a class="btn-native-quiz <?= ($navLink === 'Kuis') ? 'active' : '' ?>"
+                                aria-current="page"
+                                href="<?= base_url('/kuis-masyarakat') ?>"><i class="fa-solid fa-circle-question"></i>Kuis Sekarang</a>
                         </li>
                     </ul>
                 </div>

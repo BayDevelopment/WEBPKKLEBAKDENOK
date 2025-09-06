@@ -183,7 +183,7 @@
         </header>
 
         <!-- Content card -->
-        <article class="card shadow-soft border-0 rounded-4 overflow-hidden">
+        <article class="card shadow-soft border-0 rounded-4 overflow-hidden" style="--d:120ms">
             <div class="card-body p-4 p-lg-5 content-typo">
 
                 <p>
