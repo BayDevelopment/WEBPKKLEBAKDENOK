@@ -25,6 +25,14 @@
         }
     }
 
+    /* Kompat: dukung kedua kelas visible */
+    .reveal.is-visible,
+    .reveal.show {
+        opacity: 1;
+        transform: none;
+    }
+
+
     /* Breadcrumb */
     .breadcrumb-modern {
         background: rgba(0, 98, 204, 0.06);
@@ -167,7 +175,7 @@
     </div>
 </div>
 
-<section class="section-about py-5">
+<section class="section-about py-5 reveal">
     <div class="container">
         <!-- Breadcrumb -->
         <nav aria-label="breadcrumb" class="mb-4">
@@ -295,28 +303,76 @@
         }, 200);
     });
 
-    // Reveal on view
     (function() {
-        const items = document.querySelectorAll('.reveal');
-        if (!('IntersectionObserver' in window) || !items.length) {
-            items.forEach(el => el.classList.add('is-visible'));
+        // 1) Auto-tag elemen umum jadi .reveal (kalau belum)
+        const autoTargets = [
+            '.breadcrumb-modern',
+            'header.about-hero',
+            'article.card',
+            '.content-typo p',
+            '.list-modern',
+            '.list-check'
+        ];
+        document.querySelectorAll(autoTargets.join(',')).forEach(el => {
+            if (!el.classList.contains('reveal')) el.classList.add('reveal');
+        });
+
+        const items = Array.from(document.querySelectorAll('.reveal'));
+        if (!items.length) return;
+
+        // 2) Fallback cepat bila IntersectionObserver tak ada
+        if (!('IntersectionObserver' in window)) {
+            items.forEach(el => el.classList.add('is-visible')); // atau .show
             return;
         }
+
+        // 3) Observer utama
         const io = new IntersectionObserver((entries, obs) => {
-            entries.forEach(e => {
-                if (e.isIntersecting) {
-                    e.target.classList.add('is-visible');
-                    obs.unobserve(e.target);
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // Tambah KEDUA kelas agar kompatibel dengan CSS lama/baru
+                    entry.target.classList.add('is-visible');
+                    entry.target.classList.add('show');
+                    obs.unobserve(entry.target);
                 }
             });
         }, {
-            threshold: .12,
-            rootMargin: '0px 0px -8% 0px'
+            threshold: 0.14,
+            rootMargin: '0px 0px -6% 0px'
         });
 
+        // 4) Stagger otomatis bila belum di-set
         items.forEach((el, i) => {
             if (!el.style.getPropertyValue('--d')) el.style.setProperty('--d', (i % 8) * 60);
             io.observe(el);
+        });
+
+        // 5) Backup check setelah loader/font siap (kasus elemen sudah di viewport)
+        const inView = el => {
+            const r = el.getBoundingClientRect();
+            const vh = window.innerHeight || document.documentElement.clientHeight;
+            return r.top <= vh * 0.86 && r.bottom >= 0;
+        };
+
+        function forceCheck() {
+            items.forEach(el => {
+                if (!el.classList.contains('is-visible') && inView(el)) {
+                    el.classList.add('is-visible');
+                    el.classList.add('show');
+                }
+            });
+        }
+        window.addEventListener('load', () => setTimeout(forceCheck, 60), {
+            once: true
+        });
+        if (document.fonts && document.fonts.ready) {
+            document.fonts.ready.then(() => setTimeout(forceCheck, 60));
+        }
+        window.addEventListener('resize', () => requestAnimationFrame(forceCheck), {
+            passive: true
+        });
+        window.addEventListener('scroll', () => requestAnimationFrame(forceCheck), {
+            passive: true
         });
     })();
 </script>

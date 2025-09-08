@@ -11,6 +11,88 @@
     <link rel="stylesheet" href="<?= base_url('assets/css/style.css') ?>">
     <!-- cdn fontawesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+
+
+
+    <!-- css internal -->
+    <style>
+        /* Patch akhir: pastikan typed benar-benar responsif */
+        #typed-container {
+            display: block;
+            width: 100%;
+            max-width: 100%;
+            min-height: 1em;
+        }
+
+        #typed {
+            display: inline-block;
+            white-space: normal;
+            overflow-wrap: anywhere;
+            word-break: break-word;
+            hyphens: auto;
+            line-height: 1.3;
+        }
+
+        /* Cursor */
+        .typed-cursor {
+            display: inline-block;
+            font-weight: 600;
+            transform: translateY(0.05em);
+        }
+
+        /* Ukuran teks adaptif di HP */
+        @media (max-width:575.98px) {
+            .section-cover-jumbtron .fs-4 {
+                font-size: clamp(16px, 5vw, 20px);
+                line-height: 1.35;
+                padding: 0 8px;
+            }
+
+            .section-cover-jumbtron .display-4 {
+                font-size: clamp(22px, 8vw, 32px);
+                line-height: 1.2;
+                padding: 0 8px;
+                word-break: break-word;
+            }
+        }
+
+        /* Reveal util (gunakan .reveal + JS akan menambah .show) */
+        .reveal {
+            opacity: 0;
+            transform: translateY(16px);
+            transition: opacity .6s ease, transform .6s ease;
+            transition-delay: var(--d, 0ms);
+            will-change: opacity, transform;
+        }
+
+        .reveal.show {
+            opacity: 1;
+            transform: none;
+        }
+
+        @media (prefers-reduced-motion:reduce) {
+
+            .reveal,
+            .reveal.show {
+                transition: none !important;
+                opacity: 1 !important;
+                transform: none !important;
+            }
+        }
+
+        /* Particles tetap di belakang konten hero */
+        #particles-js {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .section-cover-jumbtron .bg-body-jumbotron {
+            position: relative;
+            z-index: 2;
+        }
+    </style>
 </head>
 
 <body>

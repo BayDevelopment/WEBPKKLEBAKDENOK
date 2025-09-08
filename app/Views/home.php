@@ -100,25 +100,22 @@
 
 
 <section class="section-cover-jumbtron position-relative reveal reveal-up">
-    <!-- Partikel -->
-    <div id="particles-js"></div>
-
-    <!-- Konten -->
     <div class="p-5 mb-4 bg-body-jumbotron position-relative text-white">
+        <!-- Partikel DIPINDAH KE SINI -->
+        <div id="particles-js" aria-hidden="true"></div>
+
+        <!-- Konten -->
         <div class="container justify-content-center text-center py-5">
-            <h3 class="display-4 text-uppercase text-cutout">
-                tp pkk kelurahan lebak denok
-            </h3>
+            <h3 class="display-4 text-uppercase text-cutout">tp pkk kelurahan lebak denok</h3>
             <p class="fs-4 text-gradient">
-                <span id="typed-container">
-                    <span id="typed"></span>
-                </span>
+                <span id="typed-container"><span id="typed"></span></span>
             </p>
         </div>
     </div>
 </section>
 
-<section class="section-intro py-5 py-lg-6">
+
+<section class="section-intro py-5 py-lg-6 reveal">
     <div class="container">
         <div class="row align-items-center g-4">
             <!-- Gambar (muncul dulu di mobile) -->
@@ -152,7 +149,7 @@
     </div>
 </section>
 
-<section class="section-city py-5 py-lg-6">
+<section class="section-city py-5 py-lg-6 reveal">
     <div class="container">
         <h2 class="section-title h2 fw-bold mb-4 text-center">Gambaran Kota Cilegon</h2>
 
@@ -198,7 +195,7 @@
         </div>
     </div>
 </section>
-<section class="section-why-pkk py-5 py-lg-6">
+<section class="section-why-pkk py-5 py-lg-6 reveal">
     <div class="container">
         <h2 class="section-title h2 fw-bold mb-4 text-center">
             Kenapa PKK penting dipahami dan diadakan?

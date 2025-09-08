@@ -63,59 +63,54 @@
 </script>
 
 <!-- partikel js -->
-<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/typed.js@2.1.0/dist/typed.umd.js" defer></script>
+<!-- partikel -->
+<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js" defer></script>
 
-
-<!-- typed js -->
-<script src="https://cdn.jsdelivr.net/npm/typed.js@2.1.0"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 
-<script type="module">
-    // tahun otomatis
-    document.getElementById('year').textContent = new Date().getFullYear();
+<script>
+    /* ========== Utils ========== */
+    function ensureScript(id, src) {
+        return new Promise((res, rej) => {
+            if (document.getElementById(id)) return res();
+            const s = document.createElement('script');
+            s.id = id;
+            s.src = src;
+            s.async = true;
+            s.onload = res;
+            s.onerror = rej;
+            document.head.appendChild(s);
+        });
+    }
+    const isMobile = () => window.matchMedia('(max-width:575.98px)').matches;
+    const reduceMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    import Typed from "https://cdn.jsdelivr.net/npm/typed.js@2.1.0/dist/typed.module.js";
-
-    new Typed("#typed", {
-        strings: [
-            "TP PKK Kelurahan Lebak Denok",
-            "Pelaksanaan Pemberdayaan & Kesejahteraan Keluarga"
-        ],
-        typeSpeed: 50, // lebih cepat
-        backSpeed: 30, // lebih halus
-        backDelay: 1500, // tunggu sebentar sebelum menghapus
-        loop: true,
-        smartBackspace: false // matikan biar hapus full, lebih smooth
+    /* Tahun footer */
+    document.addEventListener('DOMContentLoaded', () => {
+        const y = document.getElementById('year');
+        if (y) y.textContent = new Date().getFullYear();
     });
 
-
+    /* ========== Sticky nav dinamis (tanpa CLS) ========== */
     document.addEventListener('DOMContentLoaded', function() {
         const topbar = document.querySelector('.navbar-information-sosmed');
-        const nav = document.querySelector('nav.navbar'); // nav kamu
+        const nav = document.querySelector('nav.navbar');
         if (!nav) return;
-
-        // Matikan sticky-top (kalau ada di HTML), biar kontrol penuh di JS
         nav.classList.remove('sticky-top');
 
-        // Placeholder untuk cegah layout shift saat nav jadi fixed
         const placeholder = document.createElement('div');
         placeholder.setAttribute('aria-hidden', 'true');
-        placeholder.style.height = '5px';
+        placeholder.style.height = '0px';
         nav.parentNode.insertBefore(placeholder, nav.nextSibling);
 
         let threshold = 0;
-
-        function recalc() {
-            // ambil tinggi topbar sebagai ambang
+        const recalc = () => {
             threshold = topbar ? topbar.offsetHeight : 0;
-            // kalau sedang fixed, update tinggi placeholder sesuai tinggi nav terbaru
-            if (nav.classList.contains('fixed-top')) {
-                placeholder.style.height = nav.offsetHeight + 'px';
-            }
-        }
-
-        function onScroll() {
-            const y = window.scrollY || window.pageYOffset || 0;
+            if (nav.classList.contains('fixed-top')) placeholder.style.height = nav.offsetHeight + 'px';
+        };
+        const onScroll = () => {
+            const y = window.scrollY || 0;
             if (y >= threshold) {
                 if (!nav.classList.contains('fixed-top')) {
                     nav.classList.add('fixed-top');
@@ -127,163 +122,314 @@
                     placeholder.style.height = '0px';
                 }
             }
-        }
-
-        // init
+        };
         recalc();
         onScroll();
-
-        // responsive: hitung ulang saat resize/orientasi berubah
         window.addEventListener('resize', () => {
             recalc();
             onScroll();
+        }, {
+            passive: true
         });
         window.addEventListener('scroll', onScroll, {
             passive: true
         });
-
-        // rerun kecil setelah font/asset selesai load (tinggi bisa berubah)
         setTimeout(() => {
             recalc();
             onScroll();
         }, 200);
     });
 
+    /* ========== Loader + Modal sekali sesi ========== */
     (function() {
-        const LOADER_MIN_MS = 700; // durasi minimum loader (halus)
-        const SHOW_MODAL_ONCE = true; // ubah ke false jika ingin tampil setiap kunjungan
-        const SESSION_KEY = 'welcomeShown';
-
+        const LOADER_MIN_MS = 700,
+            SHOW_MODAL_ONCE = true,
+            KEY = 'welcomeShown';
         const loader = document.getElementById('app-loader');
         const modalEl = document.getElementById('welcomeModal');
+        const t0 = Date.now();
 
-        const startTime = Date.now();
-
-        // Ketika semua aset selesai dimuat
-        window.addEventListener('load', function() {
-            const elapsed = Date.now() - startTime;
-            const delay = Math.max(0, LOADER_MIN_MS - elapsed);
-
-            setTimeout(function() {
-                // Sembunyikan & lepas loader
+        window.addEventListener('load', () => {
+            const delay = Math.max(0, LOADER_MIN_MS - (Date.now() - t0));
+            setTimeout(() => {
                 if (loader) {
                     loader.classList.add('hidden');
                     setTimeout(() => loader.remove(), 450);
                 }
-
-                // Tampilkan modal (sekali per sesi, bisa diubah)
-                const already = sessionStorage.getItem(SESSION_KEY);
-                if (!SHOW_MODAL_ONCE || !already) {
-                    if (window.bootstrap && modalEl) {
-                        const modal = new bootstrap.Modal(modalEl, {
-                            backdrop: 'static',
-                            keyboard: false
-                        });
-                        modal.show();
-                    }
-                    sessionStorage.setItem(SESSION_KEY, '1');
+                const shown = sessionStorage.getItem(KEY);
+                if ((!shown || !SHOW_MODAL_ONCE) && window.bootstrap && modalEl && !isMobile()) {
+                    new bootstrap.Modal(modalEl, {
+                        backdrop: 'static',
+                        keyboard: false
+                    }).show();
+                    sessionStorage.setItem(KEY, '1');
                 }
             }, delay);
         });
-
-        // Fallback: jika browser kembali dari BFCache, pastikan loader tidak muncul lagi
-        window.addEventListener('pageshow', function(e) {
-            if (e.persisted && loader) {
-                loader.classList.add('hidden');
-            }
+        window.addEventListener('pageshow', e => {
+            if (e.persisted && loader) loader.classList.add('hidden');
         });
     })();
 
-    particlesJS("particles-js", {
-        particles: {
-            number: {
-                value: 80,
-                density: {
-                    enable: true,
-                    value_area: 800
-                }
-            },
-            color: {
-                value: "#3498db"
-            }, // biru modern
-            shape: {
-                type: "circle"
-            },
-            opacity: {
-                value: 0.6,
-                random: true
-            },
-            size: {
-                value: 4,
-                random: true
-            },
-            line_linked: {
-                enable: true,
-                distance: 150,
-                color: "#3498db",
-                opacity: 0.4,
-                width: 1
-            },
-            move: {
-                enable: true,
-                speed: 3,
-                direction: "none",
-                random: false,
-                straight: false,
-                out_mode: "out"
-            }
-        },
-        interactivity: {
-            detect_on: "canvas",
-            events: {
-                onhover: {
-                    enable: true,
-                    mode: "grab"
-                },
-                onclick: {
-                    enable: true,
-                    mode: "push"
-                }
-            },
-            modes: {
-                grab: {
-                    distance: 200,
-                    line_linked: {
-                        opacity: 0.8
-                    }
-                },
-                push: {
-                    particles_nb: 4
-                }
-            }
-        },
-        retina_detect: true
-    });
+    /* ========== Fade-in (kompat .show & .is-visible + force check) ========== */
+    function initReveal() {
+        const items = [...document.querySelectorAll('.reveal')];
+        if (!items.length) return;
+        const markVisible = el => {
+            el.classList.add('show');
+            el.classList.add('is-visible');
+        };
 
-    // Reveal on view
-    (function() {
-        const items = document.querySelectorAll('.reveal');
-        if (!('IntersectionObserver' in window) || !items.length) {
-            items.forEach(el => el.classList.add('is-visible'));
+        if (!('IntersectionObserver' in window) || reduceMotion()) {
+            items.forEach(markVisible);
             return;
         }
+
         const io = new IntersectionObserver((entries, obs) => {
             entries.forEach(e => {
                 if (e.isIntersecting) {
-                    e.target.classList.add('is-visible');
+                    markVisible(e.target);
                     obs.unobserve(e.target);
                 }
             });
         }, {
-            threshold: .12,
-            rootMargin: '0px 0px -8% 0px'
+            threshold: .15,
+            rootMargin: '0px 0px -6% 0px'
         });
+
         items.forEach((el, i) => {
             if (!el.style.getPropertyValue('--d')) el.style.setProperty('--d', (i % 8) * 60);
             io.observe(el);
         });
-    })();
+
+        const inView = el => {
+            const r = el.getBoundingClientRect(),
+                vh = window.innerHeight || document.documentElement.clientHeight;
+            return r.top <= vh * 0.86 && r.bottom >= 0;
+        };
+        const forceCheck = () => items.forEach(el => {
+            if (!el.classList.contains('show') && inView(el)) markVisible(el);
+        });
+
+        window.addEventListener('load', () => setTimeout(forceCheck, 60), {
+            once: true
+        });
+        if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => setTimeout(forceCheck, 60));
+        window.addEventListener('resize', () => requestAnimationFrame(forceCheck), {
+            passive: true
+        });
+        window.addEventListener('scroll', () => requestAnimationFrame(forceCheck), {
+            passive: true
+        });
+    }
+
+    /* ========== Typed.js ========== */
+    let typedInstance = null;
+    const typedStrings = () => isMobile() ? ["Keluarga Sehat · Cerdas · Sejahtera", "PKK Lebak Denok — Bergerak Bersama"] : ["TP PKK Kelurahan Lebak Denok", "Bersama mewujudkan keluarga sehat, cerdas, dan sejahtera", "Sinergi warga, RT/RW, dan Kelurahan"];
+
+    async function loadTypedLib() {
+        if (window.Typed) return;
+        try {
+            await ensureScript('typedjs-cdn', 'https://cdn.jsdelivr.net/npm/typed.js@2.1.0/dist/typed.umd.js');
+        } catch (e) {}
+    }
+
+    function mountTyped() {
+        const target = document.getElementById('typed');
+        if (!target) return;
+        if (reduceMotion()) {
+            target.textContent = typedStrings()[0] || "";
+            return;
+        }
+        if (!window.Typed) return;
+        if (typedInstance) {
+            typedInstance.destroy();
+            typedInstance = null;
+        }
+        typedInstance = new window.Typed('#typed', {
+            strings: typedStrings(),
+            typeSpeed: isMobile() ? 36 : 42,
+            backSpeed: isMobile() ? 26 : 32,
+            backDelay: 1100,
+            startDelay: 150,
+            smartBackspace: true,
+            loop: true,
+            showCursor: true,
+            cursorChar: '|'
+        });
+    }
+
+    /* ========== Particles.js ========== */
+    const FORCE_PARTICLES_FOR_TEST = false; // set true bila ingin memaksa saat Reduce Motion aktif
+    async function loadParticlesLib() {
+        if (window.particlesJS) return;
+        try {
+            await ensureScript('particlesjs-cdn', 'https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js');
+        } catch (e) {
+            try {
+                await ensureScript('particlesjs-local', '/assets/vendor/particles.min.js');
+            } catch (_e) {}
+        }
+    }
+
+    function particlesConfig() {
+        const m = isMobile();
+
+        // ambil dari CSS var --brand (fallback ke biru brand)
+        const brandHex =
+            getComputedStyle(document.documentElement).getPropertyValue('--brand').trim() || '#0da3de';
+
+        return {
+            particles: {
+                number: {
+                    value: m ? 24 : 48,
+                    density: {
+                        enable: true,
+                        value_area: m ? 600 : 900
+                    }
+                },
+                // WARNA PARTIKEL
+                color: {
+                    value: brandHex
+                }, // <-- hex 6 digit
+                shape: {
+                    type: 'circle'
+                }, // jangan pakai stroke 8-digit hex
+                opacity: {
+                    value: 0.45,
+                    random: true
+                }, // sedikit lebih tebal biar terlihat biru
+                size: {
+                    value: m ? 1.8 : 2.8,
+                    random: true
+                },
+                line_linked: {
+                    enable: true,
+                    distance: m ? 110 : 140,
+                    color: brandHex, // <-- hex 6 digit
+                    opacity: 0.5,
+                    width: 1
+                },
+                move: {
+                    enable: true,
+                    speed: m ? 0.9 : 1.2,
+                    direction: 'none',
+                    out_mode: 'out'
+                }
+            },
+            interactivity: {
+                detect_on: 'canvas',
+                events: {
+                    onhover: {
+                        enable: false
+                    },
+                    onclick: {
+                        enable: false
+                    },
+                    resize: true
+                },
+                modes: {
+                    grab: {
+                        distance: 140,
+                        line_linked: {
+                            opacity: 0.5
+                        }
+                    },
+                    bubble: {
+                        distance: 200,
+                        size: 3,
+                        duration: 0.4,
+                        opacity: 0.8,
+                        speed: 3
+                    },
+                    repulse: {
+                        distance: 200,
+                        duration: 0.4
+                    },
+                    push: {
+                        particles_nb: 2
+                    },
+                    remove: {
+                        particles_nb: 2
+                    }
+                }
+            },
+            retina_detect: true
+        };
+    }
+
+
+
+    function mountParticles() {
+        const host = document.getElementById('particles-js');
+        if (!host) {
+            console.warn('[particles] #particles-js tidak ditemukan');
+            return;
+        }
+
+        const reduce = reduceMotion();
+        console.log('[particles] reduceMotion=', reduce, 'FORCE=', FORCE_PARTICLES_FOR_TEST);
+
+        // paksa tampil saat tes
+        if (reduce && !FORCE_PARTICLES_FOR_TEST) {
+            host.style.display = 'none';
+            console.log('[particles] dimatikan karena prefers-reduced-motion');
+            return;
+        } else {
+            host.style.display = '';
+        }
+
+        if (!window.particlesJS) {
+            console.warn('[particles] library belum siap (particlesJS undefined)');
+            return;
+        }
+
+        // Cek ukuran kontainer; kalau 0 jangan init dulu
+        const rect = host.getBoundingClientRect();
+        console.log('[particles] host rect:', rect);
+        if (rect.width === 0 || rect.height === 0) {
+            // coba tunggu sampai layout settle
+            requestAnimationFrame(() => setTimeout(mountParticles, 120));
+            console.log('[particles] tunda init karena ukuran 0');
+            return;
+        }
+
+        host.innerHTML = ''; // reset canvas lama
+        window.particlesJS('particles-js', particlesConfig());
+        console.log('[particles] inisialisasi OK');
+    }
+
+
+    /* ========== Boot (satu kali, rapi) ========== */
+    document.addEventListener('DOMContentLoaded', async () => {
+        await loadTypedLib();
+        await loadParticlesLib();
+
+        initReveal();
+        mountTyped();
+        mountParticles();
+
+        /* Re-mount setelah gambar hero selesai */
+        window.addEventListener('load', () => mountParticles(), {
+            once: true
+        });
+
+        /* Re-init ringan saat resize */
+        let rt = null;
+        window.addEventListener('resize', () => {
+            clearTimeout(rt);
+            rt = setTimeout(() => {
+                mountTyped();
+                mountParticles();
+            }, 160);
+        }, {
+            passive: true
+        });
+    });
 </script>
+
+
+
 
 
 </body>

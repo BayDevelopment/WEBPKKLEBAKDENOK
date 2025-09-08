@@ -2,6 +2,39 @@
 
 <?= $this->section('content_public') ?>
 <style>
+    /* Fade-in on scroll */
+    .reveal {
+        opacity: 0;
+        transform: translateY(16px);
+        transition: opacity .6s ease, transform .6s ease;
+        transition-delay: var(--d, 0ms);
+        will-change: opacity, transform;
+    }
+
+    .reveal.show {
+        opacity: 1;
+        transform: none;
+    }
+
+    /* Hormati preferensi pengguna */
+    @media (prefers-reduced-motion: reduce) {
+
+        .reveal,
+        .reveal.show {
+            opacity: 1 !important;
+            transform: none !important;
+            transition: none !important;
+        }
+    }
+
+    /* Kompat: dukung .is-visible (versi lama) & .show (versi baru) */
+    .reveal.is-visible,
+    .reveal.show {
+        opacity: 1;
+        transform: none;
+    }
+
+
     /* Breadcrumb */
     .breadcrumb-modern {
         background: rgba(0, 98, 204, 0.06);
@@ -183,7 +216,7 @@
         </header>
 
         <!-- Content card -->
-        <article class="card shadow-soft border-0 rounded-4 overflow-hidden" style="--d:120ms">
+        <article class="card shadow-soft border-0 rounded-4 overflow-hidden reveal" style="--d:120ms">
             <div class="card-body p-4 p-lg-5 content-typo">
 
                 <p>
@@ -239,36 +272,34 @@
 </section>
 
 <script type="module">
-    // tahun otomatis
-    document.getElementById('year').textContent = new Date().getFullYear();
+    // Tahun otomatis (aman bila #year tidak ada)
+    const y = document.getElementById('year');
+    if (y) y.textContent = new Date().getFullYear();
 
+    /* ===== Sticky navbar dinamis ===== */
     document.addEventListener('DOMContentLoaded', function() {
         const topbar = document.querySelector('.navbar-information-sosmed');
-        const nav = document.querySelector('nav.navbar'); // nav kamu
+        const nav = document.querySelector('nav.navbar');
         if (!nav) return;
 
-        // Matikan sticky-top (kalau ada di HTML), biar kontrol penuh di JS
         nav.classList.remove('sticky-top');
 
-        // Placeholder untuk cegah layout shift saat nav jadi fixed
         const placeholder = document.createElement('div');
         placeholder.setAttribute('aria-hidden', 'true');
-        placeholder.style.height = '5px';
+        placeholder.style.height = '0px';
         nav.parentNode.insertBefore(placeholder, nav.nextSibling);
 
         let threshold = 0;
 
         function recalc() {
-            // ambil tinggi topbar sebagai ambang
             threshold = topbar ? topbar.offsetHeight : 0;
-            // kalau sedang fixed, update tinggi placeholder sesuai tinggi nav terbaru
             if (nav.classList.contains('fixed-top')) {
                 placeholder.style.height = nav.offsetHeight + 'px';
             }
         }
 
         function onScroll() {
-            const y = window.scrollY || window.pageYOffset || 0;
+            const y = window.scrollY || 0;
             if (y >= threshold) {
                 if (!nav.classList.contains('fixed-top')) {
                     nav.classList.add('fixed-top');
@@ -281,65 +312,53 @@
                 }
             }
         }
-
-        // init
         recalc();
         onScroll();
-
-        // responsive: hitung ulang saat resize/orientasi berubah
         window.addEventListener('resize', () => {
             recalc();
             onScroll();
+        }, {
+            passive: true
         });
         window.addEventListener('scroll', onScroll, {
             passive: true
         });
-
-        // rerun kecil setelah font/asset selesai load (tinggi bisa berubah)
         setTimeout(() => {
             recalc();
             onScroll();
         }, 200);
     });
 
+    /* ===== Loader + Modal (sekali per sesi) ===== */
     (function() {
-        const LOADER_MIN_MS = 700; // durasi minimum loader (halus)
-        const SHOW_MODAL_ONCE = true; // ubah ke false jika ingin tampil setiap kunjungan
+        const LOADER_MIN_MS = 700;
+        const SHOW_MODAL_ONCE = true;
         const SESSION_KEY = 'welcomeShown';
 
         const loader = document.getElementById('app-loader');
         const modalEl = document.getElementById('welcomeModal');
-
         const startTime = Date.now();
 
-        // Ketika semua aset selesai dimuat
         window.addEventListener('load', function() {
             const elapsed = Date.now() - startTime;
             const delay = Math.max(0, LOADER_MIN_MS - elapsed);
-
             setTimeout(function() {
-                // Sembunyikan & lepas loader
                 if (loader) {
                     loader.classList.add('hidden');
                     setTimeout(() => loader.remove(), 450);
                 }
-
-                // Tampilkan modal (sekali per sesi, bisa diubah)
                 const already = sessionStorage.getItem(SESSION_KEY);
                 if (!SHOW_MODAL_ONCE || !already) {
                     if (window.bootstrap && modalEl) {
-                        const modal = new bootstrap.Modal(modalEl, {
+                        new bootstrap.Modal(modalEl, {
                             backdrop: 'static',
                             keyboard: false
-                        });
-                        modal.show();
+                        }).show();
                     }
                     sessionStorage.setItem(SESSION_KEY, '1');
                 }
             }, delay);
         });
-
-        // Fallback: jika browser kembali dari BFCache, pastikan loader tidak muncul lagi
         window.addEventListener('pageshow', function(e) {
             if (e.persisted && loader) {
                 loader.classList.add('hidden');
@@ -347,103 +366,120 @@
         });
     })();
 
-    particlesJS("particles-js", {
-        particles: {
-            number: {
-                value: 80,
-                density: {
-                    enable: true,
-                    value_area: 800
-                }
-            },
-            color: {
-                value: "#3498db"
-            }, // biru modern
-            shape: {
-                type: "circle"
-            },
-            opacity: {
-                value: 0.6,
-                random: true
-            },
-            size: {
-                value: 4,
-                random: true
-            },
-            line_linked: {
-                enable: true,
-                distance: 150,
-                color: "#3498db",
-                opacity: 0.4,
-                width: 1
-            },
-            move: {
-                enable: true,
-                speed: 3,
-                direction: "none",
-                random: false,
-                straight: false,
-                out_mode: "out"
-            }
-        },
-        interactivity: {
-            detect_on: "canvas",
-            events: {
-                onhover: {
-                    enable: true,
-                    mode: "grab"
-                },
-                onclick: {
-                    enable: true,
-                    mode: "push"
-                }
-            },
-            modes: {
-                grab: {
-                    distance: 200,
-                    line_linked: {
-                        opacity: 0.8
+    /* ===== Particles (guard: hanya jika #particles-js ada) ===== */
+    (function() {
+        const host = document.getElementById('particles-js');
+        if (!host || !window.particlesJS) return; // aman bila tidak ada di halaman ini
+        window.particlesJS('particles-js', {
+            particles: {
+                number: {
+                    value: 60,
+                    density: {
+                        enable: true,
+                        value_area: 800
                     }
                 },
-                push: {
-                    particles_nb: 4
+                color: {
+                    value: "#3498db"
+                },
+                shape: {
+                    type: "circle"
+                },
+                opacity: {
+                    value: 0.5,
+                    random: true
+                },
+                size: {
+                    value: 3,
+                    random: true
+                },
+                line_linked: {
+                    enable: true,
+                    distance: 150,
+                    color: "#3498db",
+                    opacity: 0.35,
+                    width: 1
+                },
+                move: {
+                    enable: true,
+                    speed: 2,
+                    direction: "none",
+                    out_mode: "out"
                 }
-            }
-        },
-        retina_detect: true
-    });
+            },
+            interactivity: {
+                detect_on: "canvas",
+                events: {
+                    onhover: {
+                        enable: true,
+                        mode: "grab"
+                    },
+                    onclick: {
+                        enable: true,
+                        mode: "push"
+                    }
+                },
+                modes: {
+                    grab: {
+                        distance: 180,
+                        line_linked: {
+                            opacity: 0.7
+                        }
+                    },
+                    push: {
+                        particles_nb: 3
+                    }
+                }
+            },
+            retina_detect: true
+        });
+    })();
 
-    // fade in
+    /* ===== Fade-in on scroll ===== */
     (function() {
-        const items = document.querySelectorAll('.reveal');
+        // Auto-tag beberapa elemen jadi .reveal (kalau belum)
+        const autoTargets = [
+            '.breadcrumb-modern',
+            'header.about-hero',
+            'article.card',
+            '.content-typo p',
+            '.list-modern',
+            '.list-check'
+        ];
+        document.querySelectorAll(autoTargets.join(',')).forEach(el => {
+            if (!el.classList.contains('reveal')) el.classList.add('reveal');
+        });
 
-        if (!('IntersectionObserver' in window) || !items.length) {
-            // Fallback: tampilkan langsung
-            items.forEach(el => el.classList.add('is-visible'));
+        const items = document.querySelectorAll('.reveal');
+        if (!items.length) return;
+
+        // Fallback jika IntersectionObserver tidak ada
+        if (!('IntersectionObserver' in window)) {
+            items.forEach(el => el.classList.add('show'));
             return;
         }
 
         const io = new IntersectionObserver((entries, obs) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    entry.target.classList.add('is-visible');
-                    obs.unobserve(entry.target); // animasi sekali saja
+                    entry.target.classList.add('show');
+                    obs.unobserve(entry.target); // animasi sekali
                 }
             });
         }, {
-            root: null,
-            threshold: 0.12,
-            rootMargin: '0px 0px -8% 0px'
+            threshold: 0.14,
+            rootMargin: '0px 0px -6% 0px'
         });
 
+        // Atur stagger otomatis (opsional)
         items.forEach((el, i) => {
-            // jika belum set delay, kasih stagger otomatis 60ms
             if (!el.style.getPropertyValue('--d')) {
-                el.style.setProperty('--d', (i % 8) * 60);
+                el.style.setProperty('--d', (i % 8) * 60); // 0,60,120ms, ...
             }
             io.observe(el);
         });
     })();
 </script>
+
 
 <?= $this->endSection() ?>
