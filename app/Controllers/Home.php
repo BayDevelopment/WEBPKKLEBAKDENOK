@@ -84,4 +84,12 @@ class Home extends BaseController
         ];
         return view('pages/public/hubungi', $data);
     }
+    public function ProgramPkk()
+    {
+        $data = [
+            'title' => 'Program Kami | PKK Kelurahan Lebak Denok',
+            'navLink' => 'ProgramKami' //untuk navlink 
+        ];
+        return view('pages/public/program-pkk', $data);
+    }
 }

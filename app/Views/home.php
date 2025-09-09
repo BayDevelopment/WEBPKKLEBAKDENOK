@@ -1,6 +1,115 @@
 <?= $this->extend('templates/template_public') ?>
 
 <?= $this->section('content_public') ?>
+<!-- CSS -->
+<style>
+    /* ====== Jumbotron Modern ====== */
+    .section-cover-jumbotron {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        background: radial-gradient(1200px 600px at 20% 110%,
+                rgba(13, 163, 222, 0.06),
+                transparent),
+            #fff;
+        position: relative;
+        color: white;
+    }
+
+    /* Text cutout gradient effect */
+    .text-cutout {
+        background: linear-gradient(90deg, #0da3de, #36c4f1, #ffffff);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: gradientShift 5s ease infinite;
+    }
+
+    @keyframes gradientShift {
+        0% {
+            background-position: 0% 50%;
+        }
+
+        50% {
+            background-position: 100% 50%;
+        }
+
+        100% {
+            background-position: 0% 50%;
+        }
+    }
+
+    .text-gradient {
+        background: linear-gradient(180deg,
+                rgba(32, 181, 18, 0.29) 0%,
+                rgba(228, 247, 236, 1) 0%,
+                rgba(32, 181, 18, 0.13) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-weight: 500;
+    }
+
+    /* Button */
+    .btn-primary {
+        background: linear-gradient(90deg,
+                rgba(51, 230, 60, 1) 0%,
+                rgba(7, 145, 30, 1) 100%);
+        border: none;
+        font-weight: bold;
+        padding: 1rem 2rem;
+        border-radius: 50px;
+        transition: 0.3s;
+        text-transform: uppercase;
+    }
+
+    .btn-primary:hover {
+        transform: scale(1.05);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        background: linear-gradient(90deg,
+                rgba(51, 230, 60, 1) 0%,
+                rgba(7, 145, 30, 1) 100%);
+    }
+
+    /* Particles full-screen behind content */
+    #particles-js {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+    }
+
+    .container {
+        position: relative;
+        z-index: 2;
+    }
+
+    /* Fade-in animation */
+    .reveal-up {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: all 0.8s ease-out;
+    }
+
+    .reveal-up.show {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* Responsive Text */
+    @media (max-width: 768px) {
+        .display-3 {
+            font-size: 2.5rem;
+        }
+
+        .fs-4 {
+            font-size: 1.5rem;
+        }
+    }
+</style>
+
 <!-- LOADER OVERLAY -->
 <div id="app-loader" role="status" aria-live="polite" aria-label="Memuat halaman">
     <div class="loader-box">
@@ -88,7 +197,7 @@
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                         Tutup
                     </button>
-                    <a href="#" class="btn btn-brand">
+                    <a href="/program" class="btn btn-brand">
                         Lihat Program
                     </a>
                 </div>
@@ -98,28 +207,26 @@
 </div>
 
 
+<!-- Jumbotron Modern -->
+<section class="section-cover-jumbotron position-relative reveal reveal-up">
+    <!-- Particles -->
+    <div id="particles-js"></div>
 
-<section class="section-cover-jumbtron position-relative reveal reveal-up">
-    <div class="p-5 mb-4 bg-body-jumbotron position-relative text-white">
-        <!-- Partikel DIPINDAH KE SINI -->
-        <div id="particles-js" aria-hidden="true"></div>
-
-        <!-- Konten -->
-        <div class="container justify-content-center text-center py-5">
-            <h3 class="display-4 text-uppercase text-cutout">tp pkk kelurahan lebak denok</h3>
-            <p class="fs-4 text-gradient">
-                <span id="typed-container"><span id="typed"></span></span>
-            </p>
-        </div>
+    <!-- Konten -->
+    <div class="container text-center py-5 position-relative text-white">
+        <h1 class="display-3 fw-bold text-uppercase text-cutout">TP PKK Kelurahan Lebak Denok</h1>
+        <p class="fs-4 mt-3 text-gradient">
+            <span id="typed-container"><span id="typed"></span></span>
+        </p>
+        <a href="#kontak" class="btn btn-lg btn-primary mt-4 shadow-lg">Gabung Bersama Kami</a>
     </div>
 </section>
 
-
-<section class="section-intro py-5 py-lg-6 reveal">
+<section class="section-intro py-5 py-lg-6 ">
     <div class="container">
         <div class="row align-items-center g-4">
             <!-- Gambar (muncul dulu di mobile) -->
-            <div class="col-lg-6 order-1 order-lg-2">
+            <div class="col-lg-6 order-1 order-lg-2 reveal">
                 <div class="illustration-wrap">
                     <img
                         src="<?= base_url('assets/img/section-content.png') ?>"
@@ -130,8 +237,8 @@
             </div>
 
             <!-- Konten teks -->
-            <div class="col-lg-6 order-2 order-lg-1">
-                <h2 class="section-title h2 fw-bold mb-3 mt-3">Pendahuluan</h2>
+            <div class="col-lg-6 order-2 order-lg-1 reveal">
+                <h2 class="section-title h2 fw-bold mb-3 mt-5">Pendahuluan</h2>
                 <p class="lead text-muted mb-3">
                     Hakikat pembangunan nasional membangun manusia seutuhnya dan membangun masyarakat Indonesia seluruhnya.
                     Hakekat pembangunan nasional akan terwujud apabila kesejahteraan keluarga dan masyarakat dapat terlaksana dengan baik.

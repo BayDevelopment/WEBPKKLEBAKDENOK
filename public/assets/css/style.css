@@ -4,8 +4,8 @@
 
 /* ===== Variabel global ===== */
 :root {
-  --brand: #0da3de;
-  --brand-2: #36c4f1;
+  --brand: #07b91fc5;
+  --brand-2: #07b91fc5;
   --ink: #0f172a;
   --ink-muted: #6b7280;
   --muted: #6b7280;
@@ -80,9 +80,9 @@ body {
 .navbar-information-sosmed {
   background: linear-gradient(
     90deg,
-    rgba(13, 163, 222, 1) 0%,
+    rgb(20, 133, 5) 0%,
     rgba(228, 247, 236, 1) 0%,
-    rgba(13, 163, 222, 1) 100%
+    rgb(20, 133, 5) 100%
   );
 }
 .text-native {
@@ -208,7 +208,7 @@ body {
   font-weight: 600;
   transform: translateY(0.05em);
   font-size: 1.2em;
-  color: #f7f1f1;
+  color: #f1f7f2;
   animation: blink 0.7s infinite;
 }
 @keyframes blink {
@@ -233,6 +233,9 @@ body {
 }
 
 /* ===== Nav underline lembut ===== */
+.w-navbar-logo {
+  width: 140px;
+}
 .nav-modern .nav-link {
   position: relative;
   font-weight: 600;
@@ -341,12 +344,12 @@ body {
 }
 @media (max-width: 767.98px) {
   .navbar-information-sosmed {
+    background: #20b512;
     background: linear-gradient(
       90deg,
-      rgba(13, 163, 222, 1) 0%,
-      rgba(228, 247, 236, 1) 0%,
-      rgba(13, 163, 222, 1) 0%
-    ) !important;
+      rgb(205, 248, 208) 0%,
+      rgba(7, 145, 30, 1) 100%
+    );
   }
   .navbar-information-sosmed .container > .d-flex {
     display: none !important;
@@ -364,8 +367,8 @@ body {
   font-weight: 800;
   letter-spacing: 0.06em;
   color: transparent !important;
-  -webkit-text-stroke: 2px #adc3ff;
-  text-stroke: 2px #d7ebf7;
+  -webkit-text-stroke: 2px rgb(20, 133, 5);
+  text-stroke: 2px #0aa324;
   filter: drop-shadow(0 2px 6px rgba(241, 241, 241, 0.25));
   text-transform: uppercase;
 }
@@ -428,7 +431,7 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  background: linear-gradient(135deg, #0da3dec5, #0da3dec5);
+  background: linear-gradient(135deg, #07b91fc5, #07b91fc5);
   color: #fff;
   padding: 0.4rem 1rem;
   border-radius: 999px;
@@ -652,7 +655,7 @@ body {
       rgba(255, 255, 255, 0.12),
       transparent
     ),
-    linear-gradient(180deg, #0b93d4 0%, #0da3de 100%);
+    linear-gradient(180deg, #07b91fc5 0%, #07b91fc5 100%);
 }
 .footer-pkk::before {
   content: "";
@@ -753,7 +756,7 @@ body {
       rgba(13, 163, 222, 0.1),
       transparent
     ),
-    linear-gradient(180deg, #0b93d4 0%, #0da3de 100%);
+    linear-gradient(180deg, #07b91fc5 0%, #07b91fc5 100%);
   color: #fff;
   transition: opacity 0.4s ease, visibility 0.4s ease;
 }

@@ -20,3 +20,4 @@ $routes->get('/tanamanku', 'Home::Tanamanku');
 $routes->get('/tanamanku/1', 'Home::DetailTanamanku');
 $routes->get('/kuis-masyarakat', 'Home::Kuis');
 $routes->get('/hubungi-kami', 'Home::HubungiKami');
+$routes->get('/program', 'Home::ProgramPkk');

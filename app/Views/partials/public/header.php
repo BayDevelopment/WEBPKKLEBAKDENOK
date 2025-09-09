@@ -2,11 +2,23 @@
 <html lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="index, follow">
+    <meta name="description" content="Website resmi TP PKK Kelurahan Lebak Denok yang mempromosikan program-program kesejahteraan keluarga.">
+    <meta name="keywords" content="PKK, Lebak Denok, Keluarga Sehat, Cerdas, Sejahtera, Program PKK, Kesejahteraan Keluarga">
+    <meta property="og:title" content="TP PKK Kelurahan Lebak Denok">
+    <meta property="og:description" content="Website resmi TP PKK Kelurahan Lebak Denok yang mempromosikan program-program kesejahteraan keluarga.">
+    <meta property="og:image" content="<?= base_url('assets/img/logo-pkk-lebakdenok.jpg') ?>">
+    <meta property="og:url" content="https://pkklebakdenok.my.id/">
     <title><?= esc($title) ?></title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="canonical" href="https://pkklebakdenok.my.id/"> <!-- Menghindari konten duplikat -->
 
+
+    <!-- icon -->
+    <link rel="icon" href="<?= base_url('assets/img/logo-pkk-lebakdenok.jpg') ?>" type="image/x-icon">
+    <!-- bootstrap css -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <!-- css external -->
     <link rel="stylesheet" href="<?= base_url('assets/css/style.css') ?>">
     <!-- cdn fontawesome -->
@@ -32,6 +44,18 @@
             hyphens: auto;
             line-height: 1.3;
         }
+
+        #typed {
+            font-size: 2rem;
+            font-weight: bold;
+            background: linear-gradient(90deg, #138b318c, #138b318c, #ffffff);
+            /* Gradien hijau, biru, putih */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
+            /* Efek bayangan untuk teks */
+        }
+
 
         /* Cursor */
         .typed-cursor {
@@ -129,9 +153,11 @@
 
         </section>
 
-        <nav class="navbar navbar-expand-lg bg-body-native-navbar sticky-top">
+        <nav id="navbar" class="navbar navbar-expand-lg bg-body-native-navbar ">
             <div class="container">
-                <a class="navbar-brand" href="/">PKK <span class="span-color">LEBAK DENOK</span></a>
+                <a class="navbar-brand" href="#">
+                    <img src="<?= base_url('assets/img/logo-navbar-pkk.png') ?>" alt="PKK LEBAK DENOK" class="w-navbar-logo">
+                </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>

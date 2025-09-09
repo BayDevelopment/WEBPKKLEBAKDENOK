@@ -58,19 +58,36 @@
     </div>
 </section>
 
-<script>
-
-</script>
 
 <!-- partikel js -->
 <script src="https://cdn.jsdelivr.net/npm/typed.js@2.1.0/dist/typed.umd.js" defer></script>
-<!-- partikel -->
+<!-- Memuat library Particles.js -->
 <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js" defer></script>
+
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 
 <script>
     /* ========== Utils ========== */
+
+    document.addEventListener("DOMContentLoaded", function() {
+        const navbar = document.getElementById("navbar");
+        const sticky = navbar.offsetTop; // Mendapatkan posisi offset navbar
+
+        // Fungsi untuk menambah/menghapus kelas fixed-top berdasarkan scroll
+        function onScroll() {
+            if (window.pageYOffset > sticky) {
+                navbar.classList.add("fixed-top"); // Menambahkan kelas fixed-top
+            } else {
+                navbar.classList.remove("fixed-top"); // Menghapus kelas fixed-top
+            }
+        }
+
+        // Menambahkan event listener saat scroll
+        window.addEventListener("scroll", onScroll);
+    });
+
+
     function ensureScript(id, src) {
         return new Promise((res, rej) => {
             if (document.getElementById(id)) return res();
@@ -83,64 +100,11 @@
             document.head.appendChild(s);
         });
     }
+
     const isMobile = () => window.matchMedia('(max-width:575.98px)').matches;
     const reduceMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    /* Tahun footer */
-    document.addEventListener('DOMContentLoaded', () => {
-        const y = document.getElementById('year');
-        if (y) y.textContent = new Date().getFullYear();
-    });
-
-    /* ========== Sticky nav dinamis (tanpa CLS) ========== */
-    document.addEventListener('DOMContentLoaded', function() {
-        const topbar = document.querySelector('.navbar-information-sosmed');
-        const nav = document.querySelector('nav.navbar');
-        if (!nav) return;
-        nav.classList.remove('sticky-top');
-
-        const placeholder = document.createElement('div');
-        placeholder.setAttribute('aria-hidden', 'true');
-        placeholder.style.height = '0px';
-        nav.parentNode.insertBefore(placeholder, nav.nextSibling);
-
-        let threshold = 0;
-        const recalc = () => {
-            threshold = topbar ? topbar.offsetHeight : 0;
-            if (nav.classList.contains('fixed-top')) placeholder.style.height = nav.offsetHeight + 'px';
-        };
-        const onScroll = () => {
-            const y = window.scrollY || 0;
-            if (y >= threshold) {
-                if (!nav.classList.contains('fixed-top')) {
-                    nav.classList.add('fixed-top');
-                    placeholder.style.height = nav.offsetHeight + 'px';
-                }
-            } else {
-                if (nav.classList.contains('fixed-top')) {
-                    nav.classList.remove('fixed-top');
-                    placeholder.style.height = '0px';
-                }
-            }
-        };
-        recalc();
-        onScroll();
-        window.addEventListener('resize', () => {
-            recalc();
-            onScroll();
-        }, {
-            passive: true
-        });
-        window.addEventListener('scroll', onScroll, {
-            passive: true
-        });
-        setTimeout(() => {
-            recalc();
-            onScroll();
-        }, 200);
-    });
-
-    /* ========== Loader + Modal sekali sesi ========== */
+    /* ========== Loader + Modal once per session ========== */
     (function() {
         const LOADER_MIN_MS = 700,
             SHOW_MODAL_ONCE = true,
@@ -166,6 +130,7 @@
                 }
             }, delay);
         });
+
         window.addEventListener('pageshow', e => {
             if (e.persisted && loader) loader.classList.add('hidden');
         });
@@ -260,97 +225,41 @@
     }
 
     /* ========== Particles.js ========== */
-    const FORCE_PARTICLES_FOR_TEST = false; // set true bila ingin memaksa saat Reduce Motion aktif
-    async function loadParticlesLib() {
-        if (window.particlesJS) return;
-        try {
-            await ensureScript('particlesjs-cdn', 'https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js');
-        } catch (e) {
-            try {
-                await ensureScript('particlesjs-local', '/assets/vendor/particles.min.js');
-            } catch (_e) {}
-        }
-    }
-
     function particlesConfig() {
-        const m = isMobile();
-
-        // ambil dari CSS var --brand (fallback ke biru brand)
-        const brandHex =
-            getComputedStyle(document.documentElement).getPropertyValue('--brand').trim() || '#0da3de';
-
         return {
             particles: {
                 number: {
-                    value: m ? 24 : 48,
+                    value: 50,
                     density: {
                         enable: true,
-                        value_area: m ? 600 : 900
+                        value_area: 800
                     }
                 },
-                // WARNA PARTIKEL
                 color: {
-                    value: brandHex
-                }, // <-- hex 6 digit
-                shape: {
-                    type: 'circle'
-                }, // jangan pakai stroke 8-digit hex
-                opacity: {
-                    value: 0.45,
-                    random: true
-                }, // sedikit lebih tebal biar terlihat biru
-                size: {
-                    value: m ? 1.8 : 2.8,
-                    random: true
+                    value: "#0da3de" // Particle color
                 },
-                line_linked: {
-                    enable: true,
-                    distance: m ? 110 : 140,
-                    color: brandHex, // <-- hex 6 digit
-                    opacity: 0.5,
-                    width: 1
+                shape: {
+                    type: "circle"
+                },
+                opacity: {
+                    value: 0.5,
+                    random: true,
+                },
+                size: {
+                    value: 5,
+                    random: true,
                 },
                 move: {
                     enable: true,
-                    speed: m ? 0.9 : 1.2,
-                    direction: 'none',
-                    out_mode: 'out'
+                    speed: 3,
+                    direction: "none",
                 }
             },
             interactivity: {
-                detect_on: 'canvas',
                 events: {
                     onhover: {
-                        enable: false
-                    },
-                    onclick: {
-                        enable: false
-                    },
-                    resize: true
-                },
-                modes: {
-                    grab: {
-                        distance: 140,
-                        line_linked: {
-                            opacity: 0.5
-                        }
-                    },
-                    bubble: {
-                        distance: 200,
-                        size: 3,
-                        duration: 0.4,
-                        opacity: 0.8,
-                        speed: 3
-                    },
-                    repulse: {
-                        distance: 200,
-                        duration: 0.4
-                    },
-                    push: {
-                        particles_nb: 2
-                    },
-                    remove: {
-                        particles_nb: 2
+                        enable: true,
+                        mode: "repulse"
                     }
                 }
             },
@@ -358,52 +267,25 @@
         };
     }
 
-
-
     function mountParticles() {
         const host = document.getElementById('particles-js');
         if (!host) {
-            console.warn('[particles] #particles-js tidak ditemukan');
+            console.warn('[particles] #particles-js not found');
             return;
-        }
-
-        const reduce = reduceMotion();
-        console.log('[particles] reduceMotion=', reduce, 'FORCE=', FORCE_PARTICLES_FOR_TEST);
-
-        // paksa tampil saat tes
-        if (reduce && !FORCE_PARTICLES_FOR_TEST) {
-            host.style.display = 'none';
-            console.log('[particles] dimatikan karena prefers-reduced-motion');
-            return;
-        } else {
-            host.style.display = '';
         }
 
         if (!window.particlesJS) {
-            console.warn('[particles] library belum siap (particlesJS undefined)');
+            console.warn('[particles] particles.js not loaded');
             return;
         }
 
-        // Cek ukuran kontainer; kalau 0 jangan init dulu
-        const rect = host.getBoundingClientRect();
-        console.log('[particles] host rect:', rect);
-        if (rect.width === 0 || rect.height === 0) {
-            // coba tunggu sampai layout settle
-            requestAnimationFrame(() => setTimeout(mountParticles, 120));
-            console.log('[particles] tunda init karena ukuran 0');
-            return;
-        }
-
-        host.innerHTML = ''; // reset canvas lama
+        host.innerHTML = ''; // Clear previous canvas
         window.particlesJS('particles-js', particlesConfig());
-        console.log('[particles] inisialisasi OK');
     }
 
-
-    /* ========== Boot (satu kali, rapi) ========== */
+    /* ========== Boot (Once Only, Clean Setup) ========== */
     document.addEventListener('DOMContentLoaded', async () => {
         await loadTypedLib();
-        await loadParticlesLib();
 
         initReveal();
         mountTyped();
@@ -427,11 +309,6 @@
         });
     });
 </script>
-
-
-
-
-
 </body>
 
 </html>
