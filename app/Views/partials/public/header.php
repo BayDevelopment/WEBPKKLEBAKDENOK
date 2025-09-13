@@ -9,14 +9,17 @@
     <meta name="keywords" content="PKK, Lebak Denok, Keluarga Sehat, Cerdas, Sejahtera, Program PKK, Kesejahteraan Keluarga">
     <meta property="og:title" content="TP PKK Kelurahan Lebak Denok">
     <meta property="og:description" content="Website resmi TP PKK Kelurahan Lebak Denok yang mempromosikan program-program kesejahteraan keluarga.">
-    <meta property="og:image" content="<?= base_url('assets/img/logo-pkk-lebakdenok.jpg') ?>">
+    <meta property="og:image" content="<?= base_url('assets/img/logo-baru.jpg') ?>">
     <meta property="og:url" content="https://pkklebakdenok.my.id/">
     <title><?= esc($title) ?></title>
     <link rel="canonical" href="https://pkklebakdenok.my.id/"> <!-- Menghindari konten duplikat -->
 
 
     <!-- icon -->
-    <link rel="icon" href="<?= base_url('assets/img/logo-pkk-lebakdenok.jpg') ?>" type="image/x-icon">
+    <link rel="icon" href="<?= base_url('assets/img/logo-baru.jpg') ?>" type="image/x-icon">
+    <!-- font -->
+    <link rel="preload" href="<?= base_url('assets/fonts/centurygothic.ttf') ?>"
+        as="font" type="font/ttf" crossorigin>
     <!-- bootstrap css -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <!-- css external -->
@@ -156,7 +159,7 @@
         <nav id="navbar" class="navbar navbar-expand-lg bg-body-native-navbar ">
             <div class="container">
                 <a class="navbar-brand" href="#">
-                    <img src="<?= base_url('assets/img/logo-navbar-pkk.png') ?>" alt="PKK LEBAK DENOK" class="w-navbar-logo">
+                    <img src="<?= base_url('assets/img/navbar-logo-new.png') ?>" alt="PKK LEBAK DENOK" class="w-navbar-logo">
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -195,6 +198,9 @@
                                 <li><a class="dropdown-item <?= ($navLink === 'KondisiWilayah') ? 'active' : '' ?>"
                                         aria-current="page"
                                         href="<?= base_url('/kondisi-wilayah') ?>">Kondisi Wilayah</a></li>
+                                <li><a class="dropdown-item <?= ($navLink === 'Sekretariat') ? 'active' : '' ?>"
+                                        aria-current="page"
+                                        href="<?= base_url('/sekretariat') ?>">Sekretariat</a></li>
                             </ul>
                         </li>
                         <li class="nav-item dropdown">
@@ -210,9 +216,9 @@
                             </ul>
                         </li>
                         <li class="nav-item">
-                            <a class="btn-native-quiz <?= ($navLink === 'Kuis') ? 'active' : '' ?>"
+                            <a class="btn-native-quiz <?= ($navLink === 'Daftar Quiz') ? 'active' : '' ?>"
                                 aria-current="page"
-                                href="<?= base_url('/kuis-masyarakat') ?>"><i class="fa-solid fa-circle-question"></i>Kuis Sekarang</a>
+                                href="<?= base_url('/quiz-list') ?>"><i class="fa-solid fa-circle-question"></i>Kuis Sekarang</a>
                         </li>
                     </ul>
                 </div>

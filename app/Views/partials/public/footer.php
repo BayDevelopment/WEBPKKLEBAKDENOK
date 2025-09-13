@@ -63,9 +63,73 @@
 <script src="https://cdn.jsdelivr.net/npm/typed.js@2.1.0/dist/typed.umd.js" defer></script>
 <!-- Memuat library Particles.js -->
 <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js" defer></script>
-
-
+<!-- bootstrap -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<!-- Flash SweetAlert (PASTIKAN DI DALAM <script>) -->
+<?php if (session()->getFlashdata('sweet_success')) : ?>
+    <script>
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+
+        Toast.fire({
+            icon: "success",
+            title: "<?= session()->getFlashdata('sweet_success'); ?>"
+        });
+    </script>
+<?php endif; ?>
+<?php if (session()->getFlashdata('sweet_error')) : ?>
+    <script>
+        const ToastError = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+
+        ToastError.fire({
+            icon: "error",
+            title: "<?= session()->getFlashdata('sweet_error'); ?>"
+        });
+    </script>
+<?php endif; ?>
+<?php if (session()->getFlashdata('flash_logout')) : ?>
+    <script>
+        const ToastLogout = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+
+        ToastLogout.fire({
+            icon: "success",
+            title: "<?= session()->getFlashdata('flash_logout'); ?>"
+        });
+    </script>
+<?php endif; ?>
 
 <script>
     /* ========== Utils ========== */
@@ -87,6 +151,17 @@
         window.addEventListener("scroll", onScroll);
     });
 
+    // Aktivasi Modal ketika halaman selesai dimuat
+    document.addEventListener('DOMContentLoaded', function() {
+        // Menunggu halaman selesai dimuat sebelum menampilkan modal
+        const modal = new bootstrap.Modal(document.getElementById('welcomeModal'), {
+            backdrop: 'static',
+            keyboard: false
+        });
+
+        // Menampilkan modal
+        modal.show();
+    });
 
     function ensureScript(id, src) {
         return new Promise((res, rej) => {

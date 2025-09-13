@@ -1,84 +1,129 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="utf-8">
-    <title><?= lang('Errors.pageNotFound') ?></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error 404 - Halaman Tidak Ditemukan</title>
+
+    <!-- Import Poppins font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 
     <style>
-        div.logo {
-            height: 200px;
-            width: 155px;
-            display: inline-block;
-            opacity: 0.08;
-            position: absolute;
-            top: 2rem;
-            left: 50%;
-            margin-left: -73px;
-        }
+        /* Body styling */
         body {
-            height: 100%;
-            background: #fafafa;
-            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-            color: #777;
-            font-weight: 300;
-        }
-        h1 {
-            font-weight: lighter;
-            letter-spacing: normal;
-            font-size: 3rem;
-            margin-top: 0;
-            margin-bottom: 0;
-            color: #222;
-        }
-        .wrap {
-            max-width: 1024px;
-            margin: 5rem auto;
-            padding: 2rem;
-            background: #fff;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #2a9d8f, #264653);
+            /* Green gradient */
+            color: #fff;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             text-align: center;
-            border: 1px solid #efefef;
-            border-radius: 0.5rem;
-            position: relative;
         }
-        pre {
-            white-space: normal;
-            margin-top: 1.5rem;
+
+        /* Main container for the 404 message */
+        .container {
+            background: rgba(13, 110, 253, 0.9);
+            padding: 50px;
+            border-radius: 12px;
+            box-shadow: 0 12px 40px rgba(13, 27, 42, 0.25);
+            width: 80%;
+            max-width: 500px;
+            transition: transform 0.3s ease-in-out;
         }
-        code {
-            background: #fafafa;
-            border: 1px solid #efefef;
-            padding: 0.5rem 1rem;
-            border-radius: 5px;
-            display: block;
+
+        .container:hover {
+            transform: scale(1.05);
         }
+
+        /* Heading styling */
+        h1 {
+            font-size: 72px;
+            font-weight: 700;
+            margin: 0;
+            color: #ff7eb3;
+            /* Pink color */
+        }
+
+        h2 {
+            font-size: 24px;
+            margin-top: 15px;
+            font-weight: 600;
+            color: #e76f51;
+            /* Accent color */
+        }
+
+        /* Paragraph styling */
         p {
-            margin-top: 1.5rem;
+            font-size: 18px;
+            margin-top: 15px;
+            color: #f1faee;
         }
-        .footer {
-            margin-top: 2rem;
-            border-top: 1px solid #efefef;
-            padding: 1em 2em 0 2em;
-            font-size: 85%;
-            color: #999;
+
+        /* Button styling */
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            margin-top: 20px;
+            background-color: #264653;
+            /* Dark green */
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            border-radius: 30px;
+            transition: background-color 0.3s ease;
+            font-weight: 600;
         }
-        a:active,
-        a:link,
-        a:visited {
-            color: #dd4814;
+
+        .btn:hover {
+            background-color: #e76f51;
+            /* Accent color on hover */
+        }
+
+        /* Fade-in effect */
+        .fade-in {
+            opacity: 0;
+            animation: fadeIn 1.5s forwards;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Link style for "Back to Home" */
+        .home-link {
+            margin-top: 20px;
+            display: inline-block;
+            font-size: 16px;
+            color: #0d6efd;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .home-link:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
-<body>
-    <div class="wrap">
-        <h1>404</h1>
 
-        <p>
-            <?php if (ENVIRONMENT !== 'production') : ?>
-                <?= nl2br(esc($message)) ?>
-            <?php else : ?>
-                <?= lang('Errors.sorryCannotFind') ?>
-            <?php endif; ?>
-        </p>
+<body>
+    <div class="container fade-in">
+        <h1>404</h1>
+        <h2>Halaman Tidak Ditemukan</h2>
+        <p>Maaf, halaman yang Anda cari tidak ada atau sudah dihapus.</p>
+        <a href="/" class="btn">Kembali ke Beranda</a>
     </div>
 </body>
+
 </html>

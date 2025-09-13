@@ -1,3 +1,7 @@
+<?php
+
+use CodeIgniter\I18n\Time;
+?>
 <?= $this->extend('templates/template_public') ?>
 
 <?= $this->section('content_public') ?>
@@ -327,6 +331,50 @@
         border-radius: 999px 0 0 999px;
         background: #fff;
     }
+
+    /* Frame ilustrasi supaya responsif */
+    .empty-illustration {
+        margin: auto;
+        width: min(560px, 86vw);
+        display: grid;
+        place-items: center;
+        aspect-ratio: 16/10;
+        justify-content: center;
+        text-align: center;
+    }
+
+    /* Gambar */
+    .img-empty-data {
+        width: 50%;
+        height: 100%;
+        object-fit: contain;
+        display: block;
+    }
+
+    /* Trik “remove background” untuk gambar berlatar putih */
+    .rmbg-white .img-empty-data {
+        mix-blend-mode: multiply;
+        /* putih jadi menyatu dg background */
+        isolation: isolate;
+        /* biar efek blend gak bocor ke luar container */
+    }
+
+    /* Teks */
+    .text-img-empty {
+        margin: 0;
+        font-weight: 700;
+        letter-spacing: .2px;
+        color: #334155;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .badge-soft {
+        background: rgba(78, 115, 223, .08);
+        color: #4e73df;
+        border: 1px solid rgba(78, 115, 223, .2);
+        border-radius: 999px
+    }
 </style>
 
 <!-- LOADER OVERLAY -->
@@ -360,9 +408,15 @@
                 </div>
                 <div class="col-lg-4">
                     <ul class="list-unstyled d-flex flex-wrap gap-2 justify-content-lg-end mb-0">
-                        <li><span class="chip"><i class="fa-solid fa-user me-2"></i>Admin</span></li>
-                        <li><span class="chip"><i class="fa-solid fa-calendar me-2"></i>06 September 2025</span></li>
-                        <li><span class="chip"><i class="fa-solid fa-signal me-2"></i>150 Kunjungan</span></li>
+                        <li>
+                            <span class="chip"><i class="fa-solid fa-calendar me-2"></i>
+                                <?php
+                                $nowJakarta = Time::now('Asia/Jakarta');              // WIB
+                                $labelNow   = $nowJakarta->toLocalizedString('d MMMM yyyy');
+                                ?>
+                                <?php echo $labelNow ?>
+                            </span>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -372,60 +426,85 @@
         <article class="card shadow-soft border-0 rounded-4 overflow-hidden reveal" style="--d:120ms">
             <div class="card-body p-4 p-lg-5 content-typo">
                 <div class="d-flex align-items-center gap-2 mb-3">
-                    <span class="text-body-secondary small">Tanamanku</span>
+                    <span class="badge badge-soft px-3 py-2 mr-2"><i class="fa-solid fa-leaf"></i></span> Tanamanku
                 </div>
 
                 <!-- Search bar modern -->
-                <div class="search-box mb-4">
+                <form action="<?= current_url() ?>" method="get" class="search-box mb-4" role="search">
                     <div class="input-group input-group-lg">
                         <span class="input-group-text bg-white border-end-0">
-                            <i class="fa-solid fa-magnifying-glass text-muted"></i>
+                            <i class="fa-solid fa-magnifying-glass text-muted" aria-hidden="true"></i>
                         </span>
-                        <input type="text"
+
+                        <input
+                            type="search"
                             class="form-control border-start-0"
+                            name="q"
+                            value="<?= esc($q ?? '') ?>"
                             placeholder="Cari tanaman di Kelurahan Lebak Denok..."
-                            aria-label="Cari Tanaman">
+                            aria-label="Cari Tanaman"
+                            maxlength="100" />
+
+                        <input type="hidden" name="per_page" value="<?= (int)($per_page ?? 12) ?>">
+
+                        <button class="btn btn-primary" type="submit">Cari</button>
+
+                        <?php if (!empty($q)) : ?>
+                            <a class="btn btn-outline-secondary" href="<?= current_url() ?>">Reset</a>
+                        <?php endif; ?>
                     </div>
-                </div>
+                </form>
+
 
 
                 <!-- Grid Kartu Tanaman -->
                 <div class="row g-4">
-                    <!-- Item Tanaman -->
-                    <div class="col-12 col-md-6 col-lg-4">
-                        <div class="plant-card h-100 reveal" style="--d:180ms">
-                            <figure class="plant-cover">
-                                <img src="<?= base_url('assets/img/img-phn-mangga.png') ?>"
-                                    alt="Pohon Mangga (Mangifera indica)"
-                                    class="plant-img">
-                            </figure>
+                    <?php if (!empty($d_tanaman)): ?>
+                        <!-- Item Tanaman -->
+                        <?php foreach ($d_tanaman as $dt): ?>
+                            <div class="col-12 col-md-6 col-lg-4">
+                                <div class="plant-card h-100 reveal" style="--d:180ms">
+                                    <figure class="plant-cover">
+                                        <img src="<?= base_url('assets/uploads/tanaman/' . esc($dt['foto_tanaman'])) ?>"
+                                            alt="Pohon Mangga (Mangifera indica)"
+                                            class="plant-img">
+                                    </figure>
 
-                            <div class="plant-body">
-                                <h3 class="plant-title">Mangga</h3>
-                                <p class="plant-latin"><em>Mangifera indica</em></p>
+                                    <div class="plant-body">
+                                        <h3 class="plant-title"><?= esc($dt['nama_umum']) ?></h3>
+                                        <p class="plant-latin"><em><?= esc($dt['nama_latin']) ?></em></p>
 
-                                <div class="plant-tags mb-2">
-                                    <span class="badge tag">Pohon buah</span>
-                                    <span class="badge tag alt">Obat Tradisional</span>
+                                        <dl class="plant-meta">
+                                            <dt>Asal/Daerah</dt>
+                                            <dd><?= esc($dt['asal_daerah']) ?></dd>
+
+                                            <dt>Manfaat</dt>
+                                            <dd><?= esc($dt['manfaat']) ?></dd>
+                                        </dl>
+                                    </div>
+
+                                    <div class="plant-actions">
+                                        <a href="<?= base_url('/tanamanku/detail/' . esc($dt['id_tanamanku'])) ?>" class="btn btn-plant">
+                                            <i class="fa-solid fa-eye me-2" aria-hidden="true"></i>
+                                            Detail
+                                        </a>
+                                    </div>
                                 </div>
-
-                                <dl class="plant-meta">
-                                    <dt>Asal/Daerah</dt>
-                                    <dd>Tumbuh di halaman rumah RT 02 RW 01</dd>
-
-                                    <dt>Manfaat</dt>
-                                    <dd>Buah untuk konsumsi; kayu dapat dimanfaatkan; daun untuk obat tradisional</dd>
-                                </dl>
                             </div>
-
-                            <div class="plant-actions">
-                                <a href="<?= base_url('/tanamanku/1') ?>" class="btn btn-plant">
-                                    <i class="fa-solid fa-eye me-2" aria-hidden="true"></i>
-                                    Detail
-                                </a>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <div class="cover-empty-data">
+                            <div class="empty-illustration rmbg-white">
+                                <img
+                                    src="<?= base_url('assets/img/img-empty.png') ?>"
+                                    alt="Tidak ada data saat ini"
+                                    class="img-empty-data"
+                                    loading="lazy"
+                                    decoding="async">
                             </div>
+                            <h6 class="text-img-empty">Tidak ada data saat ini!</h6>
                         </div>
-                    </div>
+                    <?php endif; ?>
                     <!-- /Item Tanaman -->
 
                     <!-- Contoh item lain (duplikasi & ganti datanya jika perlu)

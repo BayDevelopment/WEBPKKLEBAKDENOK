@@ -1,3 +1,7 @@
+<?php
+
+use CodeIgniter\I18n\Time;
+?>
 <?= $this->extend('templates/template_public') ?>
 
 <?= $this->section('content_public') ?>
@@ -525,6 +529,319 @@
         color: #e2e6ea;
         border-color: rgba(255, 255, 255, .12)
     }
+
+    :root {
+        --surface: #ffffff;
+        --bg: #f6f8fb;
+        --border: #e6eaf0;
+        --text: #1f2937;
+        --muted: #6b7280;
+        --accent: #2f7d32;
+        /* hijau tanaman */
+        --ring: rgba(47, 125, 50, .25);
+        --shadow: 0 1px 2px rgba(16, 24, 40, .06), 0 8px 24px rgba(16, 24, 40, .06);
+        --shadow-lg: 0 8px 24px rgba(16, 24, 40, .12);
+    }
+
+    /* ---- KARTU DETAIL ---- */
+    .plant-card {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: var(--shadow);
+        transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+    }
+
+    .plant-card:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
+        border-color: rgba(47, 125, 50, .25);
+    }
+
+    .plant-cover {
+        --ratio: 16/9;
+        margin: 0;
+        block-size: auto;
+        aspect-ratio: var(--ratio);
+        background: var(--bg);
+        overflow: hidden;
+    }
+
+    .plant-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        transform: scale(1.02);
+        transition: transform .6s cubic-bezier(.22, 1, .36, 1), filter .2s ease;
+    }
+
+    .plant-card:hover .plant-img {
+        transform: scale(1.05);
+    }
+
+    .plant-body {
+        padding: 1rem 1.25rem .5rem;
+        color: var(--text);
+    }
+
+    .plant-title {
+        font-weight: 700;
+        letter-spacing: .2px;
+    }
+
+    .plant-latin {
+        color: var(--muted);
+        font-size: .95rem;
+    }
+
+    .plant-meta {
+        margin: .75rem 0 0;
+        display: grid;
+        grid-template-columns: 160px 1fr;
+        column-gap: .75rem;
+        row-gap: .35rem;
+    }
+
+    .plant-meta dt {
+        margin: 0;
+        color: var(--muted);
+        font-weight: 600;
+    }
+
+    .plant-meta dd {
+        margin: 0;
+        color: var(--text);
+    }
+
+    /* aksi di bawah kartu */
+    .plant-actions {
+        margin-top: auto;
+        padding: 0 1.25rem 1.25rem;
+    }
+
+    .btn-plant {
+        --btn-bg: var(--accent);
+        --btn-bg-hover: #236b27;
+        --btn-fg: #fff;
+        display: inline-flex;
+        align-items: center;
+        gap: .5rem;
+        background: var(--btn-bg);
+        color: var(--btn-fg);
+        border: none;
+        border-radius: 12px;
+        padding: .65rem 1rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition: transform .15s ease, background .15s ease, box-shadow .15s ease;
+    }
+
+    .btn-plant:hover {
+        background: var(--btn-bg-hover);
+        color: #fff;
+        transform: translateY(-1px);
+    }
+
+    .btn-plant:focus-visible {
+        outline: 2px solid transparent;
+        box-shadow: 0 0 0 4px var(--ring);
+    }
+
+    /* ---- SECTION: TANAMAN LAINNYA ---- */
+    /* Tambahkan class ini pada <section class="mt-5 plant-related"> */
+    .plant-related h5 {
+        font-weight: 700;
+        letter-spacing: .2px;
+    }
+
+    .plant-related .related-list {
+        display: flex;
+        flex-direction: column;
+        gap: .75rem;
+    }
+
+    .plant-related .related-item {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: .9rem 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: .75rem;
+        transition: background .2s ease, border-color .2s ease, transform .2s ease;
+    }
+
+    .plant-related .related-item:hover {
+        border-color: rgba(47, 125, 50, .25);
+        background: #fbfdfa;
+        transform: translateY(-1px);
+    }
+
+    .plant-related .related-info .name {
+        font-weight: 600;
+        color: var(--text);
+        line-height: 1.2;
+    }
+
+    .plant-related .related-info .latin {
+        color: var(--muted);
+        font-style: italic;
+        font-size: .9rem;
+    }
+
+    .plant-related .btn-view {
+        border-radius: 10px;
+        font-weight: 600;
+        padding: .5rem .75rem;
+        display: inline-flex;
+        align-items: center;
+        gap: .4rem;
+    }
+
+    .plant-related .btn-view i {
+        transition: transform .15s ease;
+    }
+
+    .plant-related .btn-view:hover i {
+        transform: translateX(2px);
+    }
+
+    /* ---- ANIMASI REVEAL ---- */
+    .reveal {
+        opacity: 0;
+        transform: translateY(10px);
+        animation: reveal .6s cubic-bezier(.22, 1, .36, 1) forwards;
+        animation-delay: var(--d, 0ms);
+    }
+
+    @keyframes reveal {
+        to {
+            opacity: 1;
+            transform: none;
+        }
+    }
+
+    /* ---- RESPONSIVE ---- */
+    @media (max-width: 992px) {
+        .plant-meta {
+            grid-template-columns: 140px 1fr;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .plant-meta {
+            grid-template-columns: 1fr;
+        }
+
+        .plant-meta dt {
+            margin-top: .5rem;
+        }
+
+        .plant-actions {
+            padding: 0 1rem 1rem;
+        }
+
+        .plant-body {
+            padding: .9rem 1rem .25rem;
+        }
+    }
+
+    /* ---- DARK MODE ---- */
+    @media (prefers-color-scheme: dark) {
+        :root {
+            --bg: #ffffffff;
+            --border: #7a7a7adc;
+            --text: #0b1220;
+            --muted: #0b1220;
+            --ring: rgba(34, 197, 94, .28);
+            --shadow: 0 1px 2px rgba(0, 0, 0, .35), 0 8px 24px rgba(0, 0, 0, .35);
+        }
+
+        .plant-related .related-item:hover {
+            background: #ffffffff;
+        }
+    }
+
+    @media (min-width: 768px) {
+        .plant-related {
+            margin-top: 0 !important;
+        }
+    }
+
+
+
+    /* new */
+    /* SECTION related: header sticky, list scroll */
+    .plant-related {
+        display: flex;
+        flex-direction: column;
+        max-height: 200px;
+        /* batas tinggi */
+        overflow: hidden;
+        /* sembunyikan overflow parent, biar yang scroll list-nya */
+    }
+
+    .plant-related>h5 {
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        background: var(--surface, #fff);
+        /* fallback jika variabel root belum ada */
+        margin: 0 0 .75rem 0;
+        padding: .5rem 0;
+        border-bottom: 1px solid var(--border, #e6eaf0);
+    }
+
+    .plant-related .related-list {
+        /* ini yang scroll */
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+        /* Firefox */
+        scrollbar-color: rgba(47, 125, 50, .45) transparent;
+        padding-right: .25rem;
+        /* beri ruang agar scrollbar tak nutup konten */
+        min-height: 0;
+        /* penting untuk flex child yg bisa scroll */
+    }
+
+    /* WebKit scrollbar */
+    .plant-related .related-list::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .plant-related .related-list::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .plant-related .related-list::-webkit-scrollbar-thumb {
+        background: rgba(47, 125, 50, .45);
+        border-radius: 8px;
+    }
+
+    .plant-related .related-list::-webkit-scrollbar-thumb:hover {
+        background: rgba(47, 125, 50, .65);
+    }
+
+    /* Optional: nonaktifkan batas 500px di layar kecil agar tidak sempit */
+    @media (max-width: 575.98px) {
+        .plant-related {
+            max-height: none;
+        }
+    }
+
+    .badge-soft {
+        background: rgba(78, 115, 223, .08);
+        color: #4e73df;
+        border: 1px solid rgba(78, 115, 223, .2);
+        border-radius: 999px
+    }
 </style>
 
 <!-- LOADER OVERLAY -->
@@ -558,9 +875,16 @@
                 </div>
                 <div class="col-lg-4">
                     <ul class="list-unstyled d-flex flex-wrap gap-2 justify-content-lg-end mb-0">
-                        <li><span class="chip"><i class="fa-solid fa-user me-2"></i>Admin</span></li>
-                        <li><span class="chip"><i class="fa-solid fa-calendar me-2"></i>06 September 2025</span></li>
-                        <li><span class="chip"><i class="fa-solid fa-signal me-2"></i>150 Kunjungan</span></li>
+                        <li><span class="chip"><i class="fa-solid fa-user me-2"></i><?= esc($row['petugas_nama']) ?></span></li>
+                        <li>
+                            <span class="chip"><i class="fa-solid fa-calendar me-2"></i>
+                                <?php
+                                $nowJakarta = Time::now('Asia/Jakarta');              // WIB
+                                $labelNow   = $nowJakarta->toLocalizedString('d MMMM yyyy');
+                                ?>
+                                <?php echo $labelNow ?>
+                            </span>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -570,77 +894,76 @@
         <article class="card shadow-soft border-0 rounded-4 overflow-hidden reveal" style="--d:120ms">
             <div class="card-body p-4 p-lg-5 content-typo">
                 <div class="d-flex align-items-center gap-2 mb-3">
-                    <span class="text-body-secondary small">Tanamanku</span>
+                    <span class="badge badge-soft px-3 py-2 mr-2"><i class="fa-solid fa-leaf"></i></span> Tanamanku
                 </div>
                 <!-- Grid Kartu Tanaman -->
-                <div class="row g-4">
-                    <!-- Item Tanaman -->
-                    <div class="col-12 col-md-6 col-lg-6">
+                <div class="row g-4 align-items-start">
+                    <!-- Kolom kiri -->
+                    <div class="col-12 col-md-6">
                         <div class="plant-card h-100 reveal" style="--d:180ms">
                             <figure class="plant-cover">
                                 <img
-                                    src="<?= base_url('assets/img/img-phn-mangga.png') ?>"
-                                    alt="Pohon Mangga (Mangifera indica)"
+                                    src="<?= base_url('assets/uploads/tanaman/' . esc($row['foto_tanaman'])) ?>"
+                                    alt="<?= esc($row['nama_umum']) ?> (<?= esc($row['nama_latin']) ?>)"
                                     class="plant-img">
                             </figure>
 
                             <div class="plant-body">
-                                <h3 class="plant-title mb-0">Mangga</h3>
-                                <p class="plant-latin mb-2"><em>Mangifera indica</em></p>
-
-                                <div class="plant-tags mb-2">
-                                    <span class="badge tag">Pohon buah</span>
-                                    <span class="badge tag alt">Obat tradisional</span>
-                                    <span class="badge tag neutral">Umum</span>
-                                </div>
+                                <h3 class="plant-title mb-0"><?= esc($row['nama_umum']) ?></h3>
+                                <p class="plant-latin mb-2"><em><?= esc($row['nama_latin']) ?></em></p>
 
                                 <dl class="plant-meta">
                                     <dt>Asal/Daerah</dt>
-                                    <dd>Tumbuh di halaman rumah RT 02 RW 01</dd>
-
+                                    <dd><?= esc($row['asal_daerah']) ?></dd>
                                     <dt>Manfaat</dt>
-                                    <dd>Buah untuk konsumsi; kayu dapat dimanfaatkan; daun untuk obat tradisional</dd>
-
+                                    <dd><?= esc($row['manfaat']) ?></dd>
                                     <dt>Keterangan</dt>
-                                    <dd>Tinggi ±7 m, berbuah Oktober–Desember</dd>
-
+                                    <dd><?= esc($row['keterangan']) ?></dd>
                                     <dt>Tanggal Pendataan</dt>
-                                    <dd>6 Sept 2025 • Petugas: Admin PKK</dd>
-
+                                    <dd><?= indo_date(esc($row['tanggal_pendataan'])) ?></dd>
                                     <dt>Lokasi GPS</dt>
-                                    <dd>-6.1234, 106.2345</dd>
-
+                                    <dd><?= esc($row['lokasi_gps_lat']) . " . " . esc($row['lokasi_gps_lng']) ?></dd>
                                     <dt>Jumlah</dt>
-                                    <dd>3 pohon</dd>
+                                    <dd><?= esc($row['jumlah']) ?></dd>
                                 </dl>
                             </div>
 
                             <div class="plant-actions">
-                                <a href="/tanamanku" class="btn btn-plant">
+                                <a href="/tanamanku" class="btn btn-native rounded-pill py-2">
                                     <i class="fa-solid fa-arrow-left-long me-2" aria-hidden="true"></i>
                                     Kembali
                                 </a>
-
                             </div>
                         </div>
                     </div>
-                    <!-- /Item Tanaman -->
 
-                    <!-- Opsi Lainnya -->
-                    <div class="col-12 col-md-6 col-lg-6">
-                        <div class="more-card h-100 reveal" style="--d:220ms">
-                            <div class="more-body">
-                                <h6 class="judul-opsi-tanamanku mb-2">Tanamanku Lainnya</h6>
-                                <p class="mb-3 text-body-secondary">Jelajahi tanaman lain yang tercatat di Kelurahan Lebak Denok.</p>
-                                <a href="/tanamanku" class="btn btn-plant">
-                                    <i class="fa-solid fa-seedling me-2" aria-hidden="true"></i>
-                                    Lihat Semua
-                                </a>
+                    <!-- Kolom kanan -->
+                    <div class="col-12 col-md-6">
+                        <?php if (!empty($related)) : ?>
+                            <section class="plant-related"> <!-- hilangkan mt-5 -->
+                                <h5 class="mb-3">Tanaman lainnya</h5>
+                                <div class="related-list">
+                                    <?php foreach ($related as $t): ?>
+                                        <div class="related-item">
+                                            <div class="related-info">
+                                                <div class="name"><?= esc($t['nama_umum'] ?? '') ?></div>
+                                                <div class="latin"><?= esc($t['nama_latin'] ?? '-') ?></div>
+                                            </div>
+                                            <a href="<?= site_url('tanamanku/detail/' . (int)($t['id_tanamanku'] ?? 0)) ?>" class="btn btn-native rounded-pill py2">
+                                                Lihat <i class="fa-solid fa-arrow-right-long"></i>
+                                            </a>
+                                        </div>
+                                    <?php endforeach; ?>
+                                </div>
+                            </section>
+                        <?php else: ?>
+                            <div class="cover-nihil-data">
+                                <h6>Tidak ada data saat ini!</h6>
                             </div>
-                        </div>
+                        <?php endif; ?>
                     </div>
-                    <!-- /Opsi Lainnya -->
                 </div>
+
             </div>
         </article>
     </div>

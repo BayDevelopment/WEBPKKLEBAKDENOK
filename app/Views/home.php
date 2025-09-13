@@ -218,7 +218,7 @@
         <p class="fs-4 mt-3 text-gradient">
             <span id="typed-container"><span id="typed"></span></span>
         </p>
-        <a href="#kontak" class="btn btn-lg btn-primary mt-4 shadow-lg">Gabung Bersama Kami</a>
+        <a href="/form-pendaftaran" class="btn btn-lg btn-primary mt-4 shadow-lg">Gabung Bersama Kami</a>
     </div>
 </section>
 

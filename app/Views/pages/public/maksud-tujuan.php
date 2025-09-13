@@ -1,3 +1,7 @@
+<?php
+
+use CodeIgniter\I18n\Time;
+?>
 <?= $this->extend('templates/template_public') ?>
 
 <?= $this->section('content_public') ?>
@@ -197,8 +201,13 @@
                 </div>
                 <div class="col-lg-4">
                     <ul class="list-unstyled d-flex flex-wrap gap-2 justify-content-lg-end mb-0">
-                        <li><span class="chip"><i class="fa-solid fa-user me-2"></i>Admin</span></li>
-                        <li><span class="chip"><i class="fa-solid fa-calendar me-2"></i>06 September 2025</span></li>
+                        <li><span class="chip"><i class="fa-solid fa-calendar me-2"></i>
+                                <?php
+                                $nowJakarta = Time::now('Asia/Jakarta');              // WIB
+                                $labelNow   = $nowJakarta->toLocalizedString('d MMMM yyyy');
+                                ?>
+                                <?php echo $labelNow ?>
+                            </span></li>
                         <li><span class="chip"><i class="fa-solid fa-signal me-2"></i>150 Kunjungan</span></li>
                     </ul>
                 </div>
