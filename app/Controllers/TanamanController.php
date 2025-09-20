@@ -26,16 +26,7 @@ class TanamanController extends BaseController
     {
         $session = session();
 
-        // Ambil objek file lebih dulu
-        $file = $this->request->getFile('foto_tanaman');
-
-        // Atur rules foto dinamis
-        $fotoRules = 'uploaded[foto_tanaman]';
-        if ($file && $file->getError() !== UPLOAD_ERR_NO_FILE) {
-            // Jika user memilih file, barulah validasi file-nya
-            $fotoRules = 'uploaded[foto_tanaman]|is_image[foto_tanaman]|mime_in[foto_tanaman,image/jpg,image/jpeg,image/png]|max_size[foto_tanaman,3072]';
-        }
-
+        // 1) SATU KALI VALIDATE (termasuk file)
         $rules = [
             'nama_umum' => [
                 'label'  => 'Nama Umum',
@@ -46,40 +37,10 @@ class TanamanController extends BaseController
                     'max_length' => '{field} maksimal {param} karakter.',
                 ]
             ],
-
-            'nama_latin' => [
-                'label'  => 'Nama Latin',
-                'rules'  => 'permit_empty|max_length[150]',
-                'errors' => [
-                    'max_length' => '{field} maksimal {param} karakter.',
-                ]
-            ],
-
-            'asal_daerah' => [
-                'label'  => 'Asal Daerah',
-                'rules'  => 'permit_empty|max_length[150]',
-                'errors' => [
-                    'max_length' => '{field} maksimal {param} karakter.',
-                ]
-            ],
-
-            'manfaat' => [
-                'label'  => 'Manfaat',
-                'rules'  => 'permit_empty|max_length[2000]',
-                'errors' => [
-                    'max_length' => '{field} maksimal {param} karakter.',
-                ]
-            ],
-
-            'keterangan' => [
-                'label'  => 'Keterangan',
-                'rules'  => 'permit_empty|max_length[3000]',
-                'errors' => [
-                    'max_length' => '{field} maksimal {param} karakter.',
-                ]
-            ],
-
-            // Jika input pakai <input type="datetime-local"> (YYYY-MM-DDTHH:MM)
+            'nama_latin'        => ['label' => 'Nama Latin',   'rules' => 'permit_empty|max_length[150]'],
+            'asal_daerah'       => ['label' => 'Asal Daerah',  'rules' => 'permit_empty|max_length[150]'],
+            'manfaat'           => ['label' => 'Manfaat',      'rules' => 'permit_empty|max_length[2000]'],
+            'keterangan'        => ['label' => 'Keterangan',   'rules' => 'permit_empty|max_length[3000]'],
             'tanggal_pendataan' => [
                 'label'  => 'Tanggal Pendataan',
                 'rules'  => 'required|valid_date[Y-m-d\TH:i]',
@@ -88,9 +49,6 @@ class TanamanController extends BaseController
                     'valid_date' => '{field} tidak valid. Gunakan format YYYY-MM-DDTHH:MM.',
                 ]
             ],
-            // Jika pakai <input type="date"> ganti rules menjadi: 'required|valid_date[Y-m-d]'
-            // dan ubah pesan: 'Gunakan format YYYY-MM-DD.'
-
             'jumlah' => [
                 'label'  => 'Jumlah',
                 'rules'  => 'required|is_natural_no_zero',
@@ -99,98 +57,90 @@ class TanamanController extends BaseController
                     'is_natural_no_zero' => '{field} harus bilangan bulat dan minimal 1.',
                 ]
             ],
-
-            'lokasi_gps_lat' => [
-                'label'  => 'Latitude',
-                'rules'  => 'permit_empty|decimal',
-                'errors' => [
-                    'decimal' => '{field} harus berupa angka desimal. Gunakan titik (.) untuk desimal.',
-                ]
-            ],
-
-            'lokasi_gps_lng' => [
-                'label'  => 'Longitude',
-                'rules'  => 'permit_empty|decimal',
-                'errors' => [
-                    'decimal' => '{field} harus berupa angka desimal. Gunakan titik (.) untuk desimal.',
-                ]
-            ],
-
-            // Pastikan value di <select> adalah "active" atau "inactive" (huruf kecil)
+            'lokasi_gps_lat'    => ['label' => 'Latitude',     'rules' => 'permit_empty|decimal'],
+            'lokasi_gps_lng'    => ['label' => 'Longitude',    'rules' => 'permit_empty|decimal'],
             'status' => [
                 'label'  => 'Status',
                 'rules'  => 'required|in_list[active,inactive]',
                 'errors' => [
                     'required' => '{field} wajib dipilih.',
-                    'in_list'  => '{field} tidak valid. Pilih salah satu: active atau inactive.',
+                    'in_list'  => '{field} tidak valid. Pilih active atau inactive.',
                 ]
             ],
 
-            // $fotoRules dibuat dinamis sebelumnya; siapkan pesan untuk semua kemungkinan.
+            // >>> FILE DI-VALIDASI DI SINI (TANPA return awal)
             'foto_tanaman' => [
                 'label'  => 'Foto Tanaman',
-                'rules'  => $fotoRules, // contoh: 'permit_empty' ATAU 'uploaded|is_image|mime_in|max_size'
+                'rules'  => 'uploaded[foto_tanaman]'
+                    . '|max_size[foto_tanaman,2048]'
+                    . '|is_image[foto_tanaman]'
+                    . '|mime_in[foto_tanaman,image/jpg,image/jpeg,image/png]'
+                    . '|ext_in[foto_tanaman,jpg,jpeg,png]',
                 'errors' => [
-                    'uploaded' => '{field} wajib dipilih.',
-                    'is_image' => 'File yang diunggah bukan gambar yang valid.',
-                    'mime_in'  => 'Format gambar tidak didukung. Gunakan JPG atau PNG.',
-                    'max_size' => 'Ukuran file terlalu besar. Maksimal {param} KB (≈ 3 MB).',
+                    'uploaded' => '{field} wajib diunggah.',
+                    'max_size' => 'Ukuran file melebihi 2 MB.',
+                    'is_image' => 'File bukan gambar yang valid atau rusak.',
+                    'mime_in'  => 'Format tidak didukung. Gunakan JPG/PNG.',
+                    'ext_in'   => 'Ekstensi file tidak didukung. Gunakan JPG/PNG.',
                 ]
             ],
         ];
 
         if (! $this->validate($rules)) {
+            // kirim SEMUA pesan error (buat SweetAlert) + old input
             return redirect()->back()
                 ->withInput()
-                // ->with('validation', $this->validator) // ⬅️ bawa validator ke session
-                ->with('sweet_error', 'Periksa kembali isian formulir.');
+                ->with('sweet_errors', array_values($this->validator->getErrors()));
         }
 
-        // --- HANDLE FILE ---
-        $fotoName = null;
-        if ($file && $file->isValid() && $file->getError() === UPLOAD_ERR_OK) {
-            $targetPath = FCPATH . 'assets/uploads/tanaman';
-            if (!is_dir($targetPath)) {
-                mkdir($targetPath, 0755, true);
-            }
-            $ext      = $file->getExtension();
-            $safeName = 'tanaman_' . time() . '_' . bin2hex(random_bytes(4)) . '.' . $ext;
-            $file->move($targetPath, $safeName);
-            $fotoName = $safeName;
+        // 2) VALIDASI LOLOS → pindahkan file
+        $file = $this->request->getFile('foto_tanaman');
+        $targetPath = FCPATH . 'assets/uploads/tanaman';
+        if (! is_dir($targetPath)) {
+            mkdir($targetPath, 0755, true);
+        }
+        $ext      = strtolower($file->getExtension() ?: 'jpg');
+        $safeName = 'tanaman_' . date('Ymd_His') . '_' . bin2hex(random_bytes(4)) . '.' . $ext;
+
+        if (! $file->move($targetPath, $safeName)) {
+            return redirect()->back()->withInput()
+                ->with('sweet_errors', ['Upload gagal: ' . ($file->getErrorString() ?? 'Gagal memindahkan file.')]);
         }
 
-        // --- NORMALISASI INPUT ---
-        $tglInput = (string) $this->request->getPost('tanggal_pendataan'); // contoh: 2025-09-13T22:30
-        $dt = \DateTime::createFromFormat('Y-m-d\TH:i', $tglInput, new \DateTimeZone('Asia/Jakarta'));
-        $tanggalSql = $dt ? $dt->format('Y-m-d H:i:00') : null;
+        // 3) Normalisasi tanggal
+        $tglInput    = (string) $this->request->getPost('tanggal_pendataan');
+        $dt          = \DateTime::createFromFormat('Y-m-d\TH:i', $tglInput, new \DateTimeZone('Asia/Jakarta'));
+        $tanggalSql  = $dt ? $dt->format('Y-m-d H:i:00') : null;
 
+        // 4) Susun data & simpan
         $data = [
-            'nama_umum'         => (string)$this->request->getPost('nama_umum'),
-            'nama_latin'        => (string)$this->request->getPost('nama_latin'),
-            'asal_daerah'       => (string)$this->request->getPost('asal_daerah'),
-            'manfaat'           => (string)$this->request->getPost('manfaat'),
-            'keterangan'        => (string)$this->request->getPost('keterangan'),
-            'tanggal_pendataan' => $tanggalSql, // sudah ke format DATETIME
-            'jumlah'            => (int)$this->request->getPost('jumlah'),
-            'petugas_id'        => (int)$session->get('id_admin'),
-            'petugas_nama'      => (string)$session->get('username'),
-            'lokasi_gps_lat'    => $this->request->getPost('lokasi_gps_lat') !== '' ? (float)$this->request->getPost('lokasi_gps_lat') : null,
-            'lokasi_gps_lng'    => $this->request->getPost('lokasi_gps_lng') !== '' ? (float)$this->request->getPost('lokasi_gps_lng') : null,
-            // pastikan form kirim 'aktif'/'nonaktif' lowercase
-            'status'            => strtolower((string)$this->request->getPost('status')),
+            'nama_umum'         => (string) $this->request->getPost('nama_umum'),
+            'nama_latin'        => (string) $this->request->getPost('nama_latin'),
+            'asal_daerah'       => (string) $this->request->getPost('asal_daerah'),
+            'manfaat'           => (string) $this->request->getPost('manfaat'),
+            'keterangan'        => (string) $this->request->getPost('keterangan'),
+            'tanggal_pendataan' => $tanggalSql,
+            'jumlah'            => (int) ($this->request->getPost('jumlah') ?? 0),
+            'petugas_id'        => (int) ($session->get('id_admin') ?? 0),
+            'petugas_nama'      => (string) ($session->get('username') ?? ''),
+            'lokasi_gps_lat'    => $this->request->getPost('lokasi_gps_lat') !== '' ? (float) $this->request->getPost('lokasi_gps_lat') : null,
+            'lokasi_gps_lng'    => $this->request->getPost('lokasi_gps_lng') !== '' ? (float) $this->request->getPost('lokasi_gps_lng') : null,
+            'status'            => strtolower((string) $this->request->getPost('status')),
+            'foto_tanaman'      => $safeName,
         ];
-        if ($fotoName) $data['foto_tanaman'] = $fotoName;
 
-        $model = new TanamankuModel();
+        $model = new \App\Models\TanamankuModel();
         try {
             $model->insert($data);
             return redirect()->to(route_to('admin/tanamanku'))
-                ->with('sweet_success', 'Data berhasil ditambahkan');
+                ->with('sweet_success', 'Data berhasil ditambahkan.');
         } catch (\Throwable $e) {
+            @unlink($targetPath . DIRECTORY_SEPARATOR . $safeName);
             return redirect()->back()->withInput()
-                ->with('sweet_error', 'Terjadi kesalahan, silakan coba lagi.');
+                ->with('sweet_errors', ['Terjadi kesalahan saat menyimpan data. Silakan coba lagi.']);
         }
     }
+
     public function page_edit_tanamanku($id)
     {
         // (opsional) pastikan hanya admin
@@ -219,28 +169,26 @@ class TanamanController extends BaseController
     public function EditTanamanku($id)
     {
         $session = session();
-        $model   = new TanamankuModel();
+        $model   = new \App\Models\TanamankuModel();
 
-        // --- CEK DATA LAMA ---
+        // 0) Ambil data lama
         $row = $model->find($id);
         if (!$row) {
-            return redirect()
-                ->to(route_to('admin/tanamanku')) // arahkan ke daftar Tanamanku
+            return redirect()->to(route_to('admin/tanamanku'))
                 ->with('sweet_error', 'Data Tanamanku tidak ditemukan atau sudah dihapus.');
         }
 
+        // 1) Rules — file opsional saat edit
+        $file       = $this->request->getFile('foto_tanaman');
+        $hasNewFile = $file && $file->isValid() && $file->getError() !== UPLOAD_ERR_NO_FILE;
 
-        // --- AMBIL FILE ---
-        $file = $this->request->getFile('foto_tanaman');
+        $fotoRules = $hasNewFile
+            ? 'is_image[foto_tanaman]'
+            . '|mime_in[foto_tanaman,image/jpg,image/jpeg,image/png]'
+            . '|ext_in[foto_tanaman,jpg,jpeg,png]'
+            . '|max_size[foto_tanaman,3072]'   // 3MB
+            : 'permit_empty';
 
-        // --- RULES FOTO: opsional saat edit ---
-        $fotoRules = 'permit_empty';
-        if ($file && $file->isValid() && $file->getError() !== UPLOAD_ERR_NO_FILE) {
-            // hanya validasi jika user memilih file
-            $fotoRules = 'is_image[foto_tanaman]|mime_in[foto_tanaman,image/jpg,image/jpeg,image/png]|max_size[foto_tanaman,3072]';
-        }
-
-        // --- RULES LAINNYA ---
         $rules = [
             'nama_umum' => [
                 'label'  => 'Nama Umum',
@@ -251,27 +199,10 @@ class TanamanController extends BaseController
                     'max_length' => '{field} maksimal {param} karakter.',
                 ]
             ],
-            'nama_latin' => [
-                'label'  => 'Nama Latin',
-                'rules'  => 'permit_empty|max_length[150]',
-                'errors' => ['max_length' => '{field} maksimal {param} karakter.']
-            ],
-            'asal_daerah' => [
-                'label'  => 'Asal Daerah',
-                'rules'  => 'permit_empty|max_length[150]',
-                'errors' => ['max_length' => '{field} maksimal {param} karakter.']
-            ],
-            'manfaat' => [
-                'label'  => 'Manfaat',
-                'rules'  => 'permit_empty|max_length[2000]',
-                'errors' => ['max_length' => '{field} maksimal {param} karakter.']
-            ],
-            'keterangan' => [
-                'label'  => 'Keterangan',
-                'rules'  => 'permit_empty|max_length[3000]',
-                'errors' => ['max_length' => '{field} maksimal {param} karakter.']
-            ],
-            // Jika pakai <input type="datetime-local">
+            'nama_latin'        => ['label' => 'Nama Latin', 'rules' => 'permit_empty|max_length[150]'],
+            'asal_daerah'       => ['label' => 'Asal Daerah', 'rules' => 'permit_empty|max_length[150]'],
+            'manfaat'           => ['label' => 'Manfaat', 'rules' => 'permit_empty|max_length[2000]'],
+            'keterangan'        => ['label' => 'Keterangan', 'rules' => 'permit_empty|max_length[3000]'],
             'tanggal_pendataan' => [
                 'label'  => 'Tanggal Pendataan',
                 'rules'  => 'required|valid_date[Y-m-d\TH:i]',
@@ -288,16 +219,8 @@ class TanamanController extends BaseController
                     'is_natural_no_zero' => '{field} harus bilangan bulat dan minimal 1.',
                 ]
             ],
-            'lokasi_gps_lat' => [
-                'label'  => 'Latitude',
-                'rules'  => 'permit_empty|decimal',
-                'errors' => ['decimal' => '{field} harus berupa angka desimal. Gunakan titik (.) untuk desimal.']
-            ],
-            'lokasi_gps_lng' => [
-                'label'  => 'Longitude',
-                'rules'  => 'permit_empty|decimal',
-                'errors' => ['decimal' => '{field} harus berupa angka desimal. Gunakan titik (.) untuk desimal.']
-            ],
+            'lokasi_gps_lat'    => ['label' => 'Latitude', 'rules' => 'permit_empty|decimal'],
+            'lokasi_gps_lng'    => ['label' => 'Longitude', 'rules' => 'permit_empty|decimal'],
             'status' => [
                 'label'  => 'Status',
                 'rules'  => 'required|in_list[active,inactive]',
@@ -310,79 +233,86 @@ class TanamanController extends BaseController
                 'label'  => 'Foto Tanaman',
                 'rules'  => $fotoRules,
                 'errors' => [
-                    'uploaded' => '{field} wajib dipilih.',
                     'is_image' => 'File yang diunggah bukan gambar yang valid.',
                     'mime_in'  => 'Format gambar tidak didukung. Gunakan JPG atau PNG.',
+                    'ext_in'   => 'Ekstensi file tidak didukung. Gunakan JPG atau PNG.',
                     'max_size' => 'Ukuran file terlalu besar. Maksimal {param} KB (≈ 3 MB).',
                 ]
             ],
         ];
 
-        if (!$this->validate($rules)) {
+        // 2) Validate sekali
+        if (! $this->validate($rules)) {
             return redirect()->back()
                 ->withInput()
-                ->with('sweet_error', 'Periksa kembali isian formulir.');
+                ->with('sweet_errors', array_values($this->validator->getErrors())); // untuk Swal list error
         }
 
-        // --- HANDLE FILE (ganti + hapus lama bila ada) ---
-        $fotoNameLama = $row['foto_tanaman'] ?? ($row->foto_tanaman ?? null);
+        // 3) Handle file (jika ada yang baru)
+        $fotoNameLama = is_array($row) ? ($row['foto_tanaman'] ?? null) : ($row->foto_tanaman ?? null);
         $fotoNameBaru = $fotoNameLama;
 
-        if ($file && $file->isValid() && $file->getError() === UPLOAD_ERR_OK) {
+        if ($hasNewFile && $file->getError() === UPLOAD_ERR_OK) {
             $targetPath = FCPATH . 'assets/uploads/tanaman';
             if (!is_dir($targetPath)) {
                 mkdir($targetPath, 0755, true);
             }
-            $ext      = $file->getExtension();
-            $safeName = 'tanaman_' . time() . '_' . bin2hex(random_bytes(4)) . '.' . $ext;
-            $file->move($targetPath, $safeName);
+            $ext      = strtolower($file->getExtension() ?: 'jpg');
+            $safeName = 'tanaman_' . date('Ymd_His') . '_' . bin2hex(random_bytes(4)) . '.' . $ext;
 
-            // Hapus file lama jika ada
+            if (! $file->move($targetPath, $safeName)) {
+                return redirect()->back()->withInput()
+                    ->with('sweet_errors', ['Upload gagal: ' . ($file->getErrorString() ?? 'Gagal memindahkan file.')]);
+            }
+
+            // hapus lama (jika ada)
             if (!empty($fotoNameLama)) {
-                $old = $targetPath . '/' . $fotoNameLama;
-                if (is_file($old)) @unlink($old);
+                $old = $targetPath . DIRECTORY_SEPARATOR . $fotoNameLama;
+                if (is_file($old)) {
+                    @unlink($old);
+                }
             }
 
             $fotoNameBaru = $safeName;
         }
 
-        // --- NORMALISASI INPUT ---
-        $tglInput   = (string) $this->request->getPost('tanggal_pendataan'); // 2025-09-13T22:30
+        // 4) Normalisasi input
+        $tglInput   = (string) $this->request->getPost('tanggal_pendataan');
         $dt         = \DateTime::createFromFormat('Y-m-d\TH:i', $tglInput, new \DateTimeZone('Asia/Jakarta'));
         $tanggalSql = $dt ? $dt->format('Y-m-d H:i:00') : null;
 
         $data = [
-            'nama_umum'         => (string)$this->request->getPost('nama_umum'),
-            'nama_latin'        => (string)$this->request->getPost('nama_latin'),
-            'asal_daerah'       => (string)$this->request->getPost('asal_daerah'),
-            'manfaat'           => (string)$this->request->getPost('manfaat'),
-            'keterangan'        => (string)$this->request->getPost('keterangan'),
+            'nama_umum'         => (string) $this->request->getPost('nama_umum'),
+            'nama_latin'        => (string) $this->request->getPost('nama_latin'),
+            'asal_daerah'       => (string) $this->request->getPost('asal_daerah'),
+            'manfaat'           => (string) $this->request->getPost('manfaat'),
+            'keterangan'        => (string) $this->request->getPost('keterangan'),
             'tanggal_pendataan' => $tanggalSql,
-            'jumlah'            => (int)$this->request->getPost('jumlah'),
-            'petugas_id'        => (int)$session->get('id_admin'),
-            'petugas_nama'      => (string)$session->get('username'),
-            'lokasi_gps_lat'    => $this->request->getPost('lokasi_gps_lat') !== '' ? (float)$this->request->getPost('lokasi_gps_lat') : null,
-            'lokasi_gps_lng'    => $this->request->getPost('lokasi_gps_lng') !== '' ? (float)$this->request->getPost('lokasi_gps_lng') : null,
-            'status'            => strtolower((string)$this->request->getPost('status')),
-            // Jika model Anda pakai timestamp otomatis, baris ini bisa di-skip
+            'jumlah'            => (int) $this->request->getPost('jumlah'),
+            'petugas_id'        => (int) $session->get('id_admin'),
+            'petugas_nama'      => (string) $session->get('username'),
+            'lokasi_gps_lat'    => $this->request->getPost('lokasi_gps_lat') !== '' ? (float) $this->request->getPost('lokasi_gps_lat') : null,
+            'lokasi_gps_lng'    => $this->request->getPost('lokasi_gps_lng') !== '' ? (float) $this->request->getPost('lokasi_gps_lng') : null,
+            'status'            => strtolower((string) $this->request->getPost('status')),
             'updated_at'        => date('Y-m-d H:i:s'),
         ];
 
-        // set foto baru jika berubah
         if ($fotoNameBaru !== $fotoNameLama) {
             $data['foto_tanaman'] = $fotoNameBaru;
         }
 
+        // 5) Update
         try {
             $model->update($id, $data);
             return redirect()->to(route_to('admin/tanamanku'))
-                ->with('sweet_success', 'Data berhasil diperbarui');
+                ->with('sweet_success', 'Data berhasil diperbarui.');
         } catch (\Throwable $e) {
             log_message('error', 'EditTanamanku error: {msg}', ['msg' => $e->getMessage()]);
             return redirect()->back()->withInput()
-                ->with('sweet_error', 'Terjadi kesalahan, silakan coba lagi.');
+                ->with('sweet_errors', ['Terjadi kesalahan, silakan coba lagi.']);
         }
     }
+
 
     public function DetailTanamanku(int $id)
     {

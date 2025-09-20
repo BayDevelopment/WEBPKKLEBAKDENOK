@@ -264,7 +264,7 @@
                                         <?= csrf_field() ?>
                                         <div class="form-group">
                                             <input type="text" name="username" class="form-control form-control-user"
-                                                id="exampleInputEmail" placeholder="Email" required>
+                                                id="exampleInputEmail" placeholder="Username.." required>
                                         </div>
                                         <div class="form-group password-wrapper">
                                             <input type="password" name="password_hash" class="form-control form-control-user"

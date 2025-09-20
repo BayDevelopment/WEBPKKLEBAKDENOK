@@ -55,6 +55,64 @@
             position: relative;
             height: 320px;
         }
+
+        /* === OFFSET KE KANAN SEDIKIT === */
+        :root {
+            --submenu-offset: 10px;
+        }
+
+        /* ganti 10px sesuai selera */
+
+        .sidebar {
+            overflow: visible;
+        }
+
+        .sidebar .nav-item {
+            position: relative;
+        }
+
+        /* Overlay submenu (normal / sidebar lebar) */
+        .sidebar .nav-item>.collapsing,
+        .sidebar .nav-item>.collapse.show {
+            position: absolute;
+            top: calc(100% - .25rem);
+            left: var(--submenu-offset);
+            /* geser ke kanan */
+            width: calc(100% - var(--submenu-offset));
+            /* biar nggak kepotong */
+            z-index: 1045;
+            background: #fff;
+            border-radius: .35rem;
+            box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15);
+        }
+
+        /* Optional: segitiga kecil penunjuk ke link induk */
+        .sidebar .nav-item>.collapse.show::before,
+        .sidebar .nav-item>.collapsing::before {
+            content: "";
+            position: absolute;
+            top: -6px;
+            left: calc(var(--submenu-offset) + 12px);
+            border: 6px solid transparent;
+            border-bottom-color: #fff;
+            filter: drop-shadow(0 1px 1px rgba(0, 0, 0, .1));
+        }
+
+        /* Batasi tinggi isi submenu bila panjang */
+        .sidebar .collapse-inner {
+            max-height: 60vh;
+            overflow: auto;
+        }
+
+        /* Saat sidebar di-collapse (mode icon saja), atur offset & lebar fixed */
+        .sidebar.toggled .nav-item>.collapsing,
+        .sidebar.toggled .nav-item>.collapse.show {
+            left: 4.5rem;
+            /* geser lebih jauh supaya keluar dari bar sempit */
+            width: 14rem;
+            /* lebar panel submenu saat collapsed */
+        }
+    </style>
     </style>
 </head>
 

@@ -40,8 +40,6 @@
     </div>
 </div>
 
-
-
 <!-- (Biasanya sudah ada di SB Admin 2) -->
 <!-- <a class="scroll-to-top rounded" href="#page-top"><i class="fas fa-angle-up"></i></a> -->
 
@@ -109,6 +107,20 @@
         ToastError.fire({
             icon: "error",
             title: "<?= session()->getFlashdata('sweet_error'); ?>"
+        });
+    </script>
+<?php endif; ?>
+
+<!-- new Sweet Serror -->
+<?php if ($errs = session('sweet_errors')): ?>
+    <script>
+        const errs = <?= json_encode(array_values((array)$errs), JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>;
+        Swal.fire({
+            icon: 'error',
+            title: 'Periksa Formulir',
+            html: '<ul style="text-align:left;margin:0;padding-left:1.2em">' +
+                errs.map(e => '<li>' + e + '</li>').join('') +
+                '</ul>'
         });
     </script>
 <?php endif; ?>
@@ -200,6 +212,44 @@
             }
         });
     }
+
+    // delete soal dari kategori
+    function deleteByIdUrutan(id_quiz, urutan) {
+        Swal.fire({
+            title: "Apakah Anda yakin?",
+            text: "Data yang dihapus tidak dapat dikembalikan!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Ya, hapus!",
+            cancelButtonText: "Batal"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // redirect ke route delete
+                window.location.href = "<?= base_url('admin/quiz/delete') ?>/" + id_quiz + "/" + urutan;
+            }
+        });
+    }
+
+    // hapus data quizz
+    function confirmDeleteQuiz(id_quiz) {
+        Swal.fire({
+            title: "Apakah Anda yakin?",
+            text: "Quiz yang dihapus tidak dapat dikembalikan!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Ya, hapus!",
+            cancelButtonText: "Batal"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = "<?= site_url('admin/quiz/delete') ?>/" + id_quiz;
+            }
+        });
+    }
+
 
     // chart pill
     (function() {

@@ -1,36 +1,6 @@
 <?= $this->extend('templates/template_public') ?>
 <?= $this->section('content_public') ?>
 
-<?php
-// --- DETEKSI MODE "SEMUA" ---
-// 1) Ambil dari controller jika dikirim, contoh: return view(..., ['kategori' => 'Semua'])
-$kategoriFromController = isset($kategori) ? strtolower(trim($kategori)) : '';
-
-// 2) Ambil dari query string (?kategori=semua | all) jika ada
-$req = service('request');
-$kategoriFromQuery = strtolower(trim($req->getGet('kategori') ?? ''));
-
-// 3) Putuskan apakah hanya tampilkan 1 card "Semua Kategori"
-$onlyAll = in_array($kategoriFromController, ['semua', 'all'], true)
-    || in_array($kategoriFromQuery, ['semua', 'all'], true);
-
-// 4) (Opsional) coba cari baris quiz ALL di $quizzes, agar bisa pakai judul/desc/thumbnail-nya jika ada
-$allQuizRow = null;
-if (!empty($quizzes) && is_array($quizzes)) {
-    foreach ($quizzes as $qq) {
-        if (
-            (isset($qq['is_virtual_all']) && (int)$qq['is_virtual_all'] === 1) ||
-            (isset($qq['kategori']) && strtolower($qq['kategori']) === 'semua') ||
-            (isset($qq['slug']) && strtolower($qq['slug']) === 'semua-kategori') ||
-            (isset($qq['judul']) && strtolower($qq['judul']) === 'semua kategori')
-        ) {
-            $allQuizRow = $qq;
-            break;
-        }
-    }
-}
-?>
-
 <style>
     .hero-all {
         border-radius: 18px;
@@ -95,78 +65,77 @@ if (!empty($quizzes) && is_array($quizzes)) {
 
 <div class="container py-4 mt-4">
 
-    <?php if ($onlyAll): ?>
-        <!-- MODE SEMUA: tampilkan 1 card saja -->
-        <div class="row justify-content-center">
-            <div class="col-md-8 col-lg-6">
-                <div class="card card-quiz h-100">
-                    <?php if (!empty($allQuizRow['thumbnail'])): ?>
-                        <img src="<?= base_url('assets/uploads/quiz/' . esc($allQuizRow['thumbnail'])) ?>"
-                            class="card-img-top"
-                            alt="Thumbnail <?= esc($allQuizRow['judul'] ?? 'Semua Kategori') ?>"
-                            style="object-fit:cover;height:180px">
-                    <?php else: ?>
-                        <div class="d-flex align-items-center justify-content-center bg-light" style="height:180px">
-                            <i class="fa-solid fa-layer-group text-muted"></i>
-                        </div>
-                    <?php endif; ?>
-
-                    <div class="card-body d-flex flex-column">
-                        <span class="kat-pill mb-2"><i class="fa-solid fa-tag"></i> Semua</span>
-                        <h5 class="card-title fw-bold mb-1">
-                            <?= esc($allQuizRow['judul'] ?? 'Semua Kategori') ?>
-                        </h5>
-                        <p class="card-text text-muted flex-grow-1">
-                            <?= esc($allQuizRow['deskripsi'] ?? 'Kumpulan soal dari semua quiz aktif.') ?>
-                        </p>
-
-                        <a href="<?= site_url('quiz/take/all') ?>" class="btn btn-outline-primary mt-2">
-                            <i class="fa-solid fa-circle-play"></i> Mulai (Semua Kategori)
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    <?php else: ?>
-        <!-- MODE BIASA: tampilkan daftar semua quiz -->
-        <h5 class="fw-bold mb-3"><i class="fa-solid fa-list"></i> Daftar Quiz</h5>
-        <div class="row">
+    <!-- MODE SEMUA: tampilkan 1 card saja -->
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
             <?php if (!empty($quizzes)): ?>
-                <?php foreach ($quizzes as $q): ?>
-                    <div class="col-md-6 col-lg-4 mb-4">
-                        <div class="card card-quiz h-100">
-                            <?php if (!empty($q['thumbnail'])): ?>
-                                <img src="<?= base_url('assets/uploads/quiz/' . esc($q['thumbnail'])) ?>"
-                                    class="card-img-top"
-                                    alt="Thumbnail <?= esc($q['judul']) ?>"
-                                    style="object-fit:cover;height:160px">
-                            <?php else: ?>
-                                <div class="d-flex align-items-center justify-content-center bg-light" style="height:160px">
-                                    <i class="fa-solid fa-image text-muted"></i>
-                                </div>
-                            <?php endif; ?>
-
-                            <div class="card-body d-flex flex-column">
-                                <span class="kat-pill mb-2"><i class="fa-solid fa-tag"></i> <?= esc($q['kategori']) ?></span>
-                                <h5 class="card-title fw-bold mb-1"><?= esc($q['judul']) ?></h5>
-                                <p class="card-text text-muted flex-grow-1"><?= esc($q['deskripsi'] ?? '—') ?></p>
-
-                                <!-- Semua tombol diarahkan ke ALL sesuai permintaan -->
-                                <a href="<?= site_url('quiz/take/all') ?>" class="btn btn-outline-primary mt-2">
-                                    <i class="fa-solid fa-circle-play"></i> Mulai (Semua Kategori)
-                                </a>
+                <?php foreach ($quizzes as $row): ?>
+                    <div class="card card-quiz h-100 shadow-sm border-0">
+                        <?php if (!empty($row['thumbnail'])): ?>
+                            <img src="<?= base_url('assets/uploads/quiz/' . esc($row['thumbnail'])) ?>"
+                                class="card-img-top rounded-top"
+                                alt="Thumbnail <?= esc($row['judul'] ?? 'Semua Kategori') ?>"
+                                style="object-fit:cover;height:180px">
+                        <?php else: ?>
+                            <!-- Header placeholder modern ketika tidak ada thumbnail -->
+                            <div class="d-flex align-items-center justify-content-center bg-light rounded-top"
+                                style="height:180px">
+                                <i class="fa-solid fa-layer-group text-muted" style="font-size:38px;"></i>
                             </div>
+                        <?php endif; ?>
+
+                        <div class="card-body d-flex flex-column">
+                            <span class="kat-pill mb-2"><i class="fa-solid fa-tag"></i> <?= esc($row['kategori']) ?></span>
+                            <h5 class="card-title font-weight-bold mb-1">
+                                <?= esc($row['judul'] ?? '-') ?>
+                            </h5>
+                            <p class="card-text text-muted flex-grow-1">
+                                <?= esc($row['deskripsi'] ?? '-') ?>
+                            </p>
+
+                            <?php
+                            $isAll = (int)($row['is_virtual_all'] ?? 0) === 1;
+                            $kat   = $row['kategori'] ?? 'Semua';
+                            ?>
+
+                            <?php if ($isAll): ?>
+                                <a href="<?= site_url('quiz/take/all') ?>" class="btn btn-gradient mt-2">
+                                    <i class="fa-solid fa-circle-play"></i>
+                                    Mulai <?= esc('(' . $kat . ')') ?>
+                                </a>
+                            <?php else: ?>
+                                <!-- disabled -->
+                                <a href="javascript:void(0)"
+                                    class="btn btn-gradient mt-2 disabled"
+                                    tabindex="-1" aria-disabled="true" onclick="return false;">
+                                    <i class="fa-solid fa-circle-play"></i>
+                                    Mulai <?= esc('(' . $kat . ')') ?>
+                                </a>
+                            <?php endif; ?>
                         </div>
                     </div>
                 <?php endforeach; ?>
             <?php else: ?>
-                <div class="col-12">
-                    <div class="alert alert-info mb-0">Belum ada quiz tersedia.</div>
+                <!-- Empty state modern saat TIDAK ADA quiz sama sekali -->
+                <div class="card card-quiz h-100 shadow-sm border-0 d-flex align-items-center justify-content-center p-4">
+                    <div class="text-center">
+                        <img src="<?= base_url('assets/img/icons-empty.png') ?>"
+                            alt="no quiz"
+                            style="width:100px;opacity:.9" class="mb-3">
+                        <h5 class="font-weight-bold text-muted mb-2">Belum Ada Quiz</h5>
+                        <p class="text-secondary small mb-3" style="max-width:320px;margin:0 auto;">
+                            Quiz untuk kategori ini belum tersedia. Silakan cek kembali nanti ya ✨
+                        </p>
+                        <div class="d-flex gap-2 justify-content-center">
+                            <a href="<?= site_url('/') ?>" class="btn btn-outline-primary rounded-pill px-3">
+                                <i class="fa-solid fa-arrow-left"></i> Kembali
+                            </a>
+                        </div>
+                    </div>
                 </div>
             <?php endif; ?>
         </div>
-    <?php endif; ?>
+    </div>
 </div>
 
 <?= $this->endSection() ?>

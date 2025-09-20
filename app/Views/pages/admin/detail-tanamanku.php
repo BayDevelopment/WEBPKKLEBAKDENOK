@@ -288,7 +288,7 @@ $statusLabel = $status === 'active' ? 'Active' : ($status === 'inactive' ? 'Inac
 <div class="container-fluid">
     <!-- Heading + Breadcrumb -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 page-title"><i class="fa-solid fa-seedling"></i> Detail Tanaman</h1>
+        <h1 class="h3 mb-0 page-title mb-3"><i class="fa-solid fa-seedling"></i> Detail Tanaman</h1>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb mb-0 bg-white rounded-pill px-3 py-2 shadow-sm">
                 <li class="breadcrumb-item"><a href="<?= base_url('admin/beranda') ?>"><i class="fa-solid fa-house"></i> Beranda</a></li>
@@ -402,7 +402,7 @@ $statusLabel = $status === 'active' ? 'Active' : ($status === 'inactive' ? 'Inac
 
                 <div class="card-body p-3">
                     <?php if (!empty($related)): ?>
-                        <div class="related-list d-grid gap-2">
+                        <div class="related-list d-grid gap-2 mb-3">
                             <?php foreach ($related as $t): ?>
                                 <div class="related-item mb-3">
                                     <div class="d-flex align-items-center gap-3">
@@ -420,7 +420,7 @@ $statusLabel = $status === 'active' ? 'Active' : ($status === 'inactive' ? 'Inac
                         </div>
                     <?php else: ?>
                         <div class="text-center py-5">
-                            <img src="<?= base_url('assets/img/empty-state.svg') ?>" alt="empty" style="width:120px;height:auto;opacity:.85;">
+                            <img src="<?= base_url('assets/img/img-empty.png') ?>" alt="empty" style="width:120px;height:auto;opacity:.85;">
                             <div class="mt-3 text-muted">Belum ada data tanaman lainnya.</div>
                         </div>
                     <?php endif; ?>

@@ -368,7 +368,7 @@
 
     <!-- Heading + Breadcrumb -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 page-title"><span><i class="fa-solid fa-seedling"></i></span> <?= isset($sub_judul) ? esc($sub_judul) : 'Tambah Data Tanaman' ?></h1>
+        <h1 class="h3 mb-0 page-title mb-3"><span><i class="fa-solid fa-seedling"></i></span> <?= isset($sub_judul) ? esc($sub_judul) : 'Tambah Data Tanaman' ?></h1>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb mb-0 bg-white rounded-pill px-3 py-2 shadow-sm">
                 <li class="breadcrumb-item">
@@ -379,7 +379,7 @@
         </nav>
     </div>
 
-    <div class="row">
+    <div class="row mb-3">
         <div class="col-xl-9 col-lg-10">
             <div class="card card-modern position-relative">
                 <div class="card-header d-flex align-items-center justify-content-between">
@@ -393,6 +393,7 @@
                 </div>
 
                 <div class="card-body p-4">
+
                     <form action="<?= site_url('admin/tanamanku/create'); ?>" method="post" enctype="multipart/form-data">
                         <?= csrf_field(); ?>
 
@@ -401,33 +402,41 @@
                             <div class="col-md-6 mb-3">
                                 <label class="form-label required">Nama Umum</label>
                                 <input type="text" name="nama_umum" value="<?= old('nama_umum'); ?>"
-                                    class="form-control form-soft <?= ($validation->hasError('nama_umum') ? 'is-invalid' : '') ?>"
+                                    class="form-control form-soft <?= validation_show_error('nama_umum') ? 'is-invalid' : '' ?>"
                                     placeholder="mis. Kelor">
-                                <div class="invalid-feedback"><?= $validation->getError('nama_umum'); ?></div>
+                                <div class="invalid-feedback"><?= validation_show_error('nama_umum'); ?></div>
                             </div>
 
                             <!-- Nama Latin -->
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Nama Latin</label>
                                 <input type="text" name="nama_latin" value="<?= old('nama_latin'); ?>"
-                                    class="form-control form-soft <?= ($validation->hasError('nama_latin') ? 'is-invalid' : '') ?>"
+                                    class="form-control form-soft <?= validation_show_error('nama_latin') ? 'is-invalid' : '' ?>"
                                     placeholder="mis. Moringa oleifera">
-                                <div class="invalid-feedback"><?= $validation->getError('nama_latin'); ?></div>
+                                <div class="invalid-feedback"><?= validation_show_error('nama_latin'); ?></div>
                             </div>
 
-                            <!-- Foto -->
+                            <!-- Asal Daerah -->
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Asal Daerah</label>
+                                <input type="text" name="asal_daerah" value="<?= old('asal_daerah'); ?>"
+                                    class="form-control form-soft <?= validation_show_error('asal_daerah') ? 'is-invalid' : '' ?>"
+                                    placeholder="mis. NTT, Jawa Barat">
+                                <div class="invalid-feedback"><?= validation_show_error('asal_daerah'); ?></div>
+                            </div>
+
+                            <!-- Foto: tampilkan foto saat ini + opsi ganti -->
                             <div class="col-md-6 mb-3">
                                 <div class="flex-grow-1">
                                     <label for="foto_tanaman" class="form-label fw-semibold required">Foto Tanaman</label>
 
-                                    <!-- Tambahkan class is-invalid ke .upload-field, bukan hanya ke input -->
-                                    <label class="upload-field <?= ($validation->hasError('foto_tanaman') ? 'is-invalid' : '') ?>">
+                                    <label class="upload-field <?= validation_show_error('foto_tanaman') ? 'is-invalid' : '' ?>">
                                         <input
                                             type="file"
                                             id="foto_tanaman"
                                             name="foto_tanaman"
                                             accept="image/png,image/jpeg"
-                                            class="<?= ($validation->hasError('foto_tanaman') ? 'is-invalid' : '') ?>">
+                                            class="<?= validation_show_error('foto_tanaman') ? 'is-invalid' : '' ?>">
                                         <span class="upload-ico"><i class="fa-solid fa-image"></i></span>
                                         <span class="upload-texts">
                                             <span class="upload-title">Klik untuk unggah</span>
@@ -436,96 +445,102 @@
                                         <span class="upload-cta">Pilih File</span>
                                     </label>
 
-                                    <!-- helper text -->
-                                    <div class="help-text mt-1">Maks 3MB, format JPG/PNG.</div>
-
-                                    <!-- error -->
-                                    <div class="invalid-feedback"><?= esc($validation->getError('foto_tanaman')) ?></div>
-
-                                    <!-- preview -->
-                                    <div class="preview-wrap">
-                                        <img id="previewImg"
-                                            src="https://placehold.co/320x160?text=Preview"
-                                            alt="Preview foto"
-                                            class="preview-img rounded">
-                                    </div>
+                                    <div class="help-text mt-1">Format: Jpg, Png - Maks 2MB</div>
                                 </div>
-                            </div>
-
-
-                            <!-- Asal Daerah -->
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Asal Daerah</label>
-                                <input type="text" name="asal_daerah" value="<?= old('asal_daerah'); ?>"
-                                    class="form-control form-soft <?= ($validation->hasError('asal_daerah') ? 'is-invalid' : '') ?>"
-                                    placeholder="mis. NTT, Jawa Barat">
-                                <div class="invalid-feedback"><?= $validation->getError('asal_daerah'); ?></div>
                             </div>
 
                             <!-- Manfaat -->
                             <div class="col-12 mb-3">
                                 <label class="form-label">Manfaat</label>
                                 <textarea name="manfaat" rows="2"
-                                    class="form-control form-soft <?= ($validation->hasError('manfaat') ? 'is-invalid' : '') ?>"
+                                    class="form-control form-soft <?= validation_show_error('manfaat') ? 'is-invalid' : '' ?>"
                                     placeholder="Tuliskan manfaat utama tanaman..."><?= old('manfaat'); ?></textarea>
-                                <div class="invalid-feedback"><?= $validation->getError('manfaat'); ?></div>
+                                <div class="invalid-feedback"><?= validation_show_error('manfaat'); ?></div>
                             </div>
 
                             <!-- Keterangan -->
                             <div class="col-12 mb-3">
                                 <label class="form-label">Keterangan</label>
                                 <textarea name="keterangan" rows="3"
-                                    class="form-control form-soft <?= ($validation->hasError('keterangan') ? 'is-invalid' : '') ?>"
+                                    class="form-control form-soft <?= validation_show_error('keterangan') ? 'is-invalid' : '' ?>"
                                     placeholder="Catatan tambahan..."><?= old('keterangan'); ?></textarea>
-                                <div class="invalid-feedback"><?= $validation->getError('keterangan'); ?></div>
+                                <div class="invalid-feedback"><?= validation_show_error('keterangan'); ?></div>
                             </div>
 
                             <!-- Tanggal, Jumlah, Status -->
-                            <div class="col-md-4 mb-3">
+                            <div class="col-md-5 mb-3">
                                 <label class="form-label required">Tanggal & Waktu Pendataan</label>
-
-                                <input
-                                    type="datetime-local"
-                                    id="tanggal_pendataan"
-                                    name="tanggal_pendataan"
-                                    step="60"
-                                    value="<?= old('tanggal_pendataan') // kalau POST gagal, nilai lama sudah format datetime-local 
-                                            ?>"
-                                    class="form-control form-soft <?= $validation->hasError('tanggal_pendataan') ? 'is-invalid' : '' ?>">
-                                <div class="invalid-feedback"><?= esc($validation->getError('tanggal_pendataan')) ?></div>
+                                <input type="datetime-local" id="tanggal_pendataan" name="tanggal_pendataan" step="60"
+                                    value="<?= old('tanggal_pendataan') ?>"
+                                    class="form-control form-soft <?= validation_show_error('tanggal_pendataan') ? 'is-invalid' : '' ?>">
+                                <div class="invalid-feedback"><?= validation_show_error('tanggal_pendataan') ?></div>
                             </div>
 
-                            <div class="col-md-4 mb-3">
+                            <div class="col-md-3 mb-3">
                                 <label class="form-label required">Jumlah</label>
                                 <input type="number" min="1" name="jumlah" value="<?= old('jumlah'); ?>"
-                                    class="form-control form-soft <?= ($validation->hasError('jumlah') ? 'is-invalid' : '') ?>"
+                                    class="form-control form-soft <?= validation_show_error('jumlah') ? 'is-invalid' : '' ?>"
                                     placeholder="mis. 10">
-                                <div class="invalid-feedback"><?= $validation->getError('jumlah'); ?></div>
+                                <div class="invalid-feedback"><?= validation_show_error('jumlah'); ?></div>
                             </div>
 
                             <div class="col-md-4 mb-3">
-                                <label class="form-label required">Status</label>
-                                <select name="status" class="form-select form-soft <?= ($validation->hasError('status') ? 'is-invalid' : '') ?>">
-                                    <option value="" disabled <?= old('status') ? '' : 'selected'; ?>>-- pilih status --</option>
-                                    <option value="active" <?= old('status') === 'active' ? 'selected' : ''; ?>>Active</option>
-                                    <option value="inactive" <?= old('status') === 'inactive' ? 'selected' : ''; ?>>Inactive</option>
-                                </select>
-                                <div class="invalid-feedback"><?= $validation->getError('status'); ?></div>
+                                <label class="form-label required d-flex align-items-center gap-2">
+                                    Status
+                                    <i class="fa-solid fa-circle-info text-muted"
+                                        data-bs-toggle="tooltip"
+                                        title="Pilih status data tanaman (Active akan ditampilkan di daftar publik)"></i>
+                                </label>
+
+                                <!-- Segmented toggle -->
+                                <div class="btn-group w-100" role="group" aria-label="Pilih status">
+                                    <input type="radio"
+                                        class="btn-check <?= validation_show_error('status') ? 'is-invalid' : '' ?>"
+                                        name="status" id="status_active" value="active"
+                                        autocomplete="off"
+                                        <?= old('status') === 'active' ? 'checked' : '' ?>>
+                                    <label class="btn btn-outline-success" for="status_active">
+                                        <i class="fa-solid fa-check-circle me-1"></i> Active
+                                    </label>
+
+                                    <input type="radio"
+                                        class="btn-check <?= validation_show_error('status') ? 'is-invalid' : '' ?>"
+                                        name="status" id="status_inactive" value="inactive"
+                                        autocomplete="off"
+                                        <?= old('status') === 'inactive' ? 'checked' : '' ?>>
+                                    <label class="btn btn-outline-secondary" for="status_inactive">
+                                        <i class="fa-solid fa-pause-circle me-1"></i> Inactive
+                                    </label>
+                                </div>
+
+                                <!-- Helper & error -->
+                                <div class="form-text mt-1">Pilih salah satu status.</div>
+                                <?php if (validation_show_error('status')): ?>
+                                    <div class="invalid-feedback d-block"><?= validation_show_error('status'); ?></div>
+                                <?php endif; ?>
+
+                                <!-- Live preview badge -->
+                                <div class="mt-2">
+                                    <span id="statusPreview"
+                                        class="badge rounded-pill <?= old('status') === 'inactive' ? 'bg-secondary' : (old('status') === 'active' ? 'bg-success' : 'bg-light text-muted border'); ?>">
+                                        <?php if (old('status') === 'active'): ?>
+                                            <i class="fa-solid fa-check-circle me-1"></i> Active
+                                        <?php elseif (old('status') === 'inactive'): ?>
+                                            <i class="fa-solid fa-pause-circle me-1"></i> Inactive
+                                        <?php else: ?>
+                                            — belum dipilih —
+                                        <?php endif; ?>
+                                    </span>
+                                </div>
                             </div>
 
                             <!-- Petugas -->
-
                             <div class="col-md-12 mb-3">
                                 <label for="petugas_nama" class="form-label">Nama Petugas</label>
-                                <input
-                                    type="text"
-                                    id="petugas_nama"
+                                <input type="text" id="petugas_nama"
                                     value="<?= esc(session('username') ?? '-') ?>"
-                                    class="form-control form-soft"
-                                    readonly
-                                    aria-readonly="true">
+                                    class="form-control form-soft" readonly>
                             </div>
-
 
                             <!-- GPS -->
                             <div class="col-md-6 mb-3">
@@ -533,10 +548,10 @@
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="fa-solid fa-location-crosshairs"></i></span>
                                     <input type="text" name="lokasi_gps_lat" id="gps_lat" value="<?= old('lokasi_gps_lat'); ?>"
-                                        class="form-control form-soft <?= ($validation->hasError('lokasi_gps_lat') ? 'is-invalid' : '') ?>"
+                                        class="form-control form-soft <?= validation_show_error('lokasi_gps_lat') ? 'is-invalid' : '' ?>"
                                         placeholder="-6.2xxxxx">
                                 </div>
-                                <div class="invalid-feedback"><?= $validation->getError('lokasi_gps_lat'); ?></div>
+                                <div class="invalid-feedback"><?= validation_show_error('lokasi_gps_lat'); ?></div>
                             </div>
 
                             <div class="col-md-6 mb-3">
@@ -544,10 +559,10 @@
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="fa-solid fa-location-dot"></i></span>
                                     <input type="text" name="lokasi_gps_lng" id="gps_lng" value="<?= old('lokasi_gps_lng'); ?>"
-                                        class="form-control form-soft <?= ($validation->hasError('lokasi_gps_lng') ? 'is-invalid' : '') ?>"
+                                        class="form-control form-soft <?= validation_show_error('lokasi_gps_lng') ? 'is-invalid' : '' ?>"
                                         placeholder="106.8xxxxx">
                                 </div>
-                                <div class="invalid-feedback"><?= $validation->getError('lokasi_gps_lng'); ?></div>
+                                <div class="invalid-feedback"><?= validation_show_error('lokasi_gps_lng'); ?></div>
                                 <button type="button" id="btnGetGPS" class="btn btn-outline-secondary mt-2">
                                     <i class="fa-solid fa-compass"></i> Ambil Lokasi Saya
                                 </button>
@@ -559,6 +574,7 @@
                             <button type="submit" class="btn btn-gradient rounded-pill py-2"><i class="fa-solid fa-floppy-disk"></i> Simpan</button>
                         </div>
                     </form>
+
                 </div>
             </div>
 
@@ -627,6 +643,36 @@
             // YYYY-MM-DDTHH:MM (tanpa detik, sesuai datetime-local)
             el.value = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}` +
                 `T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+        }
+    });
+
+    // status
+    document.addEventListener('DOMContentLoaded', function() {
+        const active = document.getElementById('status_active');
+        const inactive = document.getElementById('status_inactive');
+        const pv = document.getElementById('statusPreview');
+
+        function updatePreview() {
+            let val = active.checked ? 'active' : (inactive.checked ? 'inactive' : '');
+            if (val === 'active') {
+                pv.className = 'badge rounded-pill bg-white';
+                pv.innerHTML = '<i class="fa-solid fa-check-circle me-1"></i> Active';
+            } else if (val === 'inactive') {
+                pv.className = 'badge rounded-pill bg-white';
+                pv.innerHTML = '<i class="fa-solid fa-pause-circle me-1"></i> Inactive';
+            } else {
+                pv.className = 'badge rounded-pill bg-light text-muted border';
+                pv.textContent = '— belum dipilih —';
+            }
+        }
+
+        [active, inactive].forEach(el => el && el.addEventListener('change', updatePreview));
+        updatePreview();
+
+        // Aktifkan tooltip jika Bootstrap ada
+        if (window.bootstrap && bootstrap.Tooltip) {
+            document.querySelectorAll('[data-bs-toggle="tooltip"]')
+                .forEach(el => new bootstrap.Tooltip(el));
         }
     });
 </script>

@@ -3,6 +3,8 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
+use App\Models\ModelPertanyaan;
+use App\Models\QuizModel;
 use App\Models\TanamankuModel;
 use CodeIgniter\HTTP\ResponseInterface;
 
@@ -13,9 +15,11 @@ class AdminController extends BaseController
     protected $QuizAnswers;
     protected $QuizAttempts;
     protected $QuizQuetions;
+    protected $QuizModel;
     public function __construct()
     {
         $this->ModelTanamanku = new TanamankuModel();
+        $this->QuizModel = new QuizModel();
     }
     public function DashboardAdmin()
     {
@@ -100,10 +104,53 @@ class AdminController extends BaseController
     }
     public function page_quiz()
     {
+        // --- daftar quiz untuk tabel ---
+        $quizzes = $this->QuizModel
+            ->select('id_quiz, judul, slug, kategori, deskripsi, durasi_menit, status, is_virtual_all, thumbnail, created_at, updated_at')
+            ->orderBy('created_at')
+            ->findAll();
+
+        // --- siapkan kategori (urut alfabet & dipakai default 0 kalau belum ada soal) ---
+        $allCategories = $this->QuizModel
+            ->select('kategori')
+            ->groupBy('kategori')
+            ->orderBy('kategori', 'ASC')
+            ->findColumn('kategori');
+
+        if (!$allCategories) {
+            $allCategories = []; // fallback: tidak ada kategori
+        }
+
+        // --- hitung jumlah soal per kategori via Model (tanpa $db) ---
+        $pertanyaanModel = new ModelPertanyaan();
+        $rows = $pertanyaanModel
+            ->select('tb_quizzes.kategori, COUNT(tb_quiz_questions.id_pertanyaan) AS total_soal')
+            ->join('tb_quizzes', 'tb_quizzes.id_quiz = tb_quiz_questions.quiz_id', 'inner')
+            // ->where('tb_quizzes.status', 'active') // kalau hanya ingin dari quiz aktif
+            ->groupBy('tb_quizzes.kategori')
+            ->orderBy('tb_quizzes.kategori', 'ASC')
+            ->findAll();
+
+        // map kategori -> total, isi 0 untuk yang tidak ada di hasil
+        $map = array_fill_keys($allCategories, 0);
+        foreach ($rows as $r) {
+            $cat = $r['kategori'] ?? '';
+            if ($cat !== '') $map[$cat] = (int) $r['total_soal'];
+        }
+
+        // data untuk Chart.js
+        $chartLabels = array_keys($map);
+        $chartData   = array_values($map);
+
         $data = [
-            'title' => 'TP PKK | Quiz',
-            'sub_judul' => 'Quiz'
+            'title'        => 'TP PKK | Quiz',
+            'sub_judul'    => 'Quiz',
+            'quizzes'      => $quizzes,
+            'chart_labels' => $chartLabels, // kirim ke view
+            'chart_data'   => $chartData,   // kirim ke view
+            'validation'   => \Config\Services::validation(),
         ];
+
         return view('pages/admin/data-quiz', $data);
     }
 }

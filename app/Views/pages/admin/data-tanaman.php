@@ -563,13 +563,77 @@
         color: #334155;
         border-color: rgba(15, 23, 42, .08);
     }
+
+    /* Desktop (biar rapi biasa) */
+    .toolbar-left {
+        display: flex;
+        align-items: center;
+        gap: .5rem;
+    }
+
+    .toolbar-left form {
+        display: flex;
+        align-items: center;
+        gap: .5rem;
+        flex-wrap: wrap;
+    }
+
+    /* Mobile: scroll horizontal */
+    @media (max-width: 767.98px) {
+        .toolbar-left {
+            overflow-x: auto;
+            /* <-- scroll kanan-kiri */
+            overflow-y: hidden;
+            -webkit-overflow-scrolling: touch;
+            white-space: nowrap;
+            /* cegah turun baris */
+            padding-bottom: .25rem;
+            /* ruang untuk scrollbar */
+        }
+
+        .toolbar-left form {
+            display: inline-flex;
+            /* biar ikut white-space:nowrap */
+            flex-wrap: nowrap;
+            /* jangan pindah baris */
+            gap: .5rem;
+        }
+
+        /* Semua anak jangan melar, biar bisa di-scroll */
+        .toolbar-left form>* {
+            flex: 0 0 auto;
+        }
+
+        /* Lebar minimal supaya enak dipakai */
+        .toolbar-left .input-soft {
+            min-width: 200px;
+        }
+
+        .toolbar-left select {
+            min-width: 140px;
+        }
+
+        .toolbar-left button {
+            min-width: 120px;
+        }
+    }
+
+    /* opsional: tipis-in scrollbar */
+    .toolbar-left::-webkit-scrollbar {
+        height: 6px;
+    }
+
+    .toolbar-left::-webkit-scrollbar-thumb {
+        background: rgba(0, 0, 0, .2);
+        border-radius: 4px;
+    }
 </style>
 
 <div class="container-fluid dashboard-modern">
 
     <!-- Heading + Breadcrumb -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 page-title"><span><i class="fa-solid fa-seedling"></i></span> <?= esc($sub_judul) ?></h1>
+        <h1 class="h3 mb-0 page-title mb-3"><span><i class="fa-solid fa-seedling"></i></span> <?= esc($sub_judul) ?></h1>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb mb-0 bg-white rounded-pill px-3 py-2 shadow-sm">
                 <li class="breadcrumb-item"><a href="<?= base_url('admin/beranda') ?>"><span><i class="fa-solid fa-house"></i></span> Beranda</a></li>

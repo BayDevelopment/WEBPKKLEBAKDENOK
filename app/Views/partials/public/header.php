@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="index, follow">
     <meta name="description" content="Website resmi TP PKK Kelurahan Lebak Denok yang mempromosikan program-program kesejahteraan keluarga.">
-    <meta name="keywords" content="PKK, Lebak Denok, Keluarga Sehat, Cerdas, Sejahtera, Program PKK, Kesejahteraan Keluarga">
+    <meta name="keywords" content="PKK, Pkk Lebak Denok, Keluarga Sehat, Cerdas, Sejahtera, Program PKK, Kesejahteraan Keluarga">
     <meta property="og:title" content="TP PKK Kelurahan Lebak Denok">
     <meta property="og:description" content="Website resmi TP PKK Kelurahan Lebak Denok yang mempromosikan program-program kesejahteraan keluarga.">
     <meta property="og:image" content="<?= base_url('assets/img/logo-baru.jpg') ?>">

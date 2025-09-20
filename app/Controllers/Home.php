@@ -174,28 +174,49 @@ class Home extends BaseController
     }
     public function quisList()
     {
-        // Ambil quiz "Semua Kategori" yang aktif (tanpa hardcode id)
-        $quizAll = $this->Quizes
-            ->where('status', 'active')
-            ->groupStart()
-            ->where('is_virtual_all', 1)                 // kalau kolom ini ada
-            ->orWhere('kategori', 'Semua')               // kalau ENUM punya 'Semua'
-            ->orWhere('slug', 'semua-kategori')          // fallback pakai slug
-            ->orWhere('judul', 'Semua Kategori')         // fallback pakai judul
-            ->groupEnd()
-            ->orderBy('id_quiz', 'DESC')
-            ->first();
+        helper(['text']);
 
-        // Kirim sebagai array 1 item supaya view kamu mudah dipakai
-        $quizzes = $quizAll ? [$quizAll] : [];
+        $model   = $this->Quizes; // Model Quiz kamu
+        $perPage = (int) ($this->request->getGet('per_page') ?: 12);
+        $q       = trim((string) $this->request->getGet('q'));
+        $kat     = trim((string) ($this->request->getGet('kategori') ?? ''));
+
+        // Base query: ambil semua quiz aktif
+        $model = $model->select('id_quiz, slug, judul, kategori, deskripsi, thumbnail, is_virtual_all, status, created_at')
+            ->where('status', 'active');
+
+        // Filter kategori (opsional)
+        if ($kat !== '') {
+            $model = $model->where('kategori', $kat);
+        }
+
+        // Pencarian (opsional)
+        if ($q !== '') {
+            $model = $model->groupStart()
+                ->like('judul', $q)
+                ->orLike('deskripsi', $q)
+                ->orLike('kategori', $q)
+                ->groupEnd();
+        }
+
+        // Urutan: tampilkan yang "Semua Kategori" (is_virtual_all=1) dulu, lalu terbaru
+        $model = $model->orderBy('is_virtual_all', 'DESC')
+            ->orderBy('id_quiz', 'DESC');
+
+        // Paginate
+        $quizzes = $model->paginate($perPage, 'quizzes');
+        $pager   = $model->pager;
 
         return view('pages/public/quiz-list', [
             'title'    => 'TP PKK | Daftar Quiz',
             'navLink'  => 'Daftar Quiz',
-            'quizzes'  => $quizzes,
-            'kategori' => 'Semua', // biar view tahu mode "semua" dan tampilkan 1 card saja
+            'quizzes'  => $quizzes,        // <-- loop di view
+            'pager'    => $pager,          // <-- tampilkan pagination di view (opsional)
+            'kategori' => $kat === '' ? 'Semua' : $kat,
+            'q'        => $q,
         ]);
     }
+
 
     public function takeAll()
     {
@@ -213,7 +234,7 @@ class Home extends BaseController
             ->findAll();
 
         if (empty($questions)) {
-            return redirect()->to(site_url('kuis-masyarakat'))->with('sweet_error', 'Belum ada soal.');
+            return redirect()->to(site_url('/quiz-list'))->with('sweet_error', 'Belum ada soal.');
         }
 
         return view('pages/public/quiz-question', [

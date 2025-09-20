@@ -4,24 +4,15 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class QuizModel extends Model
+class ModelPertanyaan extends Model
 {
-    protected $table            = 'tb_quizzes';
-    protected $primaryKey       = 'id_quiz';
+    protected $table            = 'tb_quiz_questions';
+    protected $primaryKey       = 'id_pertanyaan';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = true;
     protected $protectFields    = true;
-    protected $allowedFields = [
-        'judul',
-        'slug',
-        'kategori',
-        'deskripsi',
-        'durasi_menit',
-        'status',
-        'thumbnail',
-        'is_virtual_all'
-    ];
+    protected $allowedFields    = ['quiz_id', 'urutan', 'pertanyaan', 'gambar', 'opsi_a', 'opsi_b', 'opsi_c', 'opsi_d', 'kunci_jawaban', 'skor'];
 
     // Dates
     protected $useTimestamps = true;

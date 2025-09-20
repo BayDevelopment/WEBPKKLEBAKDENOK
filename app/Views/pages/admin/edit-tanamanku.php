@@ -366,7 +366,7 @@
 <div class="container-fluid">
     <!-- Heading + Breadcrumb -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 page-title"><span><i class="fa-solid fa-seedling"></i></span> <?= esc($sub_judul ?? 'Edit Tanaman') ?></h1>
+        <h1 class="h3 mb-0 page-title mb-3"><span><i class="fa-solid fa-seedling"></i></span> <?= esc($sub_judul ?? 'Edit Tanaman') ?></h1>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb mb-0 bg-white rounded-pill px-3 py-2 shadow-sm">
                 <li class="breadcrumb-item">
@@ -377,7 +377,7 @@
         </nav>
     </div>
 
-    <div class="row">
+    <div class="row mb-3">
         <div class="col-xl-9 col-lg-10">
             <div class="card card-modern position-relative">
                 <div class="card-header d-flex align-items-center justify-content-between">
@@ -401,9 +401,9 @@
                             <div class="col-md-6 mb-3">
                                 <label class="form-label required">Nama Umum</label>
                                 <input type="text" name="nama_umum" value="<?= esc(old('nama_umum', $row['nama_umum'] ?? '')) ?>"
-                                    class="form-control form-soft <?= $validation->hasError('nama_umum') ? 'is-invalid' : '' ?>"
+                                    class="form-control form-soft <?= validation_show_error('nama_umum') ? 'is-invalid' : '' ?>"
                                     placeholder="mis. Kelor">
-                                <div class="invalid-feedback"><?= esc($validation->getError('nama_umum')) ?></div>
+                                <div class="invalid-feedback"><?= esc(validation_show_error('nama_umum')) ?></div>
                             </div>
 
                             <!-- Nama Latin -->
@@ -414,9 +414,9 @@
                                     name="nama_latin"
                                     value="<?= esc(old('nama_latin', $row['nama_latin'] ?? '')) ?>"
                                     maxlength="150"
-                                    class="form-control form-soft <?= $validation->hasError('nama_latin') ? 'is-invalid' : '' ?>"
+                                    class="form-control form-soft <?= validation_show_error('nama_latin') ? 'is-invalid' : '' ?>"
                                     placeholder="mis. Moringa oleifera">
-                                <div class="invalid-feedback"><?= esc($validation->getError('nama_latin')) ?></div>
+                                <div class="invalid-feedback"><?= esc(validation_show_error('nama_latin')) ?></div>
                             </div>
 
 
@@ -425,13 +425,13 @@
                                 <div class="flex-grow-1">
                                     <label for="foto_tanaman" class="form-label fw-semibold">Foto Tanaman (kosongkan jika tidak diganti)</label>
 
-                                    <label class="upload-field <?= $validation->hasError('foto_tanaman') ? 'is-invalid' : '' ?>">
+                                    <label class="upload-field <?= validation_show_error('foto_tanaman') ? 'is-invalid' : '' ?>">
                                         <input
                                             type="file"
                                             id="foto_tanaman"
                                             name="foto_tanaman"
                                             accept="image/png,image/jpeg"
-                                            class="<?= $validation->hasError('foto_tanaman') ? 'is-invalid' : '' ?>">
+                                            class="<?= validation_show_error('foto_tanaman') ? 'is-invalid' : '' ?>">
                                         <span class="upload-ico"><i class="fa-solid fa-image"></i></span>
                                         <span class="upload-texts">
                                             <span class="upload-title">Klik untuk unggah</span>
@@ -441,7 +441,7 @@
                                     </label>
 
                                     <div class="help-text mt-1">Biarkan kosong bila tidak ingin mengganti foto.</div>
-                                    <div class="invalid-feedback"><?= esc($validation->getError('foto_tanaman')) ?></div>
+                                    <div class="invalid-feedback"><?= esc(validation_show_error('foto_tanaman')) ?></div>
 
                                     <!-- Preview: pakai foto lama dulu -->
                                     <div class="preview-wrap">
@@ -456,63 +456,112 @@
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Asal Daerah</label>
                                 <input type="text" name="asal_daerah" value="<?= esc(old('asal_daerah', $row['asal_daerah'] ?? '')) ?>"
-                                    class="form-control form-soft <?= $validation->hasError('asal_daerah') ? 'is-invalid' : '' ?>"
+                                    class="form-control form-soft <?= validation_show_error('asal_daerah') ? 'is-invalid' : '' ?>"
                                     placeholder="mis. NTT, Jawa Barat">
-                                <div class="invalid-feedback"><?= esc($validation->getError('asal_daerah')) ?></div>
+                                <div class="invalid-feedback"><?= esc(validation_show_error('asal_daerah')) ?></div>
                             </div>
 
                             <!-- Manfaat -->
                             <div class="col-12 mb-3">
                                 <label class="form-label">Manfaat</label>
                                 <textarea name="manfaat" rows="2"
-                                    class="form-control form-soft <?= $validation->hasError('manfaat') ? 'is-invalid' : '' ?>"
+                                    class="form-control form-soft <?= validation_show_error('manfaat') ? 'is-invalid' : '' ?>"
                                     placeholder="Tuliskan manfaat utama tanaman..."><?= esc(old('manfaat', $row['manfaat'] ?? '')) ?></textarea>
-                                <div class="invalid-feedback"><?= esc($validation->getError('manfaat')) ?></div>
+                                <div class="invalid-feedback"><?= esc(validation_show_error('manfaat')) ?></div>
                             </div>
 
                             <!-- Keterangan -->
                             <div class="col-12 mb-3">
                                 <label class="form-label">Keterangan</label>
                                 <textarea name="keterangan" rows="3"
-                                    class="form-control form-soft <?= $validation->hasError('keterangan') ? 'is-invalid' : '' ?>"
+                                    class="form-control form-soft <?= validation_show_error('keterangan') ? 'is-invalid' : '' ?>"
                                     placeholder="Catatan tambahan..."><?= esc(old('keterangan', $row['keterangan'] ?? '')) ?></textarea>
-                                <div class="invalid-feedback"><?= esc($validation->getError('keterangan')) ?></div>
+                                <div class="invalid-feedback"><?= esc(validation_show_error('keterangan')) ?></div>
                             </div>
 
                             <!-- Tanggal, Jumlah, Status -->
-                            <div class="col-md-4 mb-3">
+                            <div class="col-md-5 mb-3">
                                 <label class="form-label required">Tanggal & Waktu Pendataan</label>
                                 <input type="datetime-local"
                                     id="tanggal_pendataan"
                                     name="tanggal_pendataan"
                                     step="60"
                                     value="<?= esc(old('tanggal_pendataan') ?: indo_date($row['tanggal_pendataan'] ?? null)) ?>"
-                                    class="form-control form-soft <?= $validation->hasError('tanggal_pendataan') ? 'is-invalid' : '' ?>">
-                                <div class="invalid-feedback"><?= esc($validation->getError('tanggal_pendataan')) ?></div>
+                                    class="form-control form-soft <?= validation_show_error('tanggal_pendataan') ? 'is-invalid' : '' ?>">
+                                <div class="invalid-feedback"><?= esc(validation_show_error('tanggal_pendataan')) ?></div>
                             </div>
 
-                            <div class="col-md-4 mb-3">
+                            <div class="col-md-3 mb-3">
                                 <label class="form-label required">Jumlah</label>
                                 <input type="number" min="1" name="jumlah" value="<?= esc(old('jumlah', $row['jumlah'] ?? '')) ?>"
-                                    class="form-control form-soft <?= $validation->hasError('jumlah') ? 'is-invalid' : '' ?>"
+                                    class="form-control form-soft <?= validation_show_error('jumlah') ? 'is-invalid' : '' ?>"
                                     placeholder="mis. 10">
-                                <div class="invalid-feedback"><?= esc($validation->getError('jumlah')) ?></div>
+                                <div class="invalid-feedback"><?= esc(validation_show_error('jumlah')) ?></div>
                             </div>
 
                             <div class="col-md-4 mb-3">
-                                <label class="form-label required">Status</label>
+                                <label class="form-label required d-flex align-items-center gap-2 mb-2">
+                                    Status
+                                    <i class="fa-solid fa-circle-info text-muted" data-bs-toggle="tooltip"
+                                        title="Pilih status data tanaman. 'Active' tampil di daftar, 'Inactive' disembunyikan."></i>
+                                </label>
+
                                 <?php
-                                // Ambil dari $row (bisa array atau object), lalu fallback ke old('status')
+                                // Ambil dari $row atau old()
                                 $statusFromRow = is_array($row) ? ($row['status'] ?? '') : (is_object($row) ? ($row->status ?? '') : '');
                                 $currStatus    = strtolower((string) old('status', $statusFromRow));
+                                $hasStatusErr  = (bool) validation_show_error('status');
                                 ?>
-                                <select name="status" required
-                                    class="form-select form-soft <?= $validation->hasError('status') ? 'is-invalid' : '' ?>">
-                                    <option value="" disabled <?= $currStatus === '' ? 'selected' : '' ?>>-- pilih status --</option>
+
+                                <!-- Segmented toggle -->
+                                <div class="btn-group w-100 border rounded-3 p-1 <?= $hasStatusErr ? 'border-danger' : 'border-light' ?>" role="group" aria-label="Pilih status">
+                                    <input type="radio"
+                                        class="btn-check"
+                                        name="status" id="status_active" value="active"
+                                        autocomplete="off" required
+                                        <?= $currStatus === 'active' ? 'checked' : '' ?>>
+                                    <label class="btn btn-outline-success px-3" for="status_active">
+                                        <i class="fa-solid fa-check-circle me-1"></i> Active
+                                    </label>
+
+                                    <input type="radio"
+                                        class="btn-check"
+                                        name="status" id="status_inactive" value="inactive"
+                                        autocomplete="off" required
+                                        <?= $currStatus === 'inactive' ? 'checked' : '' ?>>
+                                    <label class="btn btn-outline-secondary px-3" for="status_inactive">
+                                        <i class="fa-solid fa-pause-circle me-1"></i> Inactive
+                                    </label>
+                                </div>
+
+                                <!-- Error message (server-side) -->
+                                <?php if ($hasStatusErr): ?>
+                                    <div class="invalid-feedback d-block"><?= esc(validation_show_error('status')) ?></div>
+                                <?php else: ?>
+                                    <div class="form-text">Pilih salah satu status.</div>
+                                <?php endif; ?>
+
+                                <!-- Live preview badge -->
+                                <div class="mt-2">
+                                    <span id="statusPreview"
+                                        class="badge rounded-pill <?=
+                                                                    $currStatus === 'active'   ? 'bg-success'  : ($currStatus === 'inactive' ? 'bg-secondary' : 'bg-light text-muted border') ?>">
+                                        <?php if ($currStatus === 'active'): ?>
+                                            <i class="fa-solid fa-check-circle me-1"></i> Active
+                                        <?php elseif ($currStatus === 'inactive'): ?>
+                                            <i class="fa-solid fa-pause-circle me-1"></i> Inactive
+                                        <?php else: ?>
+                                            — belum dipilih —
+                                        <?php endif; ?>
+                                    </span>
+                                </div>
+
+                                <!-- Fallback <select> (opsional): disembunyikan, tetap sinkron via JS -->
+                                <select name="status" id="status_select_fallback" class="form-select d-none">
+                                    <option value="" <?= $currStatus === '' ? 'selected' : '' ?>>-- pilih status --</option>
                                     <option value="active" <?= $currStatus === 'active'   ? 'selected' : '' ?>>Active</option>
                                     <option value="inactive" <?= $currStatus === 'inactive' ? 'selected' : '' ?>>Inactive</option>
                                 </select>
-                                <div class="invalid-feedback"><?= esc($validation->getError('status')) ?></div>
                             </div>
 
 
@@ -533,10 +582,10 @@
                                     <span class="input-group-text"><i class="fa-solid fa-location-crosshairs"></i></span>
                                     <input type="text" name="lokasi_gps_lat" id="gps_lat"
                                         value="<?= esc(old('lokasi_gps_lat', $row['lokasi_gps_lat'] ?? '')) ?>"
-                                        class="form-control form-soft <?= $validation->hasError('lokasi_gps_lat') ? 'is-invalid' : '' ?>"
+                                        class="form-control form-soft <?= validation_show_error('lokasi_gps_lat') ? 'is-invalid' : '' ?>"
                                         placeholder="-6.2xxxxx">
                                 </div>
-                                <div class="invalid-feedback"><?= esc($validation->getError('lokasi_gps_lat')) ?></div>
+                                <div class="invalid-feedback"><?= esc(validation_show_error('lokasi_gps_lat')) ?></div>
                             </div>
 
                             <div class="col-md-6 mb-3">
@@ -545,10 +594,10 @@
                                     <span class="input-group-text"><i class="fa-solid fa-location-dot"></i></span>
                                     <input type="text" name="lokasi_gps_lng" id="gps_lng"
                                         value="<?= esc(old('lokasi_gps_lng', $row['lokasi_gps_lng'] ?? '')) ?>"
-                                        class="form-control form-soft <?= $validation->hasError('lokasi_gps_lng') ? 'is-invalid' : '' ?>"
+                                        class="form-control form-soft <?= validation_show_error('lokasi_gps_lng') ? 'is-invalid' : '' ?>"
                                         placeholder="106.8xxxxx">
                                 </div>
-                                <div class="invalid-feedback"><?= esc($validation->getError('lokasi_gps_lng')) ?></div>
+                                <div class="invalid-feedback"><?= esc(validation_show_error('lokasi_gps_lng')) ?></div>
                                 <button type="button" id="btnGetGPS" class="btn btn-outline-secondary mt-2">
                                     <i class="fa-solid fa-compass"></i> Ambil Lokasi Saya
                                 </button>
@@ -627,6 +676,38 @@
             const d = new Date();
             const pad = n => String(n).padStart(2, '0');
             el.value = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+        }
+    });
+
+    // status
+    document.addEventListener('DOMContentLoaded', function() {
+        const active = document.getElementById('status_active');
+        const inactive = document.getElementById('status_inactive');
+        const pv = document.getElementById('statusPreview');
+        const sel = document.getElementById('status_select_fallback');
+
+        function updatePreviewAndSelect() {
+            const val = active.checked ? 'active' : (inactive.checked ? 'inactive' : '');
+            if (sel) sel.value = val;
+
+            if (val === 'active') {
+                pv.className = 'badge rounded-pill bg-white';
+                pv.innerHTML = '<i class="fa-solid fa-check-circle me-1"></i> Active';
+            } else if (val === 'inactive') {
+                pv.className = 'badge rounded-pill bg-white';
+                pv.innerHTML = '<i class="fa-solid fa-pause-circle me-1"></i> Inactive';
+            } else {
+                pv.className = 'badge rounded-pill bg-light text-muted border';
+                pv.textContent = '— belum dipilih —';
+            }
+        }
+
+        [active, inactive].forEach(el => el && el.addEventListener('change', updatePreviewAndSelect));
+        updatePreviewAndSelect();
+
+        // Aktifkan tooltip Bootstrap jika ada
+        if (window.bootstrap && bootstrap.Tooltip) {
+            document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(el => new bootstrap.Tooltip(el));
         }
     });
 </script>
