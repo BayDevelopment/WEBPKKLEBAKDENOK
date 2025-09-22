@@ -130,8 +130,8 @@
                 <div class="d-none d-md-flex align-items-center justify-content-between gap-2">
                     <!-- KIRI -->
                     <div class="d-inline-flex align-items-center gap-3">
-                        <a href="tel:082112341234" class="text-native text-decoration-none d-inline-flex align-items-center gap-2">
-                            <span><i class="fa-solid fa-phone"></i></span> 082112341234
+                        <a href="tel:0254-310067" class="text-native text-decoration-none d-inline-flex align-items-center gap-2">
+                            <span><i class="fa-solid fa-phone"></i></span> 0254-310067
                         </a>
                         <a href="mailto:pkklebakdenok@example.com" class="text-native text-decoration-none d-inline-flex align-items-center gap-2">
                             <span><i class="fa-solid fa-envelope"></i></span> pkklebakdenok@gmail.com
@@ -142,7 +142,7 @@
                         <a href="#" class="text-white text-decoration-none d-inline-flex align-items-center gap-2">
                             <i class="fa-brands fa-facebook-f"></i><span class="d-none d-sm-inline">Facebook</span>
                         </a>
-                        <a href="#" class="text-white text-decoration-none d-inline-flex align-items-center gap-2">
+                        <a href="https://www.instagram.com/pkkkellebakdenok/" class="text-white text-decoration-none d-inline-flex align-items-center gap-2">
                             <i class="fa-brands fa-instagram"></i><span class="d-none d-sm-inline">Instagram</span>
                         </a>
                     </div>

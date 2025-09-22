@@ -24,7 +24,7 @@
                     </li>
                     <li>
                         <span class="icon-circle"><i class="fa-solid fa-phone"></i></span>
-                        <a href="tel:082112341234" class="link-light text-decoration-none">082112341234</a>
+                        <a href="tel:0254-310067" class="link-light text-decoration-none">0254-310067</a>
                     </li>
                     <li>
                         <span class="icon-circle"><i class="fa-solid fa-envelope"></i></span>
@@ -38,7 +38,7 @@
                 <h6 class="fw-bold mb-3">Ikuti Kami</h6>
                 <div class="d-flex gap-2 flex-wrap">
                     <a href="#" class="social-btn" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
-                    <a href="#" class="social-btn" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="https://www.instagram.com/pkkkellebakdenok/" class="social-btn" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
                 </div>
             </div>
         </div>
@@ -49,9 +49,9 @@
             <div class="opacity-85">
                 <i class="fa-solid fa-copyright me-1"></i>
                 Collaborative with
-                <a href="https://unival-cilegon.ac.id/" class="link-light text-decoration-none fw-semibold" target="_blank" rel="noopener">Unival</a>
+                <a href="https://unival-cilegon.ac.id/" class="link-light text-decoration-none fw-semibold" target="_blank" rel="noopener">FIK Unival</a>
                 and
-                <a href="https://kellebakdenok.cilegon.go.id/" class="link-light text-decoration-none fw-semibold" target="_blank" rel="noopener">Kampung Programmer</a>
+                <a href="https://kellebakdenok.cilegon.go.id/" class="link-light text-decoration-none fw-semibold" target="_blank" rel="noopener">Posyantek Harapan Denok</a>
             </div>
             <div class="opacity-75">© <span id="year"></span> TP PKK Kelurahan Lebak Denok</div>
         </div>
