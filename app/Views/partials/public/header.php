@@ -4,16 +4,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- SEO Basic -->
     <meta name="robots" content="index, follow">
     <meta name="description" content="Website resmi TP PKK Kelurahan Lebak Denok yang mempromosikan program-program kesejahteraan keluarga.">
     <meta name="keywords" content="PKK, Pkk Lebak Denok, Keluarga Sehat, Cerdas, Sejahtera, Program PKK, Kesejahteraan Keluarga">
+    <link rel="canonical" href="https://pkklebakdenok.my.id/"> <!-- Menghindari konten duplikat -->
+
+    <!-- Open Graph (Facebook, WhatsApp, LinkedIn) -->
     <meta property="og:title" content="TP PKK Kelurahan Lebak Denok">
     <meta property="og:description" content="Website resmi TP PKK Kelurahan Lebak Denok yang mempromosikan program-program kesejahteraan keluarga.">
     <meta property="og:image" content="<?= base_url('assets/img/logo-baru.jpg') ?>">
     <meta property="og:url" content="https://pkklebakdenok.my.id/">
-    <title><?= esc($title) ?></title>
-    <link rel="canonical" href="https://pkklebakdenok.my.id/"> <!-- Menghindari konten duplikat -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="TP PKK Kelurahan Lebak Denok">
 
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="TP PKK Kelurahan Lebak Denok">
+    <meta name="twitter:description" content="Website resmi TP PKK Kelurahan Lebak Denok yang mempromosikan program-program kesejahteraan keluarga.">
+    <meta name="twitter:image" content="<?= base_url('assets/img/logo-baru.jpg') ?>">
+
+    <!-- Favicon -->
+    <link rel="icon" href="<?= base_url('assets/img/logo-baru.jpg') ?>" type="image/jpg">
+
+    <title><?= esc($title) ?></title>
 
     <!-- icon -->
     <link rel="icon" href="<?= base_url('assets/img/logo-baru.jpg') ?>" type="image/x-icon">
