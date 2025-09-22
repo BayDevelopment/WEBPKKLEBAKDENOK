@@ -627,6 +627,53 @@
         background: rgba(0, 0, 0, .2);
         border-radius: 4px;
     }
+
+    /* Desktop: default, tidak pakai scroll horizontal */
+    .table-responsive-modern {
+        overflow: visible;
+    }
+
+    /* Tablet & Mobile: aktifkan scroll horizontal hanya pada wrapper tabel */
+    @media (max-width: 991.98px) {
+        .table-responsive-modern {
+            display: block;
+            width: 100%;
+            overflow-x: auto;
+            /* scroll ke kanan */
+            overflow-y: hidden;
+            /* jangan vertikal */
+            -webkit-overflow-scrolling: touch;
+            /* momentum iOS */
+            overscroll-behavior-x: contain;
+            /* cegah "nyeret" body */
+            scrollbar-gutter: stable;
+            /* biar layout stabil saat ada scrollbar (browser modern) */
+        }
+
+        /* Biarkan tabel melebar sesuai konten */
+        .table-responsive-modern>table {
+            width: max-content;
+            /* tidak dipaksa 100%, mengikuti lebar kolom */
+            min-width: 760px;
+            /* opsional: jaga agar header tak terlalu sempit */
+            white-space: nowrap;
+            /* anti-wrapping kolom */
+            table-layout: auto;
+            /* biar kolom natural */
+        }
+    }
+
+    /* (Opsional) tipisin scrollbar di WebKit */
+    @media (max-width: 991.98px) {
+        .table-responsive-modern::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .table-responsive-modern::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, .2);
+            border-radius: 4px;
+        }
+    }
 </style>
 
 <div class="container-fluid dashboard-modern">

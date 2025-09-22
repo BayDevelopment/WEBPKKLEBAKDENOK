@@ -311,7 +311,7 @@
             <div class="col-lg-6 order-1 order-lg-2 reveal">
                 <div class="illustration-wrap">
                     <img
-                        src="<?= base_url('assets/img/section-content.png') ?>"
+                        src="<?= base_url('assets/img/img_berita.jpg') ?>"
                         alt="Ilustrasi kegiatan TP PKK Kelurahan Lebak Denok"
                         class="img-fluid rounded-4 shadow-sm"
                         loading="lazy">

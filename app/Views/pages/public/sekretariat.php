@@ -703,6 +703,45 @@
             font-size: 1.05rem
         }
     }
+
+    /* Responsive untuk nav-pills Pokja */
+    @media (max-width: 991.98px) {
+        #v-pills-tab {
+            flex-direction: row !important;
+            /* Susun horizontal */
+            justify-content: center;
+            /* Tengah */
+            flex-wrap: wrap;
+            /* Bisa turun baris kalau sempit */
+            gap: 10px;
+            /* Jarak antar tombol */
+            width: 100%;
+            /* Ikut lebar card */
+        }
+
+        #v-pills-tab .nav-link {
+            flex: 1 1 auto;
+            /* Lebar fleksibel */
+            text-align: center;
+            /* Teks di tengah */
+            min-width: 45%;
+            /* Biar nggak terlalu kecil di HP */
+        }
+    }
+
+    /* Lebih kecil (HP ≤ 576px) → buat full width per tombol */
+    @media (max-width: 575.98px) {
+        #v-pills-tab {
+            flex-direction: column !important;
+            /* Balik jadi vertikal */
+            align-items: stretch;
+            /* Isi penuh */
+        }
+
+        #v-pills-tab .nav-link {
+            width: 100%;
+        }
+    }
 </style>
 
 <!-- LOADER (opsional) -->
@@ -773,11 +812,25 @@
                             <!-- Pokja I -->
                             <div class="tab-pane fade show active" id="v-pills-pokjaI" role="tabpanel" aria-labelledby="v-pills-pokjaI-tab" tabindex="0">
                                 <div class="cover-pokja-content p-3 p-lg-4">
+                                    belum ada data saat ini
+                                </div>
+                            </div>
+
+                            <!-- Pokja II -->
+                            <div class="tab-pane fade" id="v-pills-pokjaII" role="tabpanel" aria-labelledby="v-pills-pokjaII-tab" tabindex="0">
+                                <div class="cover-pokja-content p-3 p-lg-4">
+                                    belum ada data saat ini
+                                </div>
+                            </div>
+
+                            <!-- Pokja III -->
+                            <div class="tab-pane fade" id="v-pills-pokjaIII" role="tabpanel" aria-labelledby="v-pills-pokjaIII-tab" tabindex="0">
+                                <div class="cover-pokja-content p-3 p-lg-4">
                                     <div class="row g-4">
                                         <div class="col-lg-4 col-md-6">
                                             <article class="profile-card">
                                                 <div class="pc-media">
-                                                    <img src="<?= base_url('assets/img/dumy-img.png') ?>" alt="Foto Pengurus Pokja III" class="pc-img" loading="lazy" decoding="async">
+                                                    <img src="<?= base_url('assets/img/img-sekre.jpg') ?>" alt="Foto Pengurus Pokja III" class="pc-img" loading="lazy" decoding="async">
                                                 </div>
                                                 <div class="pc-body">
                                                     <div class="pc-kicker"><i class="fa-solid fa-id-badge"></i> Biodata Pengurus</div>
@@ -843,64 +896,13 @@
                                             </article>
                                         </div>
                                     </div>
-
-                                </div>
-                            </div>
-
-                            <!-- Pokja II -->
-                            <div class="tab-pane fade" id="v-pills-pokjaII" role="tabpanel" aria-labelledby="v-pills-pokjaII-tab" tabindex="0">
-                                <div class="cover-pokja-content p-3 p-lg-4">
-                                    <div class="row g-4">
-                                        <div class="col-lg-4 col-md-6">
-                                            <div class="cover-img-person">
-                                                <img src="<?= base_url('assets/img/dumy-img.png') ?>" alt="FOTO PERSON" class="size-person-image">
-                                            </div>
-                                            <div class="cover-biodata-person">
-                                                <h5 class="mb-1">Nama Person</h5>
-                                            </div>
-                                            <div class="cover-position-person">
-                                                <h5 class="text-uppercase">Jabatan Pokja II</h5>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Pokja III -->
-                            <div class="tab-pane fade" id="v-pills-pokjaIII" role="tabpanel" aria-labelledby="v-pills-pokjaIII-tab" tabindex="0">
-                                <div class="cover-pokja-content p-3 p-lg-4">
-                                    <div class="row g-4">
-                                        <div class="col-lg-4 col-md-6">
-                                            <div class="cover-img-person">
-                                                <img src="<?= base_url('assets/img/dumy-img.png') ?>" alt="FOTO PERSON" class="size-person-image">
-                                            </div>
-                                            <div class="cover-biodata-person">
-                                                <h5 class="mb-1">Nama Person</h5>
-                                            </div>
-                                            <div class="cover-position-person">
-                                                <h5 class="text-uppercase">Jabatan Pokja III</h5>
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
 
                             <!-- Pokja IV -->
                             <div class="tab-pane fade" id="v-pills-pokjaIV" role="tabpanel" aria-labelledby="v-pills-pokjaIV-tab" tabindex="0">
                                 <div class="cover-pokja-content p-3 p-lg-4">
-                                    <div class="row g-4">
-                                        <div class="col-lg-4 col-md-6">
-                                            <div class="cover-img-person">
-                                                <img src="<?= base_url('assets/img/dumy-img.png') ?>" alt="FOTO PERSON" class="size-person-image">
-                                            </div>
-                                            <div class="cover-biodata-person">
-                                                <h5 class="mb-1">Nama Person</h5>
-                                            </div>
-                                            <div class="cover-position-person">
-                                                <h5 class="text-uppercase">Jabatan Pokja IV</h5>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    belum ada data saat ini
                                 </div>
                             </div>
 

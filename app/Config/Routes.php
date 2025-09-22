@@ -52,5 +52,12 @@ $routes->group('admin', ['filter' => 'AdminFilter'], static function ($routes) {
     $routes->get('quiz/(:num)/urutan/(:num)/edit', 'QuizController::page_editByIdUrutan/$1/$2');
     $routes->put('quiz/(:num)/urutan/(:num)/edit', 'QuizController::updateByIdUrutan/$1/$2');
     $routes->get('quiz/delete/(:num)/(:num)', 'QuizController::deleteByIdUrutan/$1/$2');
+
+
+    $routes->get('profile', 'ProfileController::page_profile');
+    $routes->get('profile/edit', 'ProfileController::edit_profile');
+    $routes->post('profile/edit', 'ProfileController::aksi_update_profile');
+    $routes->get('profile/ganti-password', 'ProfileController::change_password');
+    $routes->post('profile/ganti-password', 'ProfileController::update_password');
     // tambahkan semua rute admin lain di sini…
 });

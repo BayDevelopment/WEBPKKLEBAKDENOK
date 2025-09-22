@@ -150,34 +150,29 @@
             <div class="sidebar-heading">
                 Interface
             </div>
-            <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#masterData"
-                    aria-expanded="true" aria-controls="masterData">
-                    <i class="fas fa-fw fa-cog"></i>
-                    <span>Master Data</span>
+            <!-- Data Tanaman -->
+            <li class="nav-item <?= (($sub_judul ?? '') === 'Tanamanku') ? 'active' : '' ?>">
+                <a class="nav-link <?= (($sub_judul ?? '') === 'Tanamanku') ? 'active' : '' ?>"
+                    href="<?= site_url('admin/tanamanku') ?>"
+                    <?= (($sub_judul ?? '') === 'Tanamanku') ? 'aria-current="page"' : '' ?>>
+                    <i class="fas fa-fw fa-seedling"></i>
+                    <span>Data Tanaman</span>
                 </a>
-                <div id="masterData" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Data Refrensi:</h6>
-                        <a class="collapse-item <?= $sub_judul === 'Tanamanku' ? ' active' : '' ?>" href="<?= base_url('admin/tanamanku') ?>">Data Tanaman</a>
-
-                        <a class="collapse-item <?= $sub_judul === 'Quiz' ? ' active' : '' ?>" href="<?= base_url('admin/quiz') ?>">Data Quiz</a>
-                        <a class="collapse-item" href="<?= base_url() ?>">Data Sekretariat</a>
-                        <a class="collapse-item" href="<?= base_url() ?>">Data Pendaftaran</a>
-                    </div>
-                </div>
             </li>
+
+            <!-- Data Quiz -->
+            <li class="nav-item <?= (($sub_judul ?? '') === 'Quiz') ? 'active' : '' ?>">
+                <a class="nav-link <?= (($sub_judul ?? '') === 'Quiz') ? 'active' : '' ?>"
+                    href="<?= site_url('admin/quiz') ?>"
+                    <?= (($sub_judul ?? '') === 'Quiz') ? 'aria-current="page"' : '' ?>>
+                    <i class="fas fa-fw fa-question-circle"></i>
+                    <span>Data Quiz</span>
+                </a>
+            </li>
+
 
             <!-- Divider -->
             <hr class="sidebar-divider">
-
-            <!-- Heading -->
-            <div class="sidebar-heading">
-                Addons
-            </div>
-            <!-- Divider -->
-            <hr class="sidebar-divider d-none d-md-block">
 
             <!-- Sidebar Toggler (Sidebar) -->
             <div class="text-center d-none d-md-inline bg-soft-green">
@@ -340,10 +335,10 @@
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?= esc(session()->get('username')) ?></span>
-                                <img class="img-profile rounded-circle" src="<?= base_url('assets/img/' . esc(session()->get('img_admin'))) ?>">
+                                <img class="img-profile rounded-circle" src="<?= base_url('assets/uploads/avatars/' . esc(session()->get('img_admin'))) ?>">
                             </a>
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#"><i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i> Profile</a>
+                                <a class="dropdown-item <?= $sub_judul === 'Profile' ? ' active' : '' ?>" href="<?= base_url('admin/profile') ?>"><i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i> Profile</a>
                                 <a class="dropdown-item" href="#"><i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i> Activity Log</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">

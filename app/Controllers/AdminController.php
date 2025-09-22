@@ -3,7 +3,9 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
+use App\Models\AttemptModel;
 use App\Models\ModelPertanyaan;
+use App\Models\QuestionModel;
 use App\Models\QuizModel;
 use App\Models\TanamankuModel;
 use CodeIgniter\HTTP\ResponseInterface;
@@ -20,15 +22,72 @@ class AdminController extends BaseController
     {
         $this->ModelTanamanku = new TanamankuModel();
         $this->QuizModel = new QuizModel();
+        $this->QuizQuetions = new QuestionModel();
+        $this->QuizAttempts = new AttemptModel();
     }
     public function DashboardAdmin()
     {
-        $data = [
-            'title' => 'TP PKK | Dashboard Admin',
-            'sub_judul' => 'Dashboard'
+        // KPI cepat
+        $jumlah_tanaman   = $this->ModelTanamanku->countAll();
+        $jumlah_soal_quiz = $this->QuizQuetions->countAll();
+
+        // === Chart Tanamanku: SUM(jumlah) per nama_umum (Top 10) ===
+        $bTanaman = $this->ModelTanamanku->builder();
+        $rowsT = $bTanaman->select('nama_umum, SUM(jumlah) AS total', false)
+            ->groupBy('nama_umum')
+            ->orderBy('total', 'DESC')
+            ->limit(10)
+            ->get()->getResultArray();
+
+        $chart_tanaman = [
+            'labels' => array_column($rowsT, 'nama_umum'),
+            'data'   => array_map('intval', array_column($rowsT, 'total')),
         ];
+
+        // === Chart Quiz: kategori (active) ===
+        $quizAll = $this->QuizQuetions->findAll();
+        $quizActive = array_values(array_filter($quizAll, function ($r) {
+            $status = strtolower(trim((string)($r['status'] ?? $r['status_question'] ?? $r['status_soal'] ?? '')));
+            return $status === 'active';
+        }));
+        $kategoriCounts = $this->groupCountByCategory($quizActive, ['kategori', 'category', 'kategori_quiz', 'topic']);
+
+        $chart_quiz = [
+            'labels' => array_values(array_keys($kategoriCounts)),
+            'data'   => array_values($kategoriCounts),
+        ];
+
+        $data = [
+            'title'             => 'TP PKK | Dashboard Admin',
+            'sub_judul'         => 'Dashboard',
+            'jumlah_tanaman'    => $jumlah_tanaman,
+            'jumlah_soal_quiz'  => $jumlah_soal_quiz,
+            'chart_tanaman'     => $chart_tanaman,
+            'chart_quiz'        => $chart_quiz,
+        ];
+
         return view('pages/admin/dashboard_admin', $data);
     }
+
+    /** Hitung jumlah item per kategori dari array row, dengan fallback beberapa nama kolom kategori */
+    private function groupCountByCategory(array $rows, array $candidateKeys): array
+    {
+        $counts = [];
+        foreach ($rows as $r) {
+            $val = null;
+            foreach ($candidateKeys as $k) {
+                if (isset($r[$k]) && $r[$k] !== '' && $r[$k] !== null) {
+                    $val = $r[$k];
+                    break;
+                }
+            }
+            $label = trim((string)($val ?? 'Tanpa Kategori'));
+            $counts[$label] = ($counts[$label] ?? 0) + 1;
+        }
+        ksort($counts);
+        return $counts;
+    }
+
     public function page_tanamanku()
     {
         $req = $this->request;

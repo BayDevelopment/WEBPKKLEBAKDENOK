@@ -336,13 +336,13 @@
     <div class="row">
 
         <!-- Earnings (Monthly) -->
-        <div class="col-xl-3 col-md-6 mb-4">
+        <div class="col-xl-6 col-md-4 mb-4">
             <div class="card border-left-primary shadow h-100 py-2 card-modern kpi-card kpi-primary">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Earnings (Monthly)</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800 kpi-value">$40,000</div>
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Jumlah Tanaman</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800 kpi-value"><?= esc($jumlah_tanaman) ?></div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-calendar fa-2x text-gray-300"></i>
@@ -351,62 +351,16 @@
                 </div>
             </div>
         </div>
-
-        <!-- Earnings (Annual) -->
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-success shadow h-100 py-2 card-modern kpi-card kpi-success">
+        <div class="col-xl-6 col-md-4 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2 card-modern kpi-card kpi-primary">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Earnings (Annual)</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800 kpi-value">$215,000</div>
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Jumlah Soal</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800 kpi-value"><?= esc($jumlah_soal_quiz) ?></div>
                         </div>
                         <div class="col-auto">
-                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Tasks -->
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-info shadow h-100 py-2 card-modern kpi-card kpi-info">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Tasks</div>
-                            <div class="row no-gutters align-items-center">
-                                <div class="col-auto">
-                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800 kpi-value">50%</div>
-                                </div>
-                                <div class="col">
-                                    <div class="progress progress-sm mr-2 progress-modern">
-                                        <div class="progress-bar bg-info" role="progressbar" style="width: 50%"
-                                            aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Pending Requests -->
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-warning shadow h-100 py-2 card-modern kpi-card kpi-warning">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Pending Requests</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800 kpi-value">18</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-comments fa-2x text-gray-300"></i>
+                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
                         </div>
                     </div>
                 </div>
@@ -417,61 +371,24 @@
     <!-- Content Row -->
     <div class="row">
         <!-- Area Chart -->
-        <div class="col-xl-8 col-lg-7">
-            <div class="card shadow mb-4 card-modern">
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">Earnings Overview</h6>
-                    <div class="dropdown no-arrow">
-                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                            aria-labelledby="dropdownMenuLink">
-                            <div class="dropdown-header">Dropdown Header:</div>
-                            <a class="dropdown-item" href="#">Action</a>
-                            <a class="dropdown-item" href="#">Another action</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Something else here</a>
-                        </div>
-                    </div>
+        <div class="col-xl-6 mb-4">
+            <div class="card card-modern">
+                <div class="card-header">
+                    <h6 class="m-0">Top 10 Tanaman berdasarkan Jumlah</h6>
                 </div>
-                <div class="card-body">
-                    <div class="chart-area">
-                        <canvas id="myAreaChart"></canvas>
-                    </div>
+                <div class="card-body" style="height:320px;overflow-x:auto">
+                    <canvas id="chartTanamanTop" style="min-width:560px"></canvas>
                 </div>
             </div>
         </div>
         <!-- Pie Chart -->
-        <div class="col-xl-4 col-lg-5">
-            <div class="card shadow mb-4 card-modern">
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">Revenue Sources</h6>
-                    <div class="dropdown no-arrow">
-                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                            aria-labelledby="dropdownMenuLink">
-                            <div class="dropdown-header">Dropdown Header:</div>
-                            <a class="dropdown-item" href="#">Action</a>
-                            <a class="dropdown-item" href="#">Another action</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Something else here</a>
-                        </div>
-                    </div>
+        <div class="col-xl-6 mb-4">
+            <div class="card card-modern">
+                <div class="card-header">
+                    <h6 class="m-0">Kategori Quiz (Active)</h6>
                 </div>
-                <div class="card-body">
-                    <div class="chart-pie pt-4 pb-2">
-                        <canvas id="myPieChart"></canvas>
-                    </div>
-                    <div class="mt-4 text-center small">
-                        <span class="mr-2"><i class="fas fa-circle text-primary"></i> Direct</span>
-                        <span class="mr-2"><i class="fas fa-circle text-success"></i> Social</span>
-                        <span class="mr-2"><i class="fas fa-circle text-info"></i> Referral</span>
-                    </div>
+                <div class="card-body" style="height:320px;overflow-x:auto">
+                    <canvas id="chartQuizAktifBar" style="min-width:560px"></canvas>
                 </div>
             </div>
         </div>
@@ -480,5 +397,123 @@
 <!-- End Page Content -->
 
 </div>
-<!-- End of Main Content -->
+<!-- Chart.js -->
+<script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+    window.addEventListener('load', function() {
+        const tLabels = <?= json_encode($chart_tanaman['labels'] ?? []) ?>;
+        const tData = <?= json_encode($chart_tanaman['data'] ?? []) ?>;
+
+        const qLabels = <?= json_encode($chart_quiz['labels'] ?? []) ?>;
+        const qData = <?= json_encode($chart_quiz['data'] ?? []) ?>;
+
+        function genColors(n) {
+            const base = ['#4e73df', '#1cc88a', '#36b9cc', '#f6c23e', '#e74a3b', '#858796', '#20c997', '#6f42c1', '#fd7e14', '#0dcaf0'];
+            return Array.from({
+                length: n
+            }, (_, i) => base[i % base.length]);
+        }
+
+        const valueLabels = {
+            id: 'valueLabels',
+            afterDatasetsDraw(chart) {
+                const {
+                    ctx
+                } = chart, ds = chart.data.datasets[0], meta = chart.getDatasetMeta(0);
+                ctx.save();
+                ctx.fillStyle = '#111827';
+                ctx.font = '12px Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'bottom';
+                meta.data.forEach((bar, i) => {
+                    const v = ds.data[i];
+                    if (v != null) ctx.fillText(v, bar.x, bar.y - 4);
+                });
+                ctx.restore();
+            }
+        };
+
+        // Bar Tanaman
+        new Chart(document.getElementById('chartTanamanTop'), {
+            type: 'bar',
+            data: {
+                labels: tLabels,
+                datasets: [{
+                    label: 'Jumlah',
+                    data: tData,
+                    backgroundColor: genColors(tData.length)
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            precision: 0
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            maxRotation: 45
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: (c) => ` ${c.dataset.label}: ${c.parsed.y}`
+                        }
+                    }
+                }
+            },
+            plugins: [valueLabels]
+        });
+
+        // Bar Kategori Quiz (active)
+        new Chart(document.getElementById('chartQuizAktifBar'), {
+            type: 'bar',
+            data: {
+                labels: qLabels,
+                datasets: [{
+                    label: 'Jumlah Soal (Active)',
+                    data: qData,
+                    backgroundColor: genColors(qData.length)
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            precision: 0
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            maxRotation: 45
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: (c) => ` ${c.dataset.label}: ${c.parsed.y}`
+                        }
+                    }
+                }
+            },
+            plugins: [valueLabels]
+        });
+    });
+</script>
 <?= $this->endSection() ?>

@@ -8,7 +8,7 @@ $p = $person ?? [
     'position'      => 'Ketua Pokja III',
     'pokja'         => 'Pokja III',
     'unit'          => 'TP PKK Kelurahan Lebak Denok',
-    'photo'         => base_url('assets/img/dumy-img.png'),
+    'photo'         => base_url('assets/img/img-sekre.jpg'),
     'since'         => '2023 – Sekarang',
     'email'         => 'contoh@email.com',
     'phone'         => '08xx xxxx xxxx',
@@ -350,6 +350,36 @@ $p = $person ?? [
             min-width: 90px
         }
     }
+
+    /* Default (desktop) biarkan horizontal sesuai Bootstrap */
+
+    /* Tablet & Mobile */
+    @media (max-width: 991.98px) {
+
+        /* ≤ col-lg */
+        .dp-pills {
+            flex-direction: column !important;
+            /* Susun ke bawah */
+            align-items: stretch;
+            /* Biar full width */
+            gap: 10px;
+            /* Jarak antar item */
+        }
+
+        .dp-pills .nav-item {
+            margin-right: 0 !important;
+            /* Hilangkan margin kanan */
+            width: 100%;
+            /* Full lebar */
+        }
+
+        .dp-pills .nav-link {
+            width: 100%;
+            /* Tombol isi penuh */
+            text-align: center;
+            /* Tengah agar rapi */
+        }
+    }
 </style>
 
 <section class="py-5 reveal" style="--d:40ms">
@@ -407,16 +437,12 @@ $p = $person ?? [
                                 </li>
                             </ul>
 
-                            <div class="dp-socials">
+                            <div class="dp-socials justify-content-center">
                                 <?php foreach (($p['socials'] ?? []) as $s): ?>
                                     <a href="<?= esc($s['url']) ?>" target="_blank" rel="noopener">
                                         <i class="<?= esc($s['icon']) ?>"></i> <?= esc($s['label']) ?>
                                     </a>
                                 <?php endforeach; ?>
-                            </div>
-
-                            <div class="mt-3 d-flex flex-wrap gap-2">
-                                <a href="<?= site_url('sekretariat') ?>" class="btn-outline-soft"><i class="fa-solid fa-arrow-left"></i> Kembali</a>
                             </div>
                         </div>
                     </div>
