@@ -132,6 +132,31 @@
 <?php endif; ?>
 
 <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const modalEl = document.getElementById("welcomeModal");
+        if (!modalEl || !window.bootstrap) return;
+
+        // Pastikan hanya satu instance
+        const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+
+        // Cari tombol Tutup
+        const btnTutup = modalEl.querySelector(".btn.btn-secondary");
+        if (btnTutup) {
+            btnTutup.addEventListener("click", function(e) {
+                e.preventDefault();
+                modal.hide(); // tutup paksa via API
+            });
+        }
+
+        // Optional: tampilkan modal otomatis saat halaman pertama load
+        modal.show();
+
+        // Bersihkan state setelah modal ditutup
+        modalEl.addEventListener("hidden.bs.modal", () => {
+            document.body.classList.remove("modal-open");
+            document.querySelectorAll(".modal-backdrop").forEach(el => el.remove());
+        });
+    });
     /* ========== Utils ========== */
 
     document.addEventListener("DOMContentLoaded", function() {
