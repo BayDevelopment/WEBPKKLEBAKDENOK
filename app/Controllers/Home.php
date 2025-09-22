@@ -385,7 +385,7 @@ class Home extends BaseController
             'title' => 'Sekretariat | PKK Kelurahan Lebak Denok',
             'navLink' => 'Sekretariat' //untuk navlink 
         ];
-        return view('pages/public/Sekretariat', $data);
+        return view('pages/public/sekretariat', $data);
     }
     public function DetailSekret()
     {
