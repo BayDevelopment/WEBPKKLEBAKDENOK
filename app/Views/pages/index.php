@@ -11,7 +11,7 @@
 
 
     <!-- icon title -->
-    <link rel="icon" href="<?= base_url('assets/img/logo-pkk-lebakdenok.jpg') ?>" type="image/x-icon">
+    <link rel="icon" href="<?= base_url('assets/img/logo-baru.jpg') ?>" type="image/x-icon">
 
     <!-- Custom fonts for this template-->
     <link href="<?= base_url('assets/vendor/fontawesome-free/css/all.min.css') ?>" rel="stylesheet" type="text/css">
@@ -223,6 +223,55 @@
         transform: translateY(0);
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     }
+
+    /* css spinner loading */
+    /* Spinner minimal (kalau belum ada Bootstrap spinner) */
+    .spinner-border {
+        display: inline-block;
+        width: 1rem;
+        height: 1rem;
+        vertical-align: text-bottom;
+        border: .15em solid currentColor;
+        border-right-color: transparent;
+        border-radius: 50%;
+        animation: spin .75s linear infinite;
+    }
+
+    @keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    /* Eye icon tidak menghalangi ketik */
+    .password-wrapper {
+        position: relative;
+    }
+
+    .password-wrapper .toggle-password {
+        position: absolute;
+        right: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        line-height: 1;
+        user-select: none;
+    }
+
+    .password-wrapper input.form-control-user {
+        padding-right: 2.5rem;
+    }
+
+    /* Tampilan readonly biar terasa terkunci */
+    .is-readonly {
+        background-color: #f5f6f8 !important;
+    }
+
+    @media (max-width: 991.98px) {
+        .row.min-vh-100 {
+            min-height: auto !important;
+        }
+    }
 </style>
 
 <body class="bg-gradient-primary">
@@ -238,10 +287,11 @@
                 <div class="card o-hidden border-0 shadow-lg my-5">
                     <div class="card-body p-0">
                         <!-- Nested Row within Card Body -->
-                        <div class="row">
+                        <div class="row min-vh-lg-100 py-5 py-lg-0">
+
                             <!-- LEFT -->
-                            <div class="col-lg-6 d-none d-lg-block bg-login-image">
-                                <div class="brand-mark d-none d-lg-inline-flex">
+                            <div class="col-lg-6 d-none d-lg-flex flex-column justify-content-center align-items-center bg-login-image">
+                                <div class="brand-mark mb-3">
                                     <i class="fas fa-seedling"></i> TP PKK LEBAK DENOK
                                 </div>
                                 <img src="<?= base_url('/assets/img/login-img-side.png') ?>"
@@ -251,37 +301,47 @@
                             </div>
 
                             <!-- RIGHT -->
-                            <div class="col-lg-6">
-                                <div class="p-5">
-                                    <div class="text-center d-lg-none mb-3">
-                                        <span class="brand-mobile"><i class="fas fa-seedling"></i> TP PKK LEBAK DENOK</span>
-                                    </div>
+                            <div class="col-lg-6 d-flex justify-content-center align-items-center">
+                                <div class="col-md-8 col-11"><!-- lebar responsif -->
+                                    <div>
 
-                                    <div class="text-center">
-                                        <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
-                                    </div>
-                                    <form class="user" action="<?= site_url('auth/login') ?>" method="post">
-                                        <?= csrf_field() ?>
-                                        <div class="form-group">
-                                            <input type="text" name="username" class="form-control form-control-user"
-                                                id="exampleInputEmail" placeholder="Username.." required>
+                                        <div class="text-center d-lg-none mb-3">
+                                            <span class="brand-mobile">
+                                                <i class="fas fa-seedling"></i> TP PKK LEBAK DENOK
+                                            </span>
                                         </div>
-                                        <div class="form-group password-wrapper">
-                                            <input type="password" name="password_hash" class="form-control form-control-user"
-                                                id="exampleInputPassword" placeholder="Password" required>
-                                            <i class="fas fa-eye toggle-password" id="togglePassword"
-                                                title="Show/Hide password" aria-label="Toggle password visibility"></i>
+                                        <div class="text-center mb-4">
+                                            <h1 class="h4 text-gray-900">Welcome Back!</h1>
                                         </div>
-                                        <div class="d-grid gap-2">
-                                            <button class="btn-login" type="submit">
-                                                <i class="fas fa-sign-in-alt me-2"></i> Log in
-                                            </button>
-                                        </div>
-                                    </form>
 
+                                        <form class="user" action="<?= site_url('auth/login') ?>" method="post">
+                                            <?= csrf_field() ?>
+
+                                            <div class="form-group mb-3">
+                                                <input type="text" name="username" class="form-control form-control-user"
+                                                    placeholder="Username.." required>
+                                            </div>
+
+                                            <div class="form-group password-wrapper mb-3">
+                                                <input type="password" name="password_hash" class="form-control form-control-user"
+                                                    placeholder="Password" required>
+                                                <i class="fas fa-eye toggle-password" id="togglePassword"
+                                                    title="Show/Hide password" aria-label="Toggle password visibility"></i>
+                                            </div>
+
+                                            <!-- Tombol center -->
+                                            <div class="d-flex justify-content-center">
+                                                <button class="btn-login btn btn-primary px-5" type="submit">
+                                                    <i class="fas fa-sign-in-alt me-2"></i> Log in
+                                                </button>
+                                            </div>
+                                        </form>
+
+                                    </div>
                                 </div>
                             </div>
                             <!-- /RIGHT -->
+
                         </div>
                     </div>
                 </div>
@@ -289,6 +349,7 @@
             </div>
         </div>
     </div>
+
 
     <!-- Bootstrap core JavaScript-->
     <script src="<?= base_url('assets/vendor/jquery/jquery.min.js') ?>"></script>
@@ -367,6 +428,51 @@
         </script>
     <?php endif; ?>
     <script>
+        // spinner loading form 
+        document.addEventListener("DOMContentLoaded", () => {
+            const form = document.querySelector("form.user");
+            if (!form) return;
+
+            const btn = form.querySelector(".btn-login");
+            const username = form.querySelector('input[name="username"]');
+            const password = form.querySelector('input[name="password_hash"]');
+            const toggle = form.querySelector("#togglePassword");
+
+            // Toggle show/hide password
+            if (toggle && password) {
+                toggle.addEventListener("click", () => {
+                    const isPwd = password.getAttribute("type") === "password";
+                    password.setAttribute("type", isPwd ? "text" : "password");
+                    toggle.classList.toggle("fa-eye-slash", isPwd);
+                    toggle.classList.toggle("fa-eye", !isPwd);
+                });
+            }
+
+            // Saat submit: kunci input (readonly) + ubah tombol
+            form.addEventListener("submit", () => {
+                // Kunci input tapi tetap kirim nilai
+                [username, password].forEach(el => {
+                    if (!el) return;
+                    el.setAttribute("readonly", "true");
+                    el.setAttribute("aria-readonly", "true");
+                    el.classList.add("is-readonly");
+                });
+
+                // Ubah tombol -> Loading dan nonaktifkan (setelah frame berikut supaya nilai form pasti sudah diambil)
+                requestAnimationFrame(() => {
+                    if (btn) {
+                        btn.disabled = true;
+                        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Loading...';
+                    }
+                });
+
+                // (opsional) cegah double submit dari Enter spam
+                if (!form.classList.contains("is-submitting")) {
+                    form.classList.add("is-submitting");
+                }
+            });
+        });
+
         particlesJS("particles-bg", {
             particles: {
                 number: {

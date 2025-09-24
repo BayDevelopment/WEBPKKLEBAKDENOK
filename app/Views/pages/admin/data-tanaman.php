@@ -674,6 +674,10 @@
             border-radius: 4px;
         }
     }
+
+    .table-responsive-modern {
+        overflow-x: auto;
+    }
 </style>
 
 <div class="container-fluid dashboard-modern">
@@ -808,5 +812,71 @@
     </div>
 
 </div> <!-- /container-fluid -->
+<!-- letakkan skrip INI setelah tabel -->
+<script>
+    (function() {
+        if (!window.DataTable) return; // guard: pastikan lib sudah loaded
+
+        new DataTable('#tblTanamanku', {
+            // length menu
+            pageLength: 10,
+            lengthMenu: [
+                [10, 25, 50, 100],
+                [10, 25, 50, 100]
+            ],
+
+            // opsional: scroll horizontal
+            scrollX: true,
+            autoWidth: false,
+
+            // opsional: urut default ke "Tanggal Pendataan" (kolom ke-5 = index 4)
+            order: [
+                [4, 'desc']
+            ],
+
+            // opsional: sesuaikan kolom tabelmu (8 kolom total)
+            columnDefs: [{
+                    targets: 0,
+                    orderable: false,
+                    width: 56
+                }, // No
+                {
+                    targets: '.no-export',
+                    orderable: false,
+                    searchable: false
+                }, // Foto & Aksi
+                {
+                    targets: 5,
+                    className: 'dt-center',
+                    width: 100
+                }, // Jumlah
+                {
+                    targets: 6,
+                    width: 120
+                }, // Status
+                {
+                    targets: 7,
+                    orderable: false,
+                    searchable: false,
+                    width: 110
+                } // Aksi
+            ],
+
+            language: {
+                lengthMenu: "Tampil _MENU_",
+                search: "Cari:",
+                info: "Menampilkan _START_–_END_ dari _TOTAL_ data",
+                paginate: {
+                    first: "Awal",
+                    last: "Akhir",
+                    next: "›",
+                    previous: "‹"
+                },
+                zeroRecords: "Tidak ditemukan data yang cocok",
+                infoEmpty: "Tidak ada data"
+            }
+        });
+    })();
+</script>
 
 <?= $this->endSection() ?>

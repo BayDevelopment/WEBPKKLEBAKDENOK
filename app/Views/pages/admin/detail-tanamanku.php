@@ -300,7 +300,7 @@ $statusLabel = $status === 'active' ? 'Active' : ($status === 'inactive' ? 'Inac
 
     <div class="row g-4 mb-4">
         <!-- KIRI: Detail Lengkap -->
-        <div class="col-lg-6">
+        <div class="col-lg-6 mb-sm-3">
             <div class="card card-modern">
                 <div class="card-header d-flex align-items-center justify-content-between">
                     <div class="d-flex align-items-center gap-2">

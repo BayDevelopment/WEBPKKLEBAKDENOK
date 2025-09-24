@@ -5,8 +5,10 @@ namespace App\Controllers;
 use App\Controllers\BaseController;
 use App\Models\AttemptModel;
 use App\Models\ModelPertanyaan;
+use App\Models\ModelPkk;
 use App\Models\QuestionModel;
 use App\Models\QuizModel;
+use App\Models\RekrutModel;
 use App\Models\TanamankuModel;
 use CodeIgniter\HTTP\ResponseInterface;
 
@@ -18,18 +20,22 @@ class AdminController extends BaseController
     protected $QuizAttempts;
     protected $QuizQuetions;
     protected $QuizModel;
+    protected $ModelPokja;
+    protected $ModelRekrut;
     public function __construct()
     {
         $this->ModelTanamanku = new TanamankuModel();
         $this->QuizModel = new QuizModel();
         $this->QuizQuetions = new QuestionModel();
         $this->QuizAttempts = new AttemptModel();
+        $this->ModelPokja = new ModelPkk();
+        $this->ModelRekrut = new RekrutModel();
     }
+
     public function DashboardAdmin()
     {
         // KPI cepat
-        $jumlah_tanaman   = $this->ModelTanamanku->countAll();
-        $jumlah_soal_quiz = $this->QuizQuetions->countAll();
+        $jumlah_tanaman = $this->ModelTanamanku->countAll();
 
         // === Chart Tanamanku: SUM(jumlah) per nama_umum (Top 10) ===
         $bTanaman = $this->ModelTanamanku->builder();
@@ -44,48 +50,108 @@ class AdminController extends BaseController
             'data'   => array_map('intval', array_column($rowsT, 'total')),
         ];
 
-        // === Chart Quiz: kategori (active) ===
-        $quizAll = $this->QuizQuetions->findAll();
-        $quizActive = array_values(array_filter($quizAll, function ($r) {
-            $status = strtolower(trim((string)($r['status'] ?? $r['status_question'] ?? $r['status_soal'] ?? '')));
-            return $status === 'active';
-        }));
-        $kategoriCounts = $this->groupCountByCategory($quizActive, ['kategori', 'category', 'kategori_quiz', 'topic']);
+        // === Chart Quiz + List Soal per Kategori (ACTIVE quiz only) ===
+        $db       = \Config\Database::connect();
 
+        // Tabel pertanyaan (model kamu)
+        $tableQ  = $this->QuizQuetions->getTable();
+        $qFields = $db->getFieldNames($tableQ);
+
+        // PK pertanyaan
+        $qidCol = in_array('id_pertanyaan', $qFields, true) ? 'id_pertanyaan'
+            : (in_array('id', $qFields, true) ? 'id' : null);
+        if ($qidCol === null) throw new \RuntimeException("PK pertanyaan (id_pertanyaan/id) tidak ada di $tableQ");
+        if (!in_array('quiz_id', $qFields, true)) throw new \RuntimeException("Kolom quiz_id tidak ada di $tableQ");
+
+        // Tabel quiz/kategori (punya status + (kategori|judul))
+        $tables    = $db->listTables();
+        $quizTable = null;
+        $pFields = [];
+        foreach ($tables as $t) {
+            if ($t === $tableQ) continue;
+            try {
+                $f = $db->getFieldNames($t);
+            } catch (\Throwable $e) {
+                continue;
+            }
+            if (in_array('status', $f, true) && (in_array('kategori', $f, true) || in_array('judul', $f, true))) {
+                $quizTable = $t;
+                $pFields = $f;
+                break;
+            }
+        }
+        if (!$quizTable) throw new \RuntimeException('Tabel quiz/kategori tidak ditemukan (butuh kolom: status + kategori/judul).');
+
+        $pidCol = in_array('id_quiz', $pFields, true) ? 'id_quiz'
+            : (in_array('id', $pFields, true) ? 'id' : null);
+        if ($pidCol === null) throw new \RuntimeException("PK quiz (id_quiz/id) tidak ada di $quizTable");
+
+        // soft delete flags
+        $qHasDeleted = in_array('deleted_at', $qFields, true);
+        $pHasDeleted = in_array('deleted_at', $pFields, true);
+
+        // Label kategori dari tabel quiz
+        $labelExpr = "COALESCE(NULLIF(TRIM(p.kategori),''), NULLIF(TRIM(p.judul),''), 'Tanpa Kategori')";
+
+        // A) Hitung jumlah PERTANYAAN per kategori (count dari tabel pertanyaan saja)
+        $bCount = $db->table("$tableQ q");
+        $bCount->select("$labelExpr AS kat", false)
+            ->selectCount("q.$qidCol", 'total')
+            ->join("$quizTable p", "p.$pidCol = q.quiz_id", 'inner')
+            ->where("LOWER(TRIM(IFNULL(p.status,''))) = 'active'", null, false);
+        if ($qHasDeleted) $bCount->where('q.deleted_at IS NULL', null, false);
+        if ($pHasDeleted) $bCount->where('p.deleted_at IS NULL', null, false);
+
+        $rowsActive = $bCount->groupBy('kat')
+            ->orderBy('total', 'DESC')
+            ->get()->getResultArray();
+
+        $jumlah_soal_quiz = array_sum(array_map(static fn($r) => (int)$r['total'], $rowsActive));
         $chart_quiz = [
-            'labels' => array_values(array_keys($kategoriCounts)),
-            'data'   => array_values($kategoriCounts),
+            'labels' => array_column($rowsActive, 'kat'),
+            'data'   => array_map('intval', array_column($rowsActive, 'total')),
         ];
 
+        // B) Ambil daftar soal per kategori (ACTIVE quiz only), tanpa urutan; exclude deleted
+        $bList = $db->table("$tableQ q");
+        $bList->select("$labelExpr AS kat", false)
+            ->select("q.$qidCol AS id_pertanyaan, q.quiz_id, q.pertanyaan, q.gambar, q.opsi_a, q.opsi_b, q.opsi_c, q.opsi_d, q.kunci_jawaban, q.skor")
+            ->join("$quizTable p", "p.$pidCol = q.quiz_id", 'inner')
+            ->where("LOWER(TRIM(IFNULL(p.status,''))) = 'active'", null, false);
+        if ($qHasDeleted) $bList->where('q.deleted_at IS NULL', null, false);
+        if ($pHasDeleted) $bList->where('p.deleted_at IS NULL', null, false);
+        $bList->orderBy('kat', 'ASC')
+            ->orderBy("q.$qidCol", 'ASC');
+
+        $rowsAll = $bList->get()->getResultArray();
+
+        // Grouping di PHP
+        $soal_per_kategori = [];
+        foreach ($rowsAll as $r) {
+            $label = $r['kat'] ?? 'Tanpa Kategori';
+            unset($r['kat']);
+            $soal_per_kategori[$label][] = $r;
+        }
+
+        // Urutkan kategori mengikuti chart (jumlah desc)
+        if (!empty($chart_quiz['labels'])) {
+            $ordered = [];
+            foreach ($chart_quiz['labels'] as $lbl) if (isset($soal_per_kategori[$lbl])) $ordered[$lbl] = $soal_per_kategori[$lbl];
+            foreach ($soal_per_kategori as $lbl => $rows) if (!isset($ordered[$lbl])) $ordered[$lbl] = $rows;
+            $soal_per_kategori = $ordered;
+        }
+
         $data = [
-            'title'             => 'TP PKK | Dashboard Admin',
-            'sub_judul'         => 'Dashboard',
-            'jumlah_tanaman'    => $jumlah_tanaman,
-            'jumlah_soal_quiz'  => $jumlah_soal_quiz,
-            'chart_tanaman'     => $chart_tanaman,
-            'chart_quiz'        => $chart_quiz,
+            'title'                 => 'TP PKK | Dashboard Admin',
+            'sub_judul'             => 'Dashboard',
+            'jumlah_tanaman'        => $jumlah_tanaman,
+            'jumlah_soal_quiz'      => $jumlah_soal_quiz,
+            'chart_tanaman'         => $chart_tanaman,
+            'chart_quiz'            => $chart_quiz,
+            'soal_per_kategori'     => $soal_per_kategori,
         ];
 
         return view('pages/admin/dashboard_admin', $data);
-    }
-
-    /** Hitung jumlah item per kategori dari array row, dengan fallback beberapa nama kolom kategori */
-    private function groupCountByCategory(array $rows, array $candidateKeys): array
-    {
-        $counts = [];
-        foreach ($rows as $r) {
-            $val = null;
-            foreach ($candidateKeys as $k) {
-                if (isset($r[$k]) && $r[$k] !== '' && $r[$k] !== null) {
-                    $val = $r[$k];
-                    break;
-                }
-            }
-            $label = trim((string)($val ?? 'Tanpa Kategori'));
-            $counts[$label] = ($counts[$label] ?? 0) + 1;
-        }
-        ksort($counts);
-        return $counts;
     }
 
     public function page_tanamanku()
@@ -161,6 +227,7 @@ class AdminController extends BaseController
 
         return view('pages/admin/data-tanaman', $data);
     }
+
     public function page_quiz()
     {
         // --- daftar quiz untuk tabel ---
@@ -211,5 +278,16 @@ class AdminController extends BaseController
         ];
 
         return view('pages/admin/data-quiz', $data);
+    }
+
+    public function page_rekrutmen()
+    {
+        $data = [
+            'title' => 'TP PKK | Pendaftaran Gabung Bersama Kami',
+            'sub_judul' => 'Data Rekrutmen',
+            'd_rekrut' => $this->ModelRekrut->findAll(),
+            'd_pokja' => $this->ModelPokja->findAll()
+        ];
+        return view('pages/admin/pendaftaran', $data);
     }
 }

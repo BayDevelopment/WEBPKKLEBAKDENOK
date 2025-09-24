@@ -1,3 +1,17 @@
+<?php
+if (!function_exists('slug_view')) {
+    function slug_view(string $s): string
+    {
+        $s = strtolower(trim($s));
+        $s = preg_replace('~[^\pL\d]+~u', '-', $s);
+        $s = preg_replace('~[-]+~', '-', $s);
+        $s = trim($s, '-');
+        return $s === '' ? 'x' : $s;
+    }
+}
+?>
+
+
 <?= $this->extend('templates/template_admin') ?>
 <?= $this->section('content_admin') ?>
 <style>
@@ -320,6 +334,13 @@
             transition: none;
         }
     }
+
+    .search-hit {
+        outline: 3px solid rgba(78, 115, 223, .6);
+        background: rgba(78, 115, 223, .08);
+        border-radius: .25rem;
+        transition: outline-color .6s, background-color .6s;
+    }
 </style>
 
 <div class="container-fluid dashboard-modern">
@@ -515,5 +536,38 @@
             plugins: [valueLabels]
         });
     });
+
+    (function() {
+        var anchor = <?= json_encode($search_target_anchor ?? '') ?>;
+        var query = <?= json_encode($search_query ?? '') ?>;
+
+        if (anchor && query) {
+            var el = document.getElementById(anchor);
+            if (el) {
+                el.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
+                });
+                el.classList.add('search-hit');
+                setTimeout(function() {
+                    el.classList.remove('search-hit');
+                }, 2200);
+            }
+        }
+
+        <?php if (!empty($search_query) && empty($search_target_anchor)): ?>
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Oops...',
+                    text: 'Konten yang anda cari tidak ditemukan',
+                    confirmButtonText: 'OK'
+                });
+            } else {
+                // fallback alert jika sweetalert belum di-include
+                alert('Konten yang anda cari tidak ditemukan');
+            }
+        <?php endif; ?>
+    })();
 </script>
 <?= $this->endSection() ?>

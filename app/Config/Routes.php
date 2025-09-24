@@ -23,11 +23,13 @@ $routes->get('/tanamanku/detail/(:num)', 'Home::DetailTanamanku/$1');
 $routes->get('/quiz-list', 'Home::quisList');
 $routes->get('/quiz/take/all', 'Home::takeAll');
 $routes->post('/quiz/submit-all', 'Home::submitQuizAll');
-$routes->get('/hubungi-kami', 'Home::HubungiKami');
+// $routes->get('/hubungi-kami', 'Home::HubungiKami');
 $routes->get('/program', 'Home::ProgramPkk');
 $routes->get('/form-pendaftaran', 'Home::FormPendaftaran');
 $routes->get('/sekretariat', 'Home::Sekretariat');
 $routes->get('/detail-sekret', 'Home::DetailSekret');
+$routes->get('/rekrutmen', 'Home::page_rekrutmen');
+$routes->post('/rekrutmen', 'Home::aksi_rekrutmen');
 
 // admin
 $routes->group('admin', ['filter' => 'AdminFilter'], static function ($routes) {
@@ -53,6 +55,22 @@ $routes->group('admin', ['filter' => 'AdminFilter'], static function ($routes) {
     $routes->put('quiz/(:num)/urutan/(:num)/edit', 'QuizController::updateByIdUrutan/$1/$2');
     $routes->get('quiz/delete/(:num)/(:num)', 'QuizController::deleteByIdUrutan/$1/$2');
 
+    // rekrutmen
+    $routes->get('rekrutmen', 'AdminController::page_rekrutmen');
+    $routes->get('rekrutmen/create', 'RekrutController::page_insert');
+    $routes->post('rekrutmen/create', 'RekrutController::aksi_insert_rekrutmen');
+    $routes->get('rekrutmen/update/(:num)', 'RekrutController::page_edit_rekrutmen/$1');
+    $routes->post('rekrutmen/update/(:num)', 'RekrutController::aksi_edit_rekrutmen/$1');
+    $routes->get('rekrutmen/detail/(:num)', 'RekrutController::page_detail_rekrutmen/$1');
+    $routes->get('rekrutmen/delete/(:num)', 'RekrutController::delete_by_id/$1'); //table
+    $routes->post('rekrutmen/delete/(:num)', 'RekrutController::aksi_delete_rekrutmen/$1'); //detail
+
+    // pokja
+    $routes->get('rekrutmen/pokja/create', 'RekrutController::page_insert_pokja');
+    $routes->post('rekrutmen/pokja/create', 'RekrutController::aksi_insert_pokja');
+    $routes->get('rekrutmen/pokja/update/(:num)', 'RekrutController::page_update_pokja/$1');
+    $routes->post('rekrutmen/pokja/update/(:num)', 'RekrutController::aksi_edit_pokja/$1');
+    $routes->get('rekrutmen/pokja/delete/(:num)', 'RekrutController::aksi_delete_pokja/$1');
 
     $routes->get('profile', 'ProfileController::page_profile');
     $routes->get('profile/edit', 'ProfileController::edit_profile');

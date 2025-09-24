@@ -5,8 +5,10 @@ namespace App\Controllers;
 use App\Models\AdminModel;
 use App\Models\AnswerModel;
 use App\Models\AttemptModel;
+use App\Models\ModelPkk;
 use App\Models\QuestionModel;
 use App\Models\QuizModel;
+use App\Models\RekrutModel;
 use App\Models\TanamankuModel;
 
 class Home extends BaseController
@@ -17,7 +19,20 @@ class Home extends BaseController
     protected $QuizQuetions;
     protected $QuizAttempts;
     protected $QuizAnswers;
+    protected $ModelPkk;
+    protected $ModelRekrut;
 
+    public function __construct()
+    {
+        $this->ModelTanamanku = new TanamankuModel();
+        $this->ModelAdmin = new AdminModel();
+        $this->Quizes = new QuizModel();
+        $this->QuizQuetions = new QuestionModel();
+        $this->QuizAttempts = new AttemptModel();
+        $this->QuizAnswers  = new AnswerModel();
+        $this->ModelPkk  = new ModelPkk();
+        $this->ModelRekrut  = new RekrutModel();
+    }
     private function getAllQuiz(): ?array
     {
         // Ambil baris virtual ALL; kalau ada yang soft-deleted, otomatis dibangunkan lagi.
@@ -34,16 +49,6 @@ class Home extends BaseController
         return $row;
     }
 
-
-    public function __construct()
-    {
-        $this->ModelTanamanku = new TanamankuModel();
-        $this->ModelAdmin = new AdminModel();
-        $this->Quizes = new QuizModel();
-        $this->QuizQuetions = new QuestionModel();
-        $this->QuizAttempts = new AttemptModel();
-        $this->QuizAnswers  = new AnswerModel();
-    }
     public function index()
     {
         $data = [
@@ -394,5 +399,153 @@ class Home extends BaseController
             'navLink' => 'Detail Sekretariat' //untuk navlink 
         ];
         return view('pages/public/detail-sekret', $data);
+    }
+
+    public function page_rekrutmen()
+    {
+        // Pakai properti model jika sudah diinisialisasi di __construct,
+        // kalau belum, fallback instansiasi langsung.
+        $model = $this->pkkPokjaModel
+            ?? $this->ModelPkk
+            ?? new \App\Models\ModelPkk();
+
+        // Ambil hanya Pokja aktif
+        $d_pkkpokja = $model->select('id_pkkpokja, kode, nama, deskripsi, aktif')
+            ->where('aktif', 1)
+            ->orderBy('kode', 'ASC')
+            ->findAll();
+        $d_rekrut = $this->ModelRekrut
+            ->orderBy('created_at', 'DESC')
+            ->findAll();
+
+        $jumPendaftar = $this->ModelRekrut->countAll();
+
+        $data = [
+            'title'       => 'TP PKK | Rekrutmen PKK Lebak Denok',
+            'sub_judul'   => 'Rekrutmen',
+            'navLink'     => 'Rekrutmen',
+            'd_pkkpokja'  => $d_pkkpokja,
+            'd_rekrut'  => $d_rekrut,
+            'totalPendaftar' => $jumPendaftar,
+            'validation'  => \Config\Services::validation(), // kalau view butuh
+        ];
+
+        return view('pages/public/rekrutmen', $data);
+    }
+    public function aksi_rekrutmen()
+    {
+        // 0) Guard NIK: hanya angka
+        $rawNik = (string) $this->request->getPost('nik');
+        if ($rawNik !== '' && preg_match('/\D/', $rawNik)) {
+            return redirect()->back()->withInput()
+                ->with('sweet_error', 'NIK hanya boleh berisi angka (0–9).');
+        }
+
+        // 1) Validasi dasar
+        $rules = [
+            'id_pkkpokja' => [
+                'rules'  => 'required|is_not_unique[tb_pkk_pokja.id_pkkpokja]',
+                'errors' => [
+                    'required'      => 'Pokja wajib dipilih.',
+                    'is_not_unique' => 'Pokja tidak valid.',
+                ],
+            ],
+            'nama_lengkap' => [
+                'rules'  => 'required|min_length[3]|max_length[100]',
+                'errors' => [
+                    'required'   => 'Nama wajib diisi.',
+                    'min_length' => 'Nama minimal 3 karakter.',
+                    'max_length' => 'Nama maksimal 100 karakter.',
+                ],
+            ],
+            'nik' => [
+                // pakai numeric & exact_length; cek unik kita lakukan manual juga
+                'rules'  => 'required|exact_length[16]|numeric',
+                'errors' => [
+                    'required'     => 'NIK wajib diisi.',
+                    'exact_length' => 'NIK harus 16 digit.',
+                    'numeric'      => 'NIK harus angka.',
+                ],
+            ],
+            'alamat' => [
+                'rules'  => 'required|min_length[5]|max_length[200]',
+                'errors' => [
+                    'required'   => 'Alamat wajib diisi.',
+                    'min_length' => 'Alamat terlalu pendek.',
+                    'max_length' => 'Alamat terlalu panjang.',
+                ],
+            ],
+            'no_hp' => [
+                'rules'  => 'permit_empty|min_length[9]|max_length[20]',
+                'errors' => [
+                    'min_length' => 'No HP terlalu pendek.',
+                    'max_length' => 'No HP terlalu panjang.',
+                ],
+            ],
+        ];
+
+        if (! $this->validate($rules)) {
+            $firstError = array_values($this->validator->getErrors())[0] ?? 'Periksa kembali input Anda.';
+            return redirect()->back()->withInput()
+                ->with('validation', $this->validator)
+                ->with('sweet_error', $firstError);
+        }
+
+        // 2) Normalisasi nilai
+        $nik = preg_replace('/\D/', '', $rawNik); // keep digits only
+
+        // Normalisasi No HP: jadikan seragam 08xxxxxxxxxx (treat +62 / 62 sama)
+        $rawHp = trim((string) $this->request->getPost('no_hp'));
+        $noHpNorm = null;
+        if ($rawHp !== '') {
+            $digits = preg_replace('/\D/', '', $rawHp);        // buang non-digit
+            if (strpos($digits, '62') === 0) {                 // +62 / 62xxxx -> 0xxxx
+                $digits = '0' . substr($digits, 2);
+            }
+            $noHpNorm = $digits ?: null;
+        }
+
+        // 3) Cek FK Pokja
+        $pokjaModel = new \App\Models\ModelPkk();
+        $pokjaId    = (int) $this->request->getPost('id_pkkpokja');
+        if (! $pokjaModel->where('id_pkkpokja', $pokjaId)->first()) {
+            return redirect()->back()->withInput()
+                ->with('sweet_error', 'Pokja tidak ditemukan.');
+        }
+
+        // 4) Cek duplikat NIK & No HP
+        $rekrutModel = new \App\Models\RekrutModel();
+
+        if ($rekrutModel->where('nik', $nik)->first()) {
+            return redirect()->back()->withInput()
+                ->with('sweet_error', 'NIK sudah terdaftar.');
+        }
+
+        if ($noHpNorm && $rekrutModel->where('no_hp', $noHpNorm)->first()) {
+            return redirect()->back()->withInput()
+                ->with('sweet_error', 'No HP sudah terdaftar.');
+        }
+
+        // 5) Simpan
+        $payload = [
+            'id_pkkpokja'  => $pokjaId,
+            'nama_lengkap' => trim((string) $this->request->getPost('nama_lengkap')),
+            'nik'          => $nik,
+            'alamat'       => trim((string) $this->request->getPost('alamat')),
+            'no_hp'        => $noHpNorm, // tersimpan dalam format seragam
+        ];
+
+        try {
+            $rekrutModel->insert($payload);
+        } catch (\CodeIgniter\Database\Exceptions\DatabaseException $e) {
+            // fallback kalau ada unique index di DB
+            $msg = 'Gagal menyimpan data.';
+            if (stripos($e->getMessage(), 'nik') !== false)   $msg = 'NIK sudah terdaftar.';
+            if (stripos($e->getMessage(), 'no_hp') !== false) $msg = 'No HP sudah terdaftar.';
+            return redirect()->back()->withInput()->with('sweet_error', $msg);
+        }
+
+        return redirect()->to(previous_url() ?: site_url('/rekrutmen'))
+            ->with('sweet_success', 'Pendaftaran berhasil dikirim.');
     }
 }

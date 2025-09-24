@@ -350,6 +350,84 @@
         filter: saturate(1.05)
     }
 
+    /* clock */
+    .clock-float {
+        position: fixed;
+        right: calc(16px + env(safe-area-inset-right));
+        bottom: calc(16px + env(safe-area-inset-bottom));
+        z-index: 1080;
+        transition: right .18s ease;
+    }
+
+    /* Saat tombol Back to Top tampil, geser clock ke kiri sejajar */
+    body.has-btt .clock-float {
+        /* 16px (gap) + lebar tombol back-to-top + 16px margin kanan */
+        right: calc(16px + var(--btt-width, 44px) + 16px + env(safe-area-inset-right));
+    }
+
+    .clock-widget {
+        display: inline-flex;
+        align-items: center;
+        gap: .55rem;
+        padding: .55rem .9rem;
+        background: linear-gradient(135deg, rgba(78, 115, 223, .10), rgba(28, 200, 138, .10));
+        border: 1px solid rgba(78, 115, 223, .22);
+        border-radius: 9999px;
+        box-shadow: 0 10px 24px rgba(15, 23, 42, .12);
+        backdrop-filter: blur(6px);
+        transition: transform .18s ease, box-shadow .18s ease;
+    }
+
+    .clock-widget:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 14px 30px rgba(15, 23, 42, .16);
+    }
+
+    .clock-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(78, 115, 223, .14);
+        color: #4e73df;
+    }
+
+    .clock-time {
+        font-weight: 800;
+        letter-spacing: .6px;
+        font-variant-numeric: tabular-nums;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        color: #1f2937;
+        min-width: 92px;
+        text-align: center;
+        display: inline-block;
+    }
+
+    @media (max-width: 576px) {
+        .clock-widget {
+            padding: .45rem .75rem;
+        }
+
+        .clock-icon {
+            width: 28px;
+            height: 28px;
+        }
+
+        .clock-time {
+            min-width: 84px;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+
+        .clock-widget,
+        .clock-float {
+            transition: none;
+        }
+    }
+
     /* upload field tetap cantik dari punyamu */
 </style>
 
@@ -357,7 +435,7 @@
 
 <div class="container-fluid">
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 page-title"><i class="fa-solid fa-clipboard-check"></i> Edit Quiz</h1>
+        <h1 class="h3 mb-0 page-title mb-sm-3"><i class="fa-solid fa-clipboard-check"></i> Edit Quiz</h1>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb mb-0 bg-white rounded-pill px-3 py-2 shadow-sm">
                 <li class="breadcrumb-item"><a href="<?= base_url('admin/beranda') ?>"><i class="fa-solid fa-house"></i> Beranda</a></li>
@@ -367,7 +445,7 @@
         </nav>
     </div>
 
-    <div class="card card-modern">
+    <div class="card card-modern mb-sm-3">
         <div class="card-header d-flex align-items-center justify-content-between">
             <h6 class="m-0 fw-bold">Form Edit Quiz</h6>
             <a href="javascript:history.back()" class="btn btn-sm btn-outline-secondary rounded-pill"><i class="fa-solid fa-arrow-left"></i> Kembali</a>

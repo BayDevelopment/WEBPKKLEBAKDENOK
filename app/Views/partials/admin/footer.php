@@ -2,7 +2,7 @@
 <footer class="sticky-footer bg-white mt-auto">
     <div class="container my-auto">
         <div class="copyright text-center my-auto">
-            <span>Copyright &copy; Kampung Programming x Unival 2025</span>
+            <span>Copyright &copy; Posyantek Harapan Denok x FIK Unival 2025</span>
         </div>
     </div>
 </footer>
@@ -124,6 +124,7 @@
         });
     </script>
 <?php endif; ?>
+
 
 <script>
     (function() {

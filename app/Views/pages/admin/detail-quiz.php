@@ -698,7 +698,7 @@ $statusLabel = $status === 'active' ? 'Active' : ($status === 'inactive' ? 'Inac
 
                             <!-- tombol tambah soal -->
                             <div class="mt-4">
-                                <a href="<?= site_url('admin/quiz/soal/' . ((int) ($row['id_quiz'] ?? 0)) . '/tambah') ?>"
+                                <a href="<?= site_url('admin/quiz/soal/' . (string)(esc($row['slug']) ?? 0) . '/tambah') ?>"
                                     class="btn btn-gradient px-4 py-2 rounded-pill">
                                     <i class="fas fa-plus-circle me-2"></i> Tambah Soal
                                 </a>

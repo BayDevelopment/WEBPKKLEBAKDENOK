@@ -329,7 +329,7 @@
                     </div>
                     <hr class="hr-soft">
                     <div class="d-flex flex-wrap gap-2">
-                        <a href="<?= site_url('admin/profile/edit') ?>" class="btn btn-gradient rounded-pill py-2 mr-2">
+                        <a href="<?= site_url('admin/profile/edit') ?>" class="btn btn-gradient rounded-pill py-2 mr-2 mb-sm-2">
                             <i class="fas fa-pen mr-1"></i> Ubah data
                         </a>
                         <a href="<?= site_url('admin/profile/ganti-password') ?>" class="btn btn-light border rounded-pill py-2">
